@@ -1,26 +1,37 @@
 import java.util.Scanner;
 
 public class Menus {
-
-    public static void Menus() {
-        Scanner scanner = new Scanner(System.in);
-        int ler_menu_opcao;
-
-
-
-
+    private static int ler(int range, String[] pergunta){
+        int val = -1  ;
         do {
-            System.out.println("\n==== MENU PRINCIPAL ====");
-            System.out.println("1. Menu Livros");
-            System.out.println("2. Menu Jornais/Revistas");
-            System.out.println("3. Menu Utente");
-            System.out.println("4. Menu Empréstimo");
-            System.out.println("5. Menu Reserva");
-            System.out.println("0. Sair");
-            System.out.print("Escolha uma opção: ");
-            ler_menu_opcao = scanner.nextInt();
-            scanner.nextLine();
-            switch (ler_menu_opcao) {
+            Scanner ler = new Scanner(System.in);
+            escrever(pergunta);
+            val = ler.nextInt();
+            System.out.println(val);
+        }while (val<=0 && val >= range);
+        return val;
+    }
+    private static void escrever(String[] perguntas){
+        for (String pergunta : perguntas) {
+            System.out.println(pergunta);
+        }
+    }
+    public static void Menus() {
+        int op;
+        String[] menu = {
+                         "\n==== MENU PRINCIPAL ====",
+                         "1. Menu Livros",
+                         "2. Menu Jornais/Revistas",
+                         "3. Menu Utente",
+                         "4. Menu Empréstimo",
+                         "5. Menu Reserva",
+                         "0. Sair",
+                         "Escolha uma opção: "
+                        };
+        do {
+            op = ler(5,menu);
+            System.out.printf(String.valueOf(op));
+            switch (op) {
                 case 1:
                     System.out.println("Escolheu: Menu Livros");
                     break;
@@ -43,6 +54,6 @@ public class Menus {
                     System.out.println("Opcão inválida! Digite novamente. ");
             }
 
-        } while (ler_menu_opcao != 0);
+        } while (op != 0);
     }
 }
