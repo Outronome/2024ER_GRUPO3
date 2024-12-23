@@ -2,12 +2,11 @@ import java.util.Scanner;
 
 public class Menus {
     private static int ler(int range, String[] pergunta){
+        Scanner ler = new Scanner(System.in);
         int val = -1  ;
         do {
-            Scanner ler = new Scanner(System.in);
             escrever(pergunta);
             val = ler.nextInt();
-            System.out.println(val);
         }while (val<=0 && val >= range);
         return val;
     }
