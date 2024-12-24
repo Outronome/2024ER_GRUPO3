@@ -1,97 +1,53 @@
 import java.io.*;
-import java.util.Scanner;
 
-public class Ficheiros {
-    public ler(){
-        return;
+
+public abstract class Ficheiros {
+
+    private String nomeFicheiro;
+
+    public Ficheiros(String nomeFicheiro) {
+        this.nomeFicheiro = nomeFicheiro;
     }
-    public escrever(){
-        return;
-    }
-    public atualizar(){
-        return;
-    }
-    public apagar(){
-        return;
-    }
-    static void lerFicheiroComBufferedReader(String nomeFicheiro) {
-        System.out.println("###################################");
-        System.out.println("## Leitura usando BufferedReader ##");
-        System.out.println("###################################");
-        System.out.println(""); // Dar um espaçamento de uma linha
 
-        // Outra forma para a instrução try é especificar a instrução específica
-        // que pode gerar o erro de runtime
-        try (BufferedReader ler = new BufferedReader( new FileReader("c:\\teste.txt")))
-        {
-            String linha;
-            String[] campos;
-
-            // Neste caso, temos de tentar ler a próxima linha
-            // e verificar se a operação foi bem sucedida (não retornou null)
-            while ((linha = ler.readLine()) != null) {
-                // Separa o valor de linha em várias strings,
-                // separando pelo caracter "|". Como o caracter "|" é especial,
-                // é necessário especificar que o caracter não é um RegEx.
-                campos = linha.split("\\|");
-
-                // Imprime a linha
-                System.out.println(linha);
-
-                // Ciclo "for each". Neste caso, a variável c assume o valor
-                // de cada elemento do array campos.
-                for (String c:campos) {
-                    // Imprime cada campo separadamente
-                    System.out.println(c);
-                }
-            }
-            ler.close();
-
+    // Função para ler do ficheiro e retornar uma lista de objetos do tipo T
+    public List<T> ler() {
+        List<T> lista = new ArrayList<>();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(nomeFicheiro))) {
+            lista = (List<T>) ois.readObject();  // Faz o cast para o tipo correto
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Erro ao ler o ficheiro: " + e.getMessage());
         }
-        catch (IOException ex) {
-            // A classe BufferedReader lança uma exceção IOException
-            // caso não consiga abrir o ficheiro
+        return lista;
+    }
+
+    // Função para escrever uma lista de objetos do tipo T no ficheiro
+    public void escrever(List<T> lista) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nomeFicheiro))) {
+            oos.writeObject(lista);  // Escreve a lista no ficheiro
+        } catch (IOException e) {
+            System.err.println("Erro ao escrever no ficheiro: " + e.getMessage());
         }
     }
 
-    /**
-     * Este método usa as classes BufferedWriter e FileWriter para escrever
-     * texto num ficheiro.
-     * @param nomeFicheiro Caminho completo do ficheiro a ser escrito
-     */
-    static void gravarFicheiroComBufferedWriter(String nomeFicheiro) {
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeFicheiro))) {
-            // Cria (sobrepõe) sempre o ficheiro.
-            // Para acrescentar ao ficheiro, seria necessário alterar a linha anterior,
-            // acrescentando o parâmetro "append" ao construtor do FileWriter:
-            // (...) new FileWriter(nomeFicheiro, true)
-
-
-            // O ciclo seguinte pede ao utilizador para introduzir texto
-            // a gravar no ficheiro.
-            // Para sair, deve carregar em Enter sem escrever nada.
-            String texto;
-            Scanner ler = new Scanner(System.in);
-            System.out.println("Introduza texto a gravar no ficheiro");
-            System.out.println("Para sair, carregue em Enter sem introduzir mais nada");
-            do {
-                texto = ler.nextLine();
-
-                // Escreve o texto que leu no ficheiro
-                writer.write(texto);
-
-                // Escreve uma quebra de linha
-                writer.write(System.lineSeparator());
-
-            } while (!texto.equals(""));
-
-            writer.close();
-        }
-        catch (IOException ex) {
-
-        }
-
+    // Função para atualizar o conteúdo do ficheiro, substituindo a lista
+    public void atualizar(List<T> lista) {
+        escrever(lista);  // Como a atualização é basicamente sobrescrever, podemos chamar a função escrever
     }
+
+    // Função para apagar os dados do ficheiro
+    public void apagar() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nomeFicheiro))) {
+            oos.writeObject(new ArrayList<T>());  // Escreve uma lista vazia no ficheiro, apagando o conteúdo anterior
+        } catch (IOException e) {
+            System.err.println("Erro ao apagar o ficheiro: " + e.getMessage());
+        }
+    }
+
+
+
+
+
+
 }
+
 
