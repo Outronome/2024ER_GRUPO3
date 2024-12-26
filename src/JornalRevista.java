@@ -1,30 +1,29 @@
-public class JornalRevista {
-    String titulo;
-    Editora editora;
-    Categoria categoria;
-    Cod issn;
-    Data dataPublicacao;
+// Classe JornalRevista, que herda de Obra
+public class JornalRevista extends Obra {
+    private String issn;
+    private String dataPublicacao;
 
-    public JornalRevista(String titulo, Editora editora, Categoria categoria, Cod issn, Data dataPublicacao) {
-        this.titulo = titulo;
-        this.editora = editora;
-        this.categoria = categoria;
+    // Construtor
+    public JornalRevista(String titulo, String editora, String categoria, String issn, String dataPublicacao) {
+        super(titulo, editora, categoria);
         this.issn = issn;
         this.dataPublicacao = dataPublicacao;
     }
-    public String registar (){
-        //código de registar o jornaisrevista no ficheiro
-        return "Resultado";
+
+    // Getters e Setters
+    public String getIssn() {
+        return issn;
     }
-    public String editar (){
-        //código de editar o jornaisrevista no ficheiro
-        return "Resultado";
+
+    public void setIssn(String issn) {
+        this.issn = issn;
     }
-    public String eliminar (){
-        //código de eliminar o jornaisrevista no ficheiro
-        return "Resultado";
+
+    public String getDataPublicacao() {
+        return dataPublicacao;
     }
-    /*public List<JornalRevista> mostrar (){
-        //código de enviar o range de jornaisrevista que estão no ficheiro caso não receba range enviar tudo
-    }*/
+
+    public void setDataPublicacao(String dataPublicacao) {
+        this.dataPublicacao = dataPublicacao;
+    }
 }
