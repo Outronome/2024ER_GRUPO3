@@ -22,7 +22,12 @@ public class Main {
         for (Livro livro : livros) {
             ficheiroLivros.escrever(nomeFicheiro,livro, livroFormat);
         }
+        List<String> linhas = Ficheiros.ler(nomeFicheiro);
 
+        // Exibe cada linha do ficheiro
+        for (int i = 0; i < linhas.size(); i++) {
+            System.out.println("Linha " + i + ": " + linhas.get(i));
+        }
         /*
 
         // Ler os livros do ficheiro

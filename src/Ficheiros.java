@@ -26,16 +26,18 @@ public abstract class Ficheiros<T> {
 
 
     // Função para ler do ficheiro e retornar uma lista de objetos do tipo T
-    public List<T> ler(String nomeFicheiro) {
+    public static List<String> ler(String nomeFicheiro) {
         //le varias linhas e retorna de um dado ficheiro em array
-        verificarCriarFicheiro(nomeFicheiro,0);  // Verifica e cria o arquivo, se necessário
-        List<T> lista = new ArrayList<>();
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(nomeFicheiro))) {
-            lista = (List<T>) ois.readObject();  // Faz o cast para o tipo correto
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Erro ao ler o ficheiro: " + e.getMessage());
+        List<String> lista = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new File(nomeFicheiro), "UTF-8")) {
+            while (scanner.hasNextLine()) {
+                lista.add(scanner.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Erro: Ficheiro não encontrado - " + e.getMessage());
         }
         return lista;
+
     }
 
     // Função para escrever uma lista de objetos do tipo T no ficheiro
@@ -80,7 +82,6 @@ public abstract class Ficheiros<T> {
         //falta colocar identificador
         try {
             File file = new File(nomeFicheiro);
-            boolean fileNotEmpty = file.length() > 0;
             // Criar o arquivo, se não existir
             if (file.createNewFile() || file.exists()) {
                 try (PrintWriter writer = new PrintWriter(
@@ -88,9 +89,6 @@ public abstract class Ficheiros<T> {
                                 java.nio.file.StandardOpenOption.CREATE,
                                 java.nio.file.StandardOpenOption.APPEND));
                      Formatter ficheiro = new Formatter(writer)) {
-                    if (fileNotEmpty) {
-                        ficheiro.format("%n"); // Adiciona uma nova linha antes de escrever
-                    }
                     // Obter os dados do objeto usando o método getObjectData
                     Object[] campos = getObjectData(objeto);
 
@@ -143,11 +141,11 @@ public abstract class Ficheiros<T> {
 
     // Função para apagar os dados do ficheiro
     //public void apagar(String nomeFicheiro) {
-        verificarCriarFicheiro(nomeFicheiro);  // Verifica e cria o arquivo, se necessário
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nomeFicheiro))) {
-            oos.writeObject(new ArrayList<T>());  // Escreve uma lista vazia no ficheiro, apagando o conteúdo anterior
-        } catch (IOException e) {
-            System.err.println("Erro ao apagar o ficheiro: " + e.getMessage());
-        }
+        //verificarCriarFicheiro(nomeFicheiro);  // Verifica e cria o arquivo, se necessário
+        //try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nomeFicheiro))) {
+        //    oos.writeObject(new ArrayList<T>());  // Escreve uma lista vazia no ficheiro, apagando o conteúdo anterior
+        //} catch (IOException e) {
+        //    System.err.println("Erro ao apagar o ficheiro: " + e.getMessage());
+        //}
     //}
 }
