@@ -27,6 +27,7 @@ public abstract class Ficheiros<T> {
 
     // Função para ler do ficheiro e retornar uma lista de objetos do tipo T
     public List<T> ler(String nomeFicheiro) {
+        //le varias linhas e retorna de um dado ficheiro em array
         verificarCriarFicheiro(nomeFicheiro,0);  // Verifica e cria o arquivo, se necessário
         List<T> lista = new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(nomeFicheiro))) {
@@ -76,9 +77,10 @@ public abstract class Ficheiros<T> {
         }
     }*/
     public static <T> void escrever(String nomeFicheiro, T objeto, String formato) {
+        //falta colocar identificador
         try {
             File file = new File(nomeFicheiro);
-
+            boolean fileNotEmpty = file.length() > 0;
             // Criar o arquivo, se não existir
             if (file.createNewFile() || file.exists()) {
                 try (PrintWriter writer = new PrintWriter(
@@ -86,7 +88,9 @@ public abstract class Ficheiros<T> {
                                 java.nio.file.StandardOpenOption.CREATE,
                                 java.nio.file.StandardOpenOption.APPEND));
                      Formatter ficheiro = new Formatter(writer)) {
-
+                    if (fileNotEmpty) {
+                        ficheiro.format("%n"); // Adiciona uma nova linha antes de escrever
+                    }
                     // Obter os dados do objeto usando o método getObjectData
                     Object[] campos = getObjectData(objeto);
 
