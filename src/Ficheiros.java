@@ -23,39 +23,7 @@ public abstract class Ficheiros<T> {
         }
     }
     // Função para verificar a existência do arquivo e criá-lo, se não existir
-    private File verificarCriarFicheiro(String nomeFicheiro,int lerEscrever) {
-        try {
-            File file = new File(nomeFicheiro);
 
-            if (file.createNewFile()) {
-                if (lerEscrever == 0){
-                    try (Scanner ficheiro = new Scanner(new File(nomeFicheiro), "UTF-8")) {
-                        while (ficheiro.hasNextLine()) {
-                            String linha = ficheiro.nextLine();
-                            System.out.println(linha);
-                        }
-                    } catch (FileNotFoundException e) {
-                        System.err.println("Ficheiro não encontrado: " + e.getMessage());
-                    }
-                } else if (lerEscrever == 1) {
-                    try (PrintWriter writer = new PrintWriter(
-                            Files.newBufferedWriter(Paths.get(nomeFicheiro),
-                                    java.nio.file.StandardOpenOption.CREATE,
-                                    java.nio.file.StandardOpenOption.APPEND));
-                         Formatter ficheiro = new Formatter(writer)) {
-                        //code sair
-                    } catch (FileNotFoundException e) {
-                        System.err.println("Ficheiro não encontrado: " + e.getMessage());
-                    }
-                }else{
-                    //sai, pois o arquivo foi criado e não tem nem nada para editar, nem para apagar
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Erro ao criar o arquivo: " + e.getMessage());
-        }
-        return ficheiro;
-    }
 
     // Função para ler do ficheiro e retornar uma lista de objetos do tipo T
     public List<T> ler(String nomeFicheiro) {
@@ -135,17 +103,47 @@ public abstract class Ficheiros<T> {
     }
 
     // Função para atualizar o conteúdo do ficheiro, substituindo a lista
-    /*public void atualizar(List<T> lista, String nomeFicheiro) {
-        escrever(lista, nomeFicheiro);  // Como a atualização é basicamente sobrescrever, podemos chamar a função escrever
+    public static void atualizarConteudo(String caminhoArquivo, String chaveBusca, String palavraAntiga, String palavraNova, String novaLinha) throws IOException {
+        File arquivoOriginal = new File(caminhoArquivo);
+        File arquivoTemp = new File("temp.txt");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(arquivoOriginal));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoTemp))) {
+
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                // Verifica se a linha contém a chave de busca
+                if (linha.contains(chaveBusca)) {
+                    // Se novaLinha for fornecida, substitui a linha inteira
+                    if (novaLinha != null && !novaLinha.isEmpty()) {
+                        linha = novaLinha;
+                    } else {
+                        // Caso contrário, substitui apenas a palavra
+                        if (palavraAntiga != null && palavraNova != null && !palavraAntiga.isEmpty()) {
+                            linha = linha.replaceAll("\b" + palavraAntiga + "\b", palavraNova);
+                        }
+                    }
+                }
+
+                // Reescreve a linha (atualizada ou original)
+                writer.write(linha);
+                writer.newLine();
+            }
+        }
+
+        // Substitui o arquivo original pelo arquivo temporário
+        if (!arquivoOriginal.delete() || !arquivoTemp.renameTo(arquivoOriginal)) {
+            throw new IOException("Erro ao substituir o arquivo original.");
+        }
     }
 
     // Função para apagar os dados do ficheiro
-    public void apagar(String nomeFicheiro) {
+    //public void apagar(String nomeFicheiro) {
         verificarCriarFicheiro(nomeFicheiro);  // Verifica e cria o arquivo, se necessário
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nomeFicheiro))) {
             oos.writeObject(new ArrayList<T>());  // Escreve uma lista vazia no ficheiro, apagando o conteúdo anterior
         } catch (IOException e) {
             System.err.println("Erro ao apagar o ficheiro: " + e.getMessage());
         }
-    }*/
+    //}
 }
