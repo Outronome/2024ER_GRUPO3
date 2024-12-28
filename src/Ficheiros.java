@@ -139,13 +139,28 @@ public abstract class Ficheiros<T> {
         }
     }
 
-    // Função para apagar os dados do ficheiro
-    //public void apagar(String nomeFicheiro) {
-        //verificarCriarFicheiro(nomeFicheiro);  // Verifica e cria o arquivo, se necessário
-        //try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nomeFicheiro))) {
-        //    oos.writeObject(new ArrayList<T>());  // Escreve uma lista vazia no ficheiro, apagando o conteúdo anterior
-        //} catch (IOException e) {
-        //    System.err.println("Erro ao apagar o ficheiro: " + e.getMessage());
-        //}
-    //}
+    public static void apagar(String caminhoArquivo, String id) throws IOException {
+        File arquivoOriginal = new File(caminhoArquivo);
+        File arquivoTemp = new File("temp.txt");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(arquivoOriginal));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoTemp))) {
+
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                // Verifica se a linha contém o ID que queremos apagar
+                String[] campos = linha.split("\|"); // Divide a linha pelo delimitador '|'
+                if (campos.length > 0 && !campos[0].equals(id)) {
+                    // Se o ID não for encontrado, reescreve a linha no arquivo temporário
+                    writer.write(linha);
+                    writer.newLine();
+                }
+            }
+        }
+
+        // Substitui o arquivo original pelo arquivo temporário
+        if (!arquivoOriginal.delete() || !arquivoTemp.renameTo(arquivoOriginal)) {
+            throw new IOException("Erro ao substituir o arquivo original.");
+        }
+    }
 }
