@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public abstract class Ficheiros<T> {
-    private File ficheiro;
+
     private static <T> Object[] getObjectData(T object) {
         try {
             // Usamos reflexão para buscar o método getData na classe do objeto
@@ -22,10 +22,8 @@ public abstract class Ficheiros<T> {
             return new Object[0];
         }
     }
-    // Função para verificar a existência do arquivo e criá-lo, se não existir
 
-
-    // Função para ler do ficheiro e retornar uma lista de objetos do tipo T
+    // Função para ler do ficheiro e retornar uma lista com cada linha
     public static List<String> ler(String nomeFicheiro) {
         //le varias linhas e retorna de um dado ficheiro em array
         List<String> lista = new ArrayList<>();
@@ -37,7 +35,6 @@ public abstract class Ficheiros<T> {
             System.err.println("Erro: Ficheiro não encontrado - " + e.getMessage());
         }
         return lista;
-
     }
 
     // Função para escrever uma lista de objetos do tipo T no ficheiro
@@ -78,8 +75,8 @@ public abstract class Ficheiros<T> {
             System.err.println("Erro ao criar o arquivo: " + e.getMessage());
         }
     }*/
+    //escreve o conteudo enviado
     public static <T> void escrever(String nomeFicheiro, T objeto, String formato) {
-        //falta colocar identificador
         try {
             File file = new File(nomeFicheiro);
             // Criar o arquivo, se não existir
@@ -105,7 +102,8 @@ public abstract class Ficheiros<T> {
     }
 
     // Função para atualizar o conteúdo do ficheiro, substituindo a lista
-    public static void atualizarConteudo(String caminhoArquivo, String chaveBusca, String palavraAntiga, String palavraNova, String novaLinha) throws IOException {
+    public static void atualizarConteudo(String caminhoArquivo, String chaveBusca,
+                                         String palavraAntiga, String palavraNova, String novaLinha) throws IOException {
         File arquivoOriginal = new File(caminhoArquivo);
         File arquivoTemp = new File("temp.txt");
 
@@ -137,22 +135,6 @@ public abstract class Ficheiros<T> {
         if (!arquivoOriginal.delete() || !arquivoTemp.renameTo(arquivoOriginal)) {
             throw new IOException("Erro ao substituir o arquivo original.");
         }
-    }
-
-    public static void criarArquivoDeTeste(String caminhoArquivo) throws IOException {
-        // Cria um arquivo de teste com algumas linhas
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivo))) {
-            writer.write("Livro1|Autor1|2023-01-01");
-            writer.newLine();
-            writer.write("Livro2|Autor2|2023-02-01");
-            writer.newLine();
-            writer.write("Livro3|Autor3|2023-03-01");
-            writer.newLine();
-        }
-    }
-    public static void exibirConteudo(String caminhoArquivo) throws IOException {
-        // Exibe o conteúdo do arquivo
-        Files.lines(Paths.get(caminhoArquivo)).forEach(System.out::println);
     }
 
     public static void apagar(String caminhoArquivo, String id) throws IOException {
