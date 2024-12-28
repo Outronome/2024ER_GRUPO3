@@ -1,12 +1,12 @@
 import java.io.Serializable;
 
-public class Livro extends Categoria implements Serializable {
+public class LivroTesteFicheiros extends CategoriaTesteFicheiros implements Serializable {
     private int anoEdicao;
     private String isbn;
     private String autores;
 
     // Construtor
-    public Livro(String titulo, String editora, String categoria, int anoEdicao, String isbn, String autores) {
+    public LivroTesteFicheiros(String titulo, String editora, String categoria, int anoEdicao, String isbn, String autores) {
         super(titulo, editora, categoria);  // Chama o construtor da classe super (Categoria)
         this.anoEdicao = anoEdicao;
         this.isbn = isbn;

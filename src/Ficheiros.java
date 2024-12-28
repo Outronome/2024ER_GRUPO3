@@ -102,7 +102,7 @@ public abstract class Ficheiros<T> {
     }
 
     // Função para atualizar o conteúdo do ficheiro, substituindo a lista
-    public static void atualizarConteudo(String caminhoArquivo, String chaveBusca,
+    public static void atualizar(String caminhoArquivo, String chaveBusca,
                                          String palavraAntiga, String palavraNova, String novaLinha) throws IOException {
         File arquivoOriginal = new File(caminhoArquivo);
         File arquivoTemp = new File("temp.txt");
@@ -112,15 +112,15 @@ public abstract class Ficheiros<T> {
 
             String linha;
             while ((linha = reader.readLine()) != null) {
-                // Verifica se a linha contém a chave de busca
+                // Verifica se a linha contém a chave de busca (ISBN)
                 if (linha.contains(chaveBusca)) {
-                    // Se novaLinha for fornecida, substitui a linha inteira
+                    // Se uma nova linha for fornecida, substitui a linha inteira
                     if (novaLinha != null && !novaLinha.isEmpty()) {
                         linha = novaLinha;
                     } else {
                         // Caso contrário, substitui apenas a palavra
                         if (palavraAntiga != null && palavraNova != null && !palavraAntiga.isEmpty()) {
-                            linha = linha.replaceAll("\b" + palavraAntiga + "\b", palavraNova);
+                            linha = linha.replaceAll("\\b" + palavraAntiga + "\\b", palavraNova);
                         }
                     }
                 }
@@ -130,7 +130,6 @@ public abstract class Ficheiros<T> {
                 writer.newLine();
             }
         }
-
         // Substitui o arquivo original pelo arquivo temporário
         if (!arquivoOriginal.delete() || !arquivoTemp.renameTo(arquivoOriginal)) {
             throw new IOException("Erro ao substituir o arquivo original.");
@@ -148,7 +147,7 @@ public abstract class Ficheiros<T> {
             while ((linha = reader.readLine()) != null) {
                 // Verifica se a linha contém o ID que queremos apagar
                 String[] campos = linha.split("\\|"); // Divide a linha pelo delimitador '|'
-                if (campos.length > 0 && !campos[0].equals(id)) {
+                if (campos.length > 0 && !campos[4].equals(id)) {  // Verifica se o ISBN (campo 4) não é o ID
                     // Se o ID não for encontrado, reescreve a linha no arquivo temporário
                     writer.write(linha);
                     writer.newLine();

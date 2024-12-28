@@ -1,12 +1,12 @@
 import java.io.Serializable;
 
-public class Categoria implements Serializable {
+public class CategoriaTesteFicheiros implements Serializable {
     private String titulo;
     private String editora;
     private String categoria;
 
     // Construtor
-    public Categoria(String titulo, String editora, String categoria) {
+    public CategoriaTesteFicheiros(String titulo, String editora, String categoria) {
         this.titulo = titulo;
         this.editora = editora;
         this.categoria = categoria;
