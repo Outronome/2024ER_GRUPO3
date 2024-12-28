@@ -139,6 +139,22 @@ public abstract class Ficheiros<T> {
         }
     }
 
+    public static void criarArquivoDeTeste(String caminhoArquivo) throws IOException {
+        // Cria um arquivo de teste com algumas linhas
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivo))) {
+            writer.write("Livro1|Autor1|2023-01-01");
+            writer.newLine();
+            writer.write("Livro2|Autor2|2023-02-01");
+            writer.newLine();
+            writer.write("Livro3|Autor3|2023-03-01");
+            writer.newLine();
+        }
+    }
+    public static void exibirConteudo(String caminhoArquivo) throws IOException {
+        // Exibe o conteúdo do arquivo
+        Files.lines(Paths.get(caminhoArquivo)).forEach(System.out::println);
+    }
+
     public static void apagar(String caminhoArquivo, String id) throws IOException {
         File arquivoOriginal = new File(caminhoArquivo);
         File arquivoTemp = new File("temp.txt");
@@ -149,7 +165,7 @@ public abstract class Ficheiros<T> {
             String linha;
             while ((linha = reader.readLine()) != null) {
                 // Verifica se a linha contém o ID que queremos apagar
-                String[] campos = linha.split("\|"); // Divide a linha pelo delimitador '|'
+                String[] campos = linha.split("\\|"); // Divide a linha pelo delimitador '|'
                 if (campos.length > 0 && !campos[0].equals(id)) {
                     // Se o ID não for encontrado, reescreve a linha no arquivo temporário
                     writer.write(linha);

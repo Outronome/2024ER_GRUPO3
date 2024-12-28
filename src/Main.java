@@ -37,9 +37,7 @@ public class Main {
             System.out.println(livro);
         }
 
-        // Atualizar os livros (simplesmente sobrescreve)
-        livro1.setAnoEdicao(2023);
-        ficheiroLivros.atualizar(livros, nomeFicheiro);
+
 
         // Ler os livros do ficheiro
         livrosLidos = ficheiroLivros.ler(nomeFicheiro);
@@ -52,5 +50,6 @@ public class Main {
         ficheiroLivros.apagar(nomeFicheiro);
 
          */
+
     }
 }
