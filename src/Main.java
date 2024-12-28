@@ -5,8 +5,8 @@ public class Main {
         // Instância de Ficheiros para objetos do tipo Livro
         Ficheiros<Livro> ficheiroLivros = new Ficheiros<Livro>() {};
         // Formato que será utilizado na escrita
-        String livroFormat = "%s, %s, %s, %d, %s, %s%n";  // Formato para Livro
-        String categoriaFormat = "%s, %s, %s%n";  // Formato para Categoria
+        String livroFormat = "%s|%s|%s|%d|%s|%s%n";  // Formato para Livro
+        String categoriaFormat = "%s|%s|%s%n";  // Formato para Categoria
 
         // Criar livros
         Livro livro1 = new Livro("Java para Iniciantes", "Editora A", "Programação", 2022, "978-3-16-148410-0", "Autor 1");
