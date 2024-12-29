@@ -3,21 +3,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Menus {
-    private static int ler(int range, String[] pergunta){
-        Scanner ler = new Scanner(System.in);
-        int val = -1  ;
-        do {
-            escrever(pergunta);
-            val = ler.nextInt();
-        }while (val<=0 && val >= range);
-        return val;
-    }
-    private static void escrever(String[] perguntas){
-        for (String pergunta : perguntas) {
-            System.out.println(pergunta);
-        }
-    }
-    public static void Menus() {
+    public static void MenuPrincipal() {
         int op;
         String[] menu = {
                          "\n==== MENU PRINCIPAL ====",
