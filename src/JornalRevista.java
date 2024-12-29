@@ -11,11 +11,11 @@ public class JornalRevista extends Obra {
     }
 
     // Getters e Setters
-    public String getIssn() {
+    public String getCodigo() {
         return issn;
     }
 
-    public void setIssn(String issn) {
+    public void setCodigo(String issn) {
         this.issn = issn;
     }
 
@@ -25,5 +25,11 @@ public class JornalRevista extends Obra {
 
     public void setDataPublicacao(String dataPublicacao) {
         this.dataPublicacao = dataPublicacao;
+    }
+
+    public void exibeDados() {
+        super.exibeDados(); // Exibe os dados comuns
+        System.out.println("ISSN: " + issn);
+        System.out.println("Data de Publicação: " + dataPublicacao);
     }
 }

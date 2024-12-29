@@ -20,11 +20,11 @@ public class Livro extends Obra {
         this.anoEdicao = anoEdicao;
     }
 
-    public String getIsbn() {
+    public String getCodigo() {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
+    public void setCodigo(String isbn) {
         this.isbn = isbn;
     }
 
@@ -34,5 +34,12 @@ public class Livro extends Obra {
 
     public void setAutores(String autores) {
         this.autores = autores;
+    }
+
+    public void exibeDados() {
+        super.exibeDados(); // Exibe os dados comuns
+        System.out.println("Ano de Edição: " + anoEdicao);
+        System.out.println("ISBN: " + isbn);
+        System.out.println("Autores: " + autores);
     }
 }

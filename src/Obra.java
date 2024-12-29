@@ -32,8 +32,17 @@ public class Obra {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public String getCodigo() {
+        return null;
     }
+
+    public void exibeDados() {
+        System.out.println("Título: " + titulo);
+        System.out.println("Editora: " + editora);
+        System.out.println("Categoria: " + categoria);
+        System.out.println("Código: " + getCodigo());
+    }
+
 }
+
 

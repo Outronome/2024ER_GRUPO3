@@ -1,27 +1,58 @@
 import java.util.ArrayList;
 
 public class Biblioteca {
-    public static void main(String[] args) {
-        // Criando ArrayLists
-        ArrayList<Livro> livros = new ArrayList<>();
-        ArrayList<Revista> revistas = new ArrayList<>();
+    private String nome;
+    private ArrayList<Obra> obras;
+    private ArrayList<Utente> utentes;
+    private ArrayList<Operacao> operacoes;
 
-        // Adicionando livros
-        livros.add(new Livro("Livro A", "Editora A", "Ficção", 2020, "123-4567890123", "Autor A"));
 
-        // Adicionando revistas
-        revistas.add(new Revista("Revista X", "Editora X", "Ciência", "1111-2222", "01/01/2024"));
+    public Biblioteca(String nome) {
+        this.nome = nome;
+        this.obras = new ArrayList<>();
+        this.utentes = new ArrayList<>();
+        this.operacoes = new ArrayList<>();
+    }
 
-        // Mostrar livros
-        System.out.println("Livros:");
-        for (Livro livro : livros) {
-            System.out.println("Título: " + livro.getTitulo() + ", Editora: " + livro.getEditora() + ", Categoria: " + livro.getCategoria() + ", Ano: " + livro.getAnoEdicao() + ", ISBN: " + livro.getIsbn() + ", Autor(es): " + livro.getAutores());
+    public void adicionaObra(Obra obra) {
+        obras.add(obra);
+    }
+
+    public void removeObra(String codigo) {
+        Obra obraParaRemover = null; // Armazena a obra que será removida
+
+        for (Obra obra : obras) {
+            if (obra.getCodigo() != null && obra.getCodigo().equals(codigo)) {
+                obraParaRemover = obra;
+                break;
+            }
         }
 
-        // Mostrar revistas
-        System.out.println("\nRevistas:");
-        for (Revista revista : revistas) {
-            System.out.println("Título: " + revista.getTitulo() + ", Editora: " + revista.getEditora() + ", Categoria: " + revista.getCategoria() + ", ISSN: " + revista.getIssn() + ", Data de Publicação: " + revista.getDataPublicacao());
+        if (obraParaRemover != null) {
+            obras.remove(obraParaRemover);
+            System.out.println("Obra removida com sucesso.");
+        } else {
+            System.out.println("Obra com o código especificado não encontrada.");
+        }
+    }
+
+    public void leDadosObra(String codigo) {
+        boolean obraEncontrada = false;
+
+        for (Obra obra : obras) {
+            if (obra.getCodigo() != null && obra.getCodigo().equals(codigo)) {
+                obraEncontrada = true;
+                obra.exibeDados();
+                break;
+            }
+        }
+
+        if (!obraEncontrada) {
+            System.out.println("Obra com o código especificado não encontrada.");
         }
     }
 }
+
+
+
+
