@@ -1,16 +1,29 @@
 import java.util.Scanner;
 
 public class Funcionalidades {
-    public static int lerInt(int range, String[] pergunta){
+    public static int lerInteiros(int range, String[] pergunta){
         Scanner ler = new Scanner(System.in);
         int val = -1  ;
         do {
-            escreverString(pergunta);
+            escreverStrings(pergunta);
             val = ler.nextInt();
         }while (val<=0 && val >= range);
         return val;
     }
-    public static void escreverString(String[] lista){
+    public static String lerstring(String pergunta){
+        Scanner ler = new Scanner(System.in);
+        escreverString(pergunta);
+        return ler.nextLine();
+    }
+    public static int lerint(String pergunta){
+        Scanner ler = new Scanner(System.in);
+        escreverString(pergunta);
+        return ler.nextInt();
+    }
+    public static void escreverString(String texto){
+        System.out.println(texto);
+    }
+    public static void escreverStrings(String[] lista){
         for (String elemento : lista) {
             System.out.println(elemento);
         }

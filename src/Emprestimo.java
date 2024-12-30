@@ -6,7 +6,8 @@ public class Emprestimo{
     Data devolucaoPrevista;
     Data devolucaoDefinitiva;
 
-    public Emprestimo(int num, Utente utente, Obra obra, Data inicio, Data devolucaoPrevista, Data devolucaoDefinitiva) {
+    public Emprestimo(int num, Utente utente, Obra obra,
+                      Data inicio, Data devolucaoPrevista, Data devolucaoDefinitiva) {
         this.num = num;
         this.utente = utente;
         this.obra = obra;
