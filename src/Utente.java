@@ -5,8 +5,8 @@ public class Utente {
     private String nome;
     private int genero;
     private int contacto;
-    private String FORMATO = "%d|%s|%d|%d%n";
-    private String NOME_FICHEIRO = "utentes.txt";
+    private static String FORMATO = "%d|%s|%d|%d%n";
+    private static String NOME_FICHEIRO = "utentes.txt";
 
     public Utente(int nif, String nome, int genero, int contacto) {
         this.nif = nif;
@@ -27,7 +27,7 @@ public class Utente {
         }
         return sucesso;
     }
-    public void registar (){
+    private void introNif(){
         do {
             nif=0;
             String val = Funcionalidades.lerstring("Introduza o NIF do Utente");
@@ -41,18 +41,24 @@ public class Utente {
                     nif=0;
                 }
             }
-        }while (nif < 100000000 && nif > 999999999);
+        }while (nif < 100000000 || nif > 999999999);
+    }
+    private void introNome(){
         //Neste caso está a supor-se que não existem nomes com mais de 100 caracteres
         do {
             nome = Funcionalidades.lerstring("Introduza o Nome do Utente");
-            if (nome.length()<=3 && nome.length()>=100){
+            if (nome.length()<=3 || nome.length()>=100){
                 Funcionalidades.escreverString("Erro:Introduza um Nome");
             }
-        }while (nome.length()<=3 && nome.length()>=100);//supomos que todos os nomes tenham mais de 3 caracteres
+        }while (nome.length()<=3 || nome.length()>=100);//supomos que todos os nomes tenham mais de 3 caracteres
+    }
+    private void introGenero(){
         do {
             genero = Funcionalidades.lerint(
                     "Se o genero for masculino insira 0 se o genero for feminino insira 1");
-        }while(genero!=0 || genero!=1);
+        }while(genero!=0 && genero!=1);
+    }
+    private void introContacto(){
         do {
             contacto=0;
             String val = Funcionalidades.lerstring("Introduza o Contacto Telefonico do Utente");
@@ -66,16 +72,40 @@ public class Utente {
                     contacto=0;
                 }
             }
-        }while (contacto < 100000000 && contacto > 999999999);
+        }while (contacto < 100000000 || contacto > 999999999);
+    }
 
-        Utente newUtente = new Utente(nif, nome, genero, contacto);
-        Ficheiros.escrever("utente",newUtente,FORMATO);
-        int sucesso = verficarUtente(newUtente);
+    public int getNif() {
+        return nif;
+    }
+
+    public int getGenero() {
+        return genero;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getContacto() {
+        return contacto;
+    }
+
+    public static Utente registar(){
+        Utente tempUtente = new Utente(0,"",0,0);
+        tempUtente.introNif();
+        tempUtente.introNome();
+        tempUtente.introGenero();
+        tempUtente.introContacto();
+        Utente newUtente = new Utente(tempUtente.nif, tempUtente.nome, tempUtente.genero, tempUtente.contacto);
+        Ficheiros.escrever(NOME_FICHEIRO,newUtente,FORMATO);
+        int sucesso = newUtente.verficarUtente(newUtente);
         if (sucesso == 1){
             Funcionalidades.escreverString("Utente registado com sucesso.");
         } else if (sucesso == 0) {
             Funcionalidades.escreverString("Utente não foi registado.");
         }
+        return newUtente;
     }
     public String editar (){
         //código de editar o livro no ficheiro
@@ -84,6 +114,9 @@ public class Utente {
     public String eliminar (){
         //código de eliminar o livro no ficheiro
         return "Resultado";
+    }
+    public Object[] getData() {
+        return new Object[]{getNif(), getNome(), getGenero(), getContacto()};
     }
     /*public List<Utente> mostrar (){
         //código de enviar o range de utentes que estão no ficheiro caso não receba range enviar tudo
