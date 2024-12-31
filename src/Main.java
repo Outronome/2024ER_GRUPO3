@@ -5,11 +5,11 @@ public class Main {
 
 
 
-        Utente.registar();
+       // Utente.registar();
 
-        Biblioteca biblioteca = new Biblioteca("Minha Biblioteca");
+        Biblioteca biblioteca = new Biblioteca("BibPorto");
 
-        // Adicionando obras
+       /* // Adicionando obras
         Livro livro = new Livro("Livro", "Editora", "Ficção", 2021, "1234", "Autor");
         JornalRevista revista = new JornalRevista("Revista", "Editora", "Ciência", "5678", "01/12/2023");
 
@@ -20,6 +20,9 @@ public class Main {
         biblioteca.removeObra("1235");
         biblioteca.removeObra("9999");
         biblioteca.leDadosObra("1234");
+*/
+        biblioteca.criarBiblioteca("BibPorto");
+        Utente.registar();
 
         // Instância de Ficheiros para objetos do tipo Livro
         //Ficheiros<LivroTesteFicheiros> ficheiroLivros = new Ficheiros<LivroTesteFicheiros>() {};

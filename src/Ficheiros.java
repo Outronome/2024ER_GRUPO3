@@ -77,6 +77,8 @@ public abstract class Ficheiros<T> {
     }*/
     //escreve o conteudo enviado
     public static <T> void escrever(String nomeFicheiro, T objeto, String formato) {
+        String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
+        nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
         try {
             File file = new File(nomeFicheiro);
             // Criar o arquivo, se não existir
@@ -102,9 +104,11 @@ public abstract class Ficheiros<T> {
     }
 
     // Função para atualizar o conteúdo do ficheiro, substituindo a lista
-    public static void atualizar(String caminhoArquivo, String chaveBusca,
+    public static void atualizar(String nomeFicheiro, String chaveBusca,
                                          String palavraAntiga, String palavraNova, String novaLinha) throws IOException {
-        File arquivoOriginal = new File(caminhoArquivo);
+        String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
+        nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
+        File arquivoOriginal = new File(nomeFicheiro);
         File arquivoTemp = new File("temp.txt");
 
         try (BufferedReader reader = new BufferedReader(new FileReader(arquivoOriginal));
@@ -136,8 +140,10 @@ public abstract class Ficheiros<T> {
         }
     }
 
-    public static void apagar(String caminhoArquivo, String id) throws IOException {
-        File arquivoOriginal = new File(caminhoArquivo);
+    public static void apagar(String nomeFicheiro, String id) throws IOException {
+        String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
+        nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
+        File arquivoOriginal = new File(nomeFicheiro);
         File arquivoTemp = new File("temp.txt");
 
         try (BufferedReader reader = new BufferedReader(new FileReader(arquivoOriginal));

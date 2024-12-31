@@ -1,20 +1,16 @@
+import java.io.File;
 import java.util.ArrayList;
 
 public class Biblioteca {
-    private String nome;
-    private ArrayList<Obra> obras;
-    private ArrayList<Utente> utentes;
-    private ArrayList<Operacao> operacoes;
+
+    public static String bibliotecaAtual;
 
 
-    public Biblioteca(String nome) {
-        this.nome = nome;
-        this.obras = new ArrayList<>();
-        this.utentes = new ArrayList<>();
-        this.operacoes = new ArrayList<>();
+    public Biblioteca(String bibliotecaAtual) {
+        this.bibliotecaAtual= bibliotecaAtual;
     }
 
-    public void adicionaObra(Obra obra) {
+   /* public void adicionaObra(Obra obra) {
         obras.add(obra);
     }
 
@@ -50,6 +46,44 @@ public class Biblioteca {
         if (!obraEncontrada) {
             System.out.println("Obra com o código especificado não encontrada.");
         }
+    }
+*/
+    public void criarBiblioteca(String nomeBiblioteca) {
+        File novaBiblioteca = new File(nomeBiblioteca);
+
+        if (novaBiblioteca.exists()) {
+            System.out.println("A biblioteca já existe. Escolha outro nome.");
+        }
+        else{
+            if(novaBiblioteca.mkdir()){
+                System.out.println("Biblioteca criada com sucesso.");
+            }
+            else{
+                System.out.println("Erro ao criar biblioteca.");
+            }
+        }
+    }
+
+    public static String getBibliotecaAtual() {
+        return bibliotecaAtual;
+    }
+
+    public void setBibliotecaAtual(String bibliotecaAtual) {
+        this.bibliotecaAtual = bibliotecaAtual;
+    }
+
+    public boolean eliminarBiblioteca(String pasta){
+       File file = new File(pasta);
+        if (file.isDirectory()) {
+
+            File[] conteudo = file.listFiles();
+            if (conteudo != null) {
+                for (File arquivo : conteudo) {
+                    eliminarBiblioteca(arquivo.toString());
+                }
+            }
+        }
+        return file.delete();
     }
 }
 
