@@ -1,8 +1,8 @@
 // Classe base Obra
 public class Obra {
-    private String titulo;
-    private String editora;
-    private String categoria;
+    protected String titulo;
+    protected String editora;
+    protected String categoria;
 
     // Construtor
     public Obra(String titulo, String editora, String categoria) {

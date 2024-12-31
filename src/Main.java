@@ -21,8 +21,8 @@ public class Main {
         biblioteca.removeObra("9999");
         biblioteca.leDadosObra("1234");
 */
-        biblioteca.criarBiblioteca("BibPorto");
-        Utente.registar();
+        biblioteca.setBibliotecaAtual("BibPorto2");
+        Livro.registar();
 
         // Instância de Ficheiros para objetos do tipo Livro
         //Ficheiros<LivroTesteFicheiros> ficheiroLivros = new Ficheiros<LivroTesteFicheiros>() {};
