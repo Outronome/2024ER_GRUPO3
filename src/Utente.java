@@ -91,23 +91,61 @@ public class Utente {
         return contacto;
     }
 
+    private static List<String> ler(){
+        return Ficheiros.ler(NOME_FICHEIRO);
+    }
+
+    public static Utente procurar(String dado){
+        List<String> utentes;
+        utentes = ler();
+        return verificarSeExiste(utentes, dado);
+        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro utente
+    }
+
+    private static Utente verificarSeExiste(List<String> utentes, String dado){
+        //o dado tem que ser o nif o nome ou o contacto
+        for (String utente : utentes){
+            String[] partes = utente.split("\\|");
+            String[] partesFiltradas = { partes[0], partes[1], partes[3] };
+            for (String parte : partesFiltradas) {
+                if (parte.equals(dado)){
+                    return new Utente(Integer.parseInt(partes[1]),partes[2],Integer.parseInt(partes[3]),Integer.parseInt(partes[4]));
+                }
+            }
+        }
+        System.out.println("Utilizador não encontrado");
+        return null;
+    }
+
     public static Utente registar(){
         Utente tempUtente = new Utente(0,"",0,0);
-        tempUtente.introNif();
-        tempUtente.introNome();
-        tempUtente.introGenero();
-        tempUtente.introContacto();
-        Utente newUtente = new Utente(tempUtente.nif, tempUtente.nome, tempUtente.genero, tempUtente.contacto);
+        Utente newUtente;
+        Utente utente;
+        do{
+            tempUtente.introNif();
+            tempUtente.introNome();
+            tempUtente.introGenero();
+            tempUtente.introContacto();
+            newUtente = new Utente(tempUtente.nif, tempUtente.nome, tempUtente.genero, tempUtente.contacto);
+            List<String> utentes;
+            utentes = ler();
+            utente = verificarSeExiste(utentes,String.valueOf(newUtente.nif));
+
+        }while(utente==null);
         Ficheiros.escrever(NOME_FICHEIRO,newUtente,FORMATO);
         int sucesso = newUtente.verficarUtente(newUtente);
         if (sucesso == 1){
             Funcionalidades.escreverString("Utente registado com sucesso.");
         } else if (sucesso == 0) {
-            Funcionalidades.escreverString("Utente não foi registado.");
+            Funcionalidades.escreverString("Erro:Utente não foi registado.");
         }
         return newUtente;
     }
+
+
     public String editar (){
+        //procurar
+        //verifica
         //código de editar o livro no ficheiro
         return "Resultado";
     }
