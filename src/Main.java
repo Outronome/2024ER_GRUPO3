@@ -6,7 +6,6 @@ public class Main {
 
 
        // Utente.registar();
-
         Biblioteca biblioteca = new Biblioteca("BibPorto");
 
        /* // Adicionando obras

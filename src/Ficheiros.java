@@ -104,8 +104,8 @@ public abstract class Ficheiros<T> {
     }
 
     // Função para atualizar o conteúdo do ficheiro, substituindo a lista
-    public static void atualizar(String nomeFicheiro, String chaveBusca,
-                                         String palavraAntiga, String palavraNova, String novaLinha) throws IOException {
+    public static void atualizar(String nomeFicheiro, String elementoPesquisa,
+                                         String palavraAntiga, String palavraNova, String novaLinha){
         String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
         nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
         File arquivoOriginal = new File(nomeFicheiro);
@@ -117,7 +117,8 @@ public abstract class Ficheiros<T> {
             String linha;
             while ((linha = reader.readLine()) != null) {
                 // Verifica se a linha contém a chave de busca (ISBN)
-                if (linha.contains(chaveBusca)) {
+                if (linha.contains(elementoPesquisa)) {
+                    System.out.println("Registo Anterior"+linha);
                     // Se uma nova linha for fornecida, substitui a linha inteira
                     if (novaLinha != null && !novaLinha.isEmpty()) {
                         linha = novaLinha;
@@ -125,22 +126,28 @@ public abstract class Ficheiros<T> {
                         // Caso contrário, substitui apenas a palavra
                         if (palavraAntiga != null && palavraNova != null && !palavraAntiga.isEmpty()) {
                             linha = linha.replaceAll("\\b" + palavraAntiga + "\\b", palavraNova);
+                            System.out.println("Registo Atualizado: " + linha);
                         }
                     }
                 }
-
                 // Reescreve a linha (atualizada ou original)
                 writer.write(linha);
                 writer.newLine();
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         // Substitui o arquivo original pelo arquivo temporário
         if (!arquivoOriginal.delete() || !arquivoTemp.renameTo(arquivoOriginal)) {
-            throw new IOException("Erro ao substituir o arquivo original.");
+            try {
+                throw new IOException("Erro ao substituir o arquivo original.");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
-    public static void apagar(String nomeFicheiro, String id) throws IOException {
+    public static void apagar(String nomeFicheiro, String elementoPesquisa) {
         String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
         nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
         File arquivoOriginal = new File(nomeFicheiro);
@@ -152,18 +159,25 @@ public abstract class Ficheiros<T> {
             String linha;
             while ((linha = reader.readLine()) != null) {
                 // Verifica se a linha contém o ID que queremos apagar
-                String[] campos = linha.split("\\|"); // Divide a linha pelo delimitador '|'
-                if (campos.length > 0 && !campos[4].equals(id)) {  // Verifica se o ISBN (campo 4) não é o ID
-                    // Se o ID não for encontrado, reescreve a linha no arquivo temporário
+                if (!linha.contains(elementoPesquisa)) {
+                    // Se não encontrar, reescreve a linha no arquivo temporário
                     writer.write(linha);
                     writer.newLine();
+                }else{
+                    System.out.println("Registo Eliminado"+linha);
                 }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         // Substitui o arquivo original pelo arquivo temporário
         if (!arquivoOriginal.delete() || !arquivoTemp.renameTo(arquivoOriginal)) {
-            throw new IOException("Erro ao substituir o arquivo original.");
+            try {
+                throw new IOException("Erro ao substituir o arquivo original.");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

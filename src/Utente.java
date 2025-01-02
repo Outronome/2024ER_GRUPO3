@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.List;
 
 public class Utente {
@@ -5,8 +6,8 @@ public class Utente {
     private String nome;
     private int genero;
     private int contacto;
-    private static String FORMATO = "%d|%s|%d|%d%n";
-    private static String NOME_FICHEIRO = "utentes.txt";
+    private static final String FORMATO = "%d|%s|%d|%d%n";
+    private static final String NOME_FICHEIRO = "utentes.txt";
 
     public Utente(int nif, String nome, int genero, int contacto) {
         this.nif = nif;
@@ -20,9 +21,10 @@ public class Utente {
         List<String> utentes = Ficheiros.ler(NOME_FICHEIRO);
         for ( String utente : utentes ) {
             String[] partes = utente.split("\\|");  // Usa expressão regular para dividir por "|"
-            int nifComparar = Integer.parseInt(partes[0].trim());
-            if(nif == nifComparar){
-               sucesso = 1;
+            int nifCompararLista = Integer.parseInt(partes[0].trim());
+            if (newUtente.nif == nifCompararLista) {
+                sucesso = 1;
+                break;
             }
         }
         return sucesso;
@@ -109,7 +111,7 @@ public class Utente {
             String[] partesFiltradas = { partes[0], partes[1], partes[3] };
             for (String parte : partesFiltradas) {
                 if (parte.equals(dado)){
-                    return new Utente(Integer.parseInt(partes[1]),partes[2],Integer.parseInt(partes[3]),Integer.parseInt(partes[4]));
+                    return new Utente(Integer.parseInt(partes[0]),partes[1],Integer.parseInt(partes[2]),Integer.parseInt(partes[3]));
                 }
             }
         }
@@ -143,15 +145,21 @@ public class Utente {
     }
 
 
-    public String editar (){
-        //procurar
-        //verifica
-        //código de editar o livro no ficheiro
-        return "Resultado";
+    public void editar (String dadoPesquisa,String novoDado,int posCampo){
+        //a pos do campo é para saber se qual campo se esta a trabalhar
+        Utente utente = procurar(dadoPesquisa);
+        String palavraAnterior = switch (posCampo) {
+            case 0 -> String.valueOf(utente.nif);
+            case 1 -> utente.nome;
+            case 3 -> String.valueOf(utente.contacto);
+            default -> null;
+        };
+        if (palavraAnterior != null){
+            Ficheiros.atualizar(NOME_FICHEIRO,dadoPesquisa,palavraAnterior,novoDado,"");
+        }
     }
-    public String eliminar (){
-        //código de eliminar o livro no ficheiro
-        return "Resultado";
+    public void eliminar (String dadoPesquisa){
+        Ficheiros.apagar(NOME_FICHEIRO,dadoPesquisa);
     }
     public Object[] getData() {
         return new Object[]{getNif(), getNome(), getGenero(), getContacto()};
