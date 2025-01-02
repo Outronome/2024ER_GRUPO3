@@ -21,7 +21,8 @@ public class Main {
         biblioteca.leDadosObra("1234");
 */
         biblioteca.setBibliotecaAtual("BibPorto2");
-        Livro.registar();
+
+        Livro.editarLinha("978-3-16-148410-0");
 
         // Instância de Ficheiros para objetos do tipo Livro
         //Ficheiros<LivroTesteFicheiros> ficheiroLivros = new Ficheiros<LivroTesteFicheiros>() {};

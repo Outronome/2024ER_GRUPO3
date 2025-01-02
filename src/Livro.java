@@ -86,6 +86,101 @@ public class Livro extends Obra {
         return newLivro;
     }
 
+    public static void eliminar(){
+        String isbneliminado = Funcionalidades.lerstring("Introduza o Isbn do livro que deseja apagar:");
+        Ficheiros.apagar(NOME_FICHEIRO,isbneliminado);
+    }
+
+    private static List<String> ler(){
+        return Ficheiros.ler(NOME_FICHEIRO);
+    }
+
+    public static Livro procurar(String isbn){
+        List<String> livros;
+        livros = ler();
+        for (String livro : livros){
+            String[] partes = livro.split("\\|");
+            String[] partesFiltradas = { partes[3] };
+            for (String parte : partesFiltradas) {
+                if (parte.equals(isbn)){
+                    return new Livro(partes[0],partes[1],partes[2],Integer.parseInt(partes[3]),partes[4],partes[5]);
+                }
+            }
+        }
+        System.out.println("Utilizador não encontrado");
+        return null;
+        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro livro
+    }
+
+    public static void editarCampo(String isbn, String palavraAntiga, String palavraNova, int posCampo){
+
+        Livro livro = procurar(isbn);
+        if (livro == null) {
+            System.out.println("Livro não encontrado.");
+            return;
+        }
+
+        String palavraAnterior = switch (posCampo) {
+            case 0 -> livro.getTitulo();
+            case 1 -> livro.getEditora();
+            case 2 -> livro.getCategoria();
+            case 3 -> String.valueOf(livro.getAnoEdicao());
+            case 4 -> livro.getIsbn();
+            case 5 -> livro.getAutores();
+            default -> null;
+        };
+
+        if (palavraAntiga != null) {
+            Ficheiros.atualizar(NOME_FICHEIRO, isbn, palavraAntiga, palavraNova, "");
+            System.out.println("Livro atualizado com sucesso.");
+        } else {
+            System.out.println("Posição do campo inválida.");
+        }
+    }
+
+    public static void editarLinha(String isbn)
+    {
+
+        Livro livro = procurar(isbn);
+        if (livro == null) {
+            System.out.println("Livro não encontrado.");
+            return;
+        }
+
+        System.out.println("Editar os seguintes campos (pressione Enter para manter o valor atual):");
+
+
+        String novoTitulo = Funcionalidades.lerstring("Novo Título (atual: " + livro.titulo + "): ");
+        if (novoTitulo.isEmpty()) novoTitulo = livro.titulo;
+
+
+        String novaEditora = Funcionalidades.lerstring("Nova Editora (atual: " + livro.editora + "): ");
+        if (novaEditora.isEmpty()) novaEditora = livro.editora;
+
+
+        String novaCategoria = Funcionalidades.lerstring("Nova Categoria (atual: " + livro.categoria + "): ");
+        if (novaCategoria.isEmpty()) novaCategoria = livro.categoria;
+
+
+        String novoAnoEdicao = Funcionalidades.lerstring("Novo Ano de Edição (atual: " + livro.anoEdicao + "): ");
+        if (novoAnoEdicao.isEmpty()) novoAnoEdicao = String.valueOf(livro.anoEdicao);
+
+
+        String novoISBN = Funcionalidades.lerstring("Novo ISBN (atual: " + livro.isbn + "): ");
+        if (novoISBN.isEmpty()) novoISBN = livro.isbn;
+
+
+        String novosAutores = Funcionalidades.lerstring("Novos Autores (atual: " + livro.autores + "): ");
+        if (novosAutores.isEmpty()) novosAutores = livro.autores;
+
+
+        String novaLinha = novoTitulo + "|" + novaEditora + "|" + novaCategoria + "|" + novoAnoEdicao + "|" + novoISBN + "|" + novosAutores;
+
+        Ficheiros.atualizar(NOME_FICHEIRO, isbn, null, null, novaLinha);
+
+        System.out.println("Livro atualizado com sucesso.");
+    }
+
     private void introTitulo() {
         do {
             titulo = Funcionalidades.lerstring("Introduza o Título do Livro:");
