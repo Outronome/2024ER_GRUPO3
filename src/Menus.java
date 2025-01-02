@@ -25,6 +25,7 @@ public class Menus {
                     System.out.println("Escolheu: Menu Jornais/Revistas");
                     break;
                 case 3:
+                    MenuUtente();
                     System.out.println("Escolheu: Menu Utente");
                     break;
                 case 4:
@@ -58,18 +59,19 @@ public class Menus {
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: Adicionar Utente");
-                    Utente.registar();
+                    // Utente.registar();
                     break;
                 case 2:
                     System.out.println("Escolheu: Editar Utente");
+                    MenuUtentePesquisa();
                     break;
-                    MenuUtentePesquisa(0);
+                    //MenuUtentePesquisa(0);
                 case 3:
                     System.out.println("Escolheu: Remover Utente");
                     break;
-                    MenuUtentePesquisa(1);
+                   // MenuUtentePesquisa(1);
                 case 0:
-                    op = 0;
+                    // op = 0;
                     System.out.println("Voltar");
                     break;
                 default:
@@ -78,13 +80,14 @@ public class Menus {
 
         } while (op != 0);
     }
-    public static void MenuUtentePesquisa(int editElim) {
+
+    public static void MenuUtentePesquisa () {
         int op;
         String[] menu = {
                 "\n==== MENU Utente Edição ====",
-                "1. Pesquisar Pelo NIF",
-                "2. Pesquisar Pelo Nome",
-                "3. Pesquisar Pelo Contacto",
+                "1. Alterar o NIF",
+                "2. Alterar o Nome",
+                "3. Alterar o Contacto",
                 "0. Sair",
                 "Escolha uma opção: "
         };
@@ -94,27 +97,20 @@ public class Menus {
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: NIF");
-                    if (editElim == 0){
-                        Utente.registar("nif");
-                    }else{
-                        Utente.eliminar("nif");
-                    }
+                    // Ler o novo NIF
+                    // Chamar a função editar
+
                     break;
                 case 2:
                     System.out.println("Escolheu: Nome");
-                    if (editElim == 0){
-                        Utente.registar("nome");
-                    }else{
-                        Utente.eliminar("nome");
-                    }
+                    // Ler o novo Nome
+                    // Chamar a função editar
                     break;
                 case 3:
                     System.out.println("Escolheu: Contacto");
-                    if (editElim == 0){
-                        Utente.registar("contacto");
-                    }else{
-                        Utente.eliminar("contacto");
-                    }
+                    // Ler o novo Contacto
+                    // Chamar a função editar
+                    op ++;
                     break;
                 case 0:
                     op = 0;
