@@ -75,6 +75,7 @@ public class Livro extends Obra {
         tempLivro.introAnoEdicao();
         tempLivro.introIsbn();
         tempLivro.introAutores();
+       
         Livro newLivro = new Livro(tempLivro.titulo, tempLivro.editora, tempLivro.categoria, tempLivro.anoEdicao,tempLivro.isbn, tempLivro.autores);
         Ficheiros.escrever(NOME_FICHEIRO,newLivro,FORMATO);
         int sucesso = newLivro.verficarLivro(newLivro);

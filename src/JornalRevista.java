@@ -14,6 +14,7 @@ public class JornalRevista extends Obra {
     }
 
     // Getters e Setters
+    public String getIssn() {
         return issn;
     }
 
@@ -118,7 +119,7 @@ public class JornalRevista extends Obra {
 
     private void introDataPublicacao() {
 
-            dataPublicacao = Funcionalidades.lerstring("Data;");
+        dataPublicacao = Funcionalidades.lerstring("Data;");
 
     }
 
