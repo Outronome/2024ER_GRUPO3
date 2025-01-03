@@ -22,7 +22,7 @@ public class Main {
 */
         biblioteca.setBibliotecaAtual("BibPorto2");
 
-        Livro.editarLinha("978-3-16-148410-0");
+       JornalRevista.registar();
 
         // Instância de Ficheiros para objetos do tipo Livro
         //Ficheiros<LivroTesteFicheiros> ficheiroLivros = new Ficheiros<LivroTesteFicheiros>() {};

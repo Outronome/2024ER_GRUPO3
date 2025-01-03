@@ -181,24 +181,7 @@ public class Livro extends Obra {
         System.out.println("Livro atualizado com sucesso.");
     }
 
-    private void introTitulo() {
-        do {
-            titulo = Funcionalidades.lerstring("Introduza o Título do Livro:");
-            if (titulo.length() <= 3 || titulo.length() >= 100) {
-                Funcionalidades.escreverString("Erro: Introduza um Título válido (entre 3 e 100 caracteres)");
-            }
-        } while (titulo.length() <= 3 || titulo.length() >= 100);
-    }
-    private void introEditora() {
-        do {
-            editora = Funcionalidades.lerstring("Introduza os Editores:");
-            if (editora.length() <= 3 || editora.length() >= 100) {
-                Funcionalidades.escreverString("Erro: Introduza um nome de Editores válido (entre 3 e 100 caracteres)");
-         }
-        } while (editora.length() <= 3 || editora.length() >= 100);
-    }
 
-    private void introCategoria() {}
     private void introAnoEdicao() {
         do {
             anoEdicao = Funcionalidades.lerint("Introduza o Ano de Edição:");

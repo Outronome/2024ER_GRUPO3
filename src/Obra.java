@@ -43,6 +43,30 @@ public class Obra {
         System.out.println("Código: " + getCodigo());
     }
 
+    protected void introTitulo() {
+        do {
+            titulo = Funcionalidades.lerstring("Introduza o Título:");
+            if (titulo.length() <= 3 || titulo.length() >= 100) {
+                Funcionalidades.escreverString("Erro: Introduza um Título válido (entre 3 e 100 caracteres)");
+            }
+        } while (titulo.length() <= 3 || titulo.length() >= 100);
+    }
+    protected void introEditora() {
+        do {
+            editora = Funcionalidades.lerstring("Introduza os Editores:");
+            if (editora.length() <= 3 || editora.length() >= 100) {
+                Funcionalidades.escreverString("Erro: Introduza um nome de Editores válido (entre 3 e 100 caracteres)");
+            }
+        } while (editora.length() <= 3 || editora.length() >= 100);
+    }
+
+    protected void introCategoria() {do {
+        categoria = Funcionalidades.lerstring("Introduza a Categoria:");
+        if (categoria.length() <= 3 || categoria.length() >= 100) {
+            Funcionalidades.escreverString("Erro: Introduza uma Categoria válida (entre 3 e 100 caracteres)");
+        }
+    } while (categoria.length() <= 3 || categoria.length() >= 100);}
+
 }
 
 
