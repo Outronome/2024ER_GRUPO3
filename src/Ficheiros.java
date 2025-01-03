@@ -147,7 +147,7 @@ public abstract class Ficheiros<T> {
         }
     }
 
-    public static void apagar(String nomeFicheiro, String elementoPesquisa) {
+    public static void apagar(String nomeFicheiro, String dado) {
         String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
         nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
         File arquivoOriginal = new File(nomeFicheiro);
@@ -159,7 +159,7 @@ public abstract class Ficheiros<T> {
             String linha;
             while ((linha = reader.readLine()) != null) {
                 // Verifica se a linha contém o ID que queremos apagar
-                if (!linha.contains(elementoPesquisa)) {
+                if (!linha.contains(dado)) {
                     // Se não encontrar, reescreve a linha no arquivo temporário
                     writer.write(linha);
                     writer.newLine();
