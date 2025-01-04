@@ -37,7 +37,7 @@ public class JornalRevista extends Obra {
     }
 
     public static void eliminar(){
-        String isnneliminado = Funcionalidades.lerstring("Introduza o Isnn do jornal ou reista que deseja apagar:");
+        String isnneliminado = Funcionalidades.lerString("Introduza o Isnn do jornal ou reista que deseja apagar:");
         Ficheiros.apagar(NOME_FICHEIRO,isnneliminado);
     }
 
@@ -83,7 +83,7 @@ public class JornalRevista extends Obra {
 
     private void introIssn() {
         do {
-            issn = Funcionalidades.lerstring("Introduza o ISSN do Livro (formato 1234-567X):");
+            issn = Funcionalidades.lerString("Introduza o ISSN do Livro (formato 1234-567X):");
 
 
             if (!issn.matches("^\\d{4}-\\d{3}[\\dX]$")) {
@@ -119,7 +119,7 @@ public class JornalRevista extends Obra {
 
     private void introDataPublicacao() {
 
-        dataPublicacao = Funcionalidades.lerstring("Data;");
+        dataPublicacao = Funcionalidades.lerString("Data;");
 
     }
 

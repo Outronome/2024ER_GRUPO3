@@ -32,7 +32,7 @@ public class Utente {
     private void introNif(){
         do {
             nif=0;
-            String val = Funcionalidades.lerstring("Introduza o NIF do Utente");
+            String val = Funcionalidades.lerString("Introduza o NIF do Utente");
             if (val.length()!=9){
                 Funcionalidades.escreverString("O NIF tem que conter 9 numeros");
             }else{
@@ -48,7 +48,7 @@ public class Utente {
     private void introNome(){
         //Neste caso está a supor-se que não existem nomes com mais de 100 caracteres
         do {
-            nome = Funcionalidades.lerstring("Introduza o Nome do Utente");
+            nome = Funcionalidades.lerString("Introduza o Nome do Utente");
             if (nome.length()<=3 || nome.length()>=100){
                 Funcionalidades.escreverString("Erro:Introduza um Nome");
             }
@@ -56,14 +56,14 @@ public class Utente {
     }
     private void introGenero(){
         do {
-            genero = Funcionalidades.lerint(
+            genero = Funcionalidades.lerInt(
                     "Se o genero for masculino insira 0 se o genero for feminino insira 1");
         }while(genero!=0 && genero!=1);
     }
     private void introContacto(){
         do {
             contacto=0;
-            String val = Funcionalidades.lerstring("Introduza o Contacto Telefonico do Utente");
+            String val = Funcionalidades.lerString("Introduza o Contacto Telefonico do Utente");
             if (val.length()!=9){
                 Funcionalidades.escreverString("O Contacto Telefonico tem que conter 9 numeros");
             } else if (val.startsWith("91") || val.startsWith("92") || val.startsWith("93") || val.startsWith("95") || val.startsWith("96")) {

@@ -47,12 +47,12 @@ public class Menus {
         int indice = 4;
         do {
             indice = 4;
-            Funcionalidades.escreverString(opcoes);
+            Funcionalidades.escreverStrings(opcoes);
             for (String pasta : pastas) {
                 System.out.println(indice+". "+"Abrir na "+pasta);
                 indice++;
             }
-            op = Funcionalidades.lerInt(5,pergunta);
+            op = Funcionalidades.lerOpcoesMenus(5,pergunta);
             //falta definir a biblioteca
             switch(op) {
                 case 1:
@@ -93,7 +93,7 @@ public class Menus {
                          "Escolha uma opção: "
                         };
         do {
-            op = Funcionalidades.lerInt(5,menu);
+            op = Funcionalidades.lerOpcoesMenus(5,menu);
             switch (op) {
                 case 1:
                     menuLivro();
@@ -133,7 +133,7 @@ public class Menus {
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerInt(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
@@ -174,7 +174,7 @@ public class Menus {
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerInt(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
@@ -215,7 +215,7 @@ public class Menus {
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerInt(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
@@ -256,7 +256,7 @@ public class Menus {
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerInt(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
@@ -297,7 +297,7 @@ public class Menus {
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerInt(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
@@ -338,7 +338,7 @@ public class Menus {
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerInt(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:

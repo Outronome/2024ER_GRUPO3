@@ -88,7 +88,7 @@ public class Livro extends Obra {
     }
 
     public static void eliminar(){
-        String isbneliminado = Funcionalidades.lerstring("Introduza o Isbn do livro que deseja apagar:");
+        String isbneliminado = Funcionalidades.lerString("Introduza o Isbn do livro que deseja apagar:");
         Ficheiros.apagar(NOME_FICHEIRO,isbneliminado);
     }
 
@@ -151,27 +151,27 @@ public class Livro extends Obra {
         System.out.println("Editar os seguintes campos (pressione Enter para manter o valor atual):");
 
 
-        String novoTitulo = Funcionalidades.lerstring("Novo Título (atual: " + livro.titulo + "): ");
+        String novoTitulo = Funcionalidades.lerString("Novo Título (atual: " + livro.titulo + "): ");
         if (novoTitulo.isEmpty()) novoTitulo = livro.titulo;
 
 
-        String novaEditora = Funcionalidades.lerstring("Nova Editora (atual: " + livro.editora + "): ");
+        String novaEditora = Funcionalidades.lerString("Nova Editora (atual: " + livro.editora + "): ");
         if (novaEditora.isEmpty()) novaEditora = livro.editora;
 
 
-        String novaCategoria = Funcionalidades.lerstring("Nova Categoria (atual: " + livro.categoria + "): ");
+        String novaCategoria = Funcionalidades.lerString("Nova Categoria (atual: " + livro.categoria + "): ");
         if (novaCategoria.isEmpty()) novaCategoria = livro.categoria;
 
 
-        String novoAnoEdicao = Funcionalidades.lerstring("Novo Ano de Edição (atual: " + livro.anoEdicao + "): ");
+        String novoAnoEdicao = Funcionalidades.lerString("Novo Ano de Edição (atual: " + livro.anoEdicao + "): ");
         if (novoAnoEdicao.isEmpty()) novoAnoEdicao = String.valueOf(livro.anoEdicao);
 
 
-        String novoISBN = Funcionalidades.lerstring("Novo ISBN (atual: " + livro.isbn + "): ");
+        String novoISBN = Funcionalidades.lerString("Novo ISBN (atual: " + livro.isbn + "): ");
         if (novoISBN.isEmpty()) novoISBN = livro.isbn;
 
 
-        String novosAutores = Funcionalidades.lerstring("Novos Autores (atual: " + livro.autores + "): ");
+        String novosAutores = Funcionalidades.lerString("Novos Autores (atual: " + livro.autores + "): ");
         if (novosAutores.isEmpty()) novosAutores = livro.autores;
 
 
@@ -185,7 +185,7 @@ public class Livro extends Obra {
 
     private void introAnoEdicao() {
         do {
-            anoEdicao = Funcionalidades.lerint("Introduza o Ano de Edição:");
+            anoEdicao = Funcionalidades.lerInt("Introduza o Ano de Edição:");
             if (anoEdicao < 0 || anoEdicao > 2024) {
                 Funcionalidades.escreverString("Erro: Introduza um Ano de Edição válido (entre 1450 e 2024)");
             }
@@ -242,7 +242,7 @@ public class Livro extends Obra {
     private void introIsbn() {
 
         do {
-            isbn = Funcionalidades.lerstring("Introduza o ISBN (com hífens):");
+            isbn = Funcionalidades.lerString("Introduza o ISBN (com hífens):");
             if (!isbnValido(isbn)) {
                 Funcionalidades.escreverString("Erro: ISBN inválido. Certifique-se de que seja um ISBN-10 ou ISBN-13 válido (com hífens).");
             }
@@ -255,7 +255,7 @@ public class Livro extends Obra {
         int numeroAutores;
 
         do {
-            numeroAutores = Funcionalidades.lerint("Quantos autores tem o Livro?");
+            numeroAutores = Funcionalidades.lerInt("Quantos autores tem o Livro?");
             if (numeroAutores <= 0) {
                 Funcionalidades.escreverString("Erro: O número de autores deve ser maior que zero.");
             }
@@ -265,7 +265,7 @@ public class Livro extends Obra {
         for (int i = 1; i <= numeroAutores; i++) {
             String autor;
             do {
-                autor = Funcionalidades.lerstring("Introduza o nome do autor " + i + ":");
+                autor = Funcionalidades.lerString("Introduza o nome do autor " + i + ":");
                 if (autor.length() <= 3 || autor.length() >= 100) {
                     Funcionalidades.escreverString("Erro: O nome do autor deve ter entre 3 e 100 caracteres.");
                 }

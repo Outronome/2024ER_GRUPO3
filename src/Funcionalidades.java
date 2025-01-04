@@ -10,12 +10,21 @@ public class Funcionalidades {
         }while (val<=0 && val >= range);
         return val;
     }
-    public static String lerstring(String pergunta){
+    public static int lerOpcoesMenus(int range, String[] pergunta){
+        Scanner ler = new Scanner(System.in);
+        int val = -1  ;
+        do {
+            escreverStrings(pergunta);
+            val = ler.nextInt();
+        }while (val<=0 && val >= range);
+        return val;
+    }
+    public static String lerString(String pergunta){
         Scanner ler = new Scanner(System.in);
         escreverString(pergunta);
         return ler.nextLine();
     }
-    public static int lerint(String pergunta){
+    public static int lerInt(String pergunta){
         Scanner ler = new Scanner(System.in);
         escreverString(pergunta);
         return ler.nextInt();
