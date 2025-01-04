@@ -15,5 +15,4 @@ public class Funcionalidades {
             System.out.println(elemento);
         }
     }
-
 }
