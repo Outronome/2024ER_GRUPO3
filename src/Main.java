@@ -1,8 +1,8 @@
 
 public class Main {
     public static void main(String[] args) {
-
-        Menus.menuPrincipal();
+        Menus menu = new Menus();
+        menu.menuPrincipal();
 
     }
 }

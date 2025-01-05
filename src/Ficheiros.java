@@ -25,7 +25,9 @@ public abstract class Ficheiros<T> {
 
     // Função para ler do ficheiro e retornar uma lista com cada linha
     public static List<String> ler(String nomeFicheiro) {
-        //le varias linhas e retorna de um dado ficheiro em array
+        //le varias linhas e retorna de um dado ficheiro em
+        String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
+        nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
         List<String> lista = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(nomeFicheiro), "UTF-8")) {
             while (scanner.hasNextLine()) {
@@ -118,7 +120,7 @@ public abstract class Ficheiros<T> {
             while ((linha = reader.readLine()) != null) {
                 // Verifica se a linha contém a chave de busca (ISBN)
                 if (linha.contains(elementoPesquisa)) {
-                    System.out.println("Registo Anterior"+linha);
+                    System.out.println("Registo Anterior: "+linha);
                     // Se uma nova linha for fornecida, substitui a linha inteira
                     if (novaLinha != null && !novaLinha.isEmpty()) {
                         linha = novaLinha;

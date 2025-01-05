@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.List;
 
 public class Utente {
@@ -15,6 +14,7 @@ public class Utente {
         this.genero = genero;
         this.contacto = contacto;
     }
+
     private int verficarUtente(Utente newUtente){
         int sucesso = 0;
         //verifica se existe no ficheiro
@@ -29,10 +29,11 @@ public class Utente {
         }
         return sucesso;
     }
-    private void introNif(){
+
+    public int introNif(String pergunta){
         do {
             nif=0;
-            String val = Funcionalidades.lerString("Introduza o NIF do Utente");
+            String val = Funcionalidades.lerString(pergunta);
             if (val.length()!=9){
                 Funcionalidades.escreverString("O NIF tem que conter 9 numeros");
             }else{
@@ -44,26 +45,31 @@ public class Utente {
                 }
             }
         }while (nif < 100000000 || nif > 999999999);
+        return nif;
     }
-    private void introNome(){
+
+    public String introNome(String pergunta){
         //Neste caso está a supor-se que não existem nomes com mais de 100 caracteres
         do {
-            nome = Funcionalidades.lerString("Introduza o Nome do Utente");
+            nome = Funcionalidades.lerString(pergunta);
             if (nome.length()<=3 || nome.length()>=100){
                 Funcionalidades.escreverString("Erro:Introduza um Nome");
             }
         }while (nome.length()<=3 || nome.length()>=100);//supomos que todos os nomes tenham mais de 3 caracteres
+        return nome;
     }
+
     private void introGenero(){
         do {
             genero = Funcionalidades.lerInt(
                     "Se o genero for masculino insira 0 se o genero for feminino insira 1");
         }while(genero!=0 && genero!=1);
     }
-    private void introContacto(){
+
+    private int introContacto(String pergunta){
         do {
             contacto=0;
-            String val = Funcionalidades.lerString("Introduza o Contacto Telefonico do Utente");
+            String val = Funcionalidades.lerString(pergunta);
             if (val.length()!=9){
                 Funcionalidades.escreverString("O Contacto Telefonico tem que conter 9 numeros");
             } else if (val.startsWith("91") || val.startsWith("92") || val.startsWith("93") || val.startsWith("95") || val.startsWith("96")) {
@@ -75,6 +81,20 @@ public class Utente {
                 }
             }
         }while (contacto < 100000000 || contacto > 999999999);
+        return contacto;
+    }
+
+    public void setNif(int nif) {
+        this.nif = nif;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+
+    public void setContacto(int contacto) {
+        this.contacto = contacto;
     }
 
     public int getNif() {
@@ -121,19 +141,29 @@ public class Utente {
 
     public static Utente registar(){
         Utente tempUtente = new Utente(0,"",0,0);
-        Utente newUtente;
-        Utente utente;
-        do{
-            tempUtente.introNif();
-            tempUtente.introNome();
-            tempUtente.introGenero();
-            tempUtente.introContacto();
-            newUtente = new Utente(tempUtente.nif, tempUtente.nome, tempUtente.genero, tempUtente.contacto);
-            List<String> utentes;
-            utentes = ler();
-            utente = verificarSeExiste(utentes,String.valueOf(newUtente.nif));
-
-        }while(utente==null);
+        Utente newUtente=null;
+        Utente utente=null;
+        int cont = 1;
+        boolean first = true;
+        do {
+            if (!first) {
+                cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+            }
+            if (cont == 1) {
+                tempUtente.introNif("Introduza o Nif do Utente");
+                tempUtente.introNome("Introduza o Nome do Utente");
+                tempUtente.introGenero();
+                tempUtente.introContacto("Introduza o Contacto Telefónico do Utente");
+                newUtente = new Utente(tempUtente.nif, tempUtente.nome, tempUtente.genero, tempUtente.contacto);
+                List<String> utentes;
+                utentes = ler();
+                utente = verificarSeExiste(utentes,String.valueOf(newUtente.nif));
+                if (utente!=null){
+                    Funcionalidades.escreverString("Não foi possivel inserir o utente pois ele já existe");
+                }
+                first = false;
+            }
+        } while (utente != null && cont == 1);
         Ficheiros.escrever(NOME_FICHEIRO,newUtente,FORMATO);
         int sucesso = newUtente.verficarUtente(newUtente);
         if (sucesso == 1){
@@ -145,21 +175,35 @@ public class Utente {
     }
 
 
-    public void editar (String dadoPesquisa,String novoDado,int posCampo){
-        //a pos do campo é para saber se qual campo se esta a trabalhar
-        Utente utente = procurar(dadoPesquisa);
-        String palavraAnterior = switch (posCampo) {
-            case 0 -> String.valueOf(utente.nif);
-            case 1 -> utente.nome;
-            case 3 -> String.valueOf(utente.contacto);
-            default -> null;
-        };
-        if (palavraAnterior != null){
-            Ficheiros.atualizar(NOME_FICHEIRO,dadoPesquisa,palavraAnterior,novoDado,"");
+    public void editar(int op){
+        String novoDado = null;
+        String dadoPesquisa = null;
+        switch (op){
+            case 1:
+                dadoPesquisa = Integer.toString(nif);
+                novoDado = Integer.toString(introNif("Introduza o novo Nif"));
+                setNif(Integer.parseInt(novoDado));
+                break;
+            case 2:
+                dadoPesquisa = nome;
+                novoDado = introNome("Introduza o novo Nome do Utente");
+                setNome(novoDado);
+                break;
+            case 3:
+                dadoPesquisa = Integer.toString(contacto);
+                novoDado = Integer.toString(introContacto("Introduza o novo Contacto Telefonico do Utente"));
+                setContacto(Integer.parseInt(novoDado));
+            default:
+                break;
         }
+
+
+        Ficheiros.atualizar(NOME_FICHEIRO,dadoPesquisa,dadoPesquisa,novoDado,"");
+
+
     }
-    public void eliminar (String dadoPesquisa){
-        Ficheiros.apagar(NOME_FICHEIRO,dadoPesquisa);
+    public void eliminar (){
+        Ficheiros.apagar(NOME_FICHEIRO,Integer.toString(nif));
     }
     public Object[] getData() {
         return new Object[]{getNif(), getNome(), getGenero(), getContacto()};
@@ -168,3 +212,4 @@ public class Utente {
         //código de enviar o range de utentes que estão no ficheiro caso não receba range enviar tudo
     }*/
 }
+

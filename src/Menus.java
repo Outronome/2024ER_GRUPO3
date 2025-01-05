@@ -7,7 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Menus {
-    private static ArrayList<String> pesquisarBibliotecas() {
+
+    private static Utente utente = new Utente(0,"",0,0);
+    private Biblioteca biblioteca = new Biblioteca(null);
+
+    private ArrayList<String> pesquisarBibliotecas() {
         // Caminho para a raiz do projeto (mude se necessário)
         Path raizProjeto = Paths.get(".");
 
@@ -39,7 +43,7 @@ public class Menus {
         return new ArrayList<>(pastasEncontradas);
     }
 
-    private static void menuBiblioteca(){
+    private void menuBiblioteca(){
         ArrayList<String> pastas = pesquisarBibliotecas();
         int op;
         String[] opcoes = new String[]{"1. Adicionar Biblioteca: ","2. Editar Biblioteca","3. Apagar Biblioteca"};
@@ -58,6 +62,7 @@ public class Menus {
                 case 1:
                     System.out.println("Adicionar Biblioteca: ");
                     //adicionar biblioteca
+                    //cria todos os ficheiros que vão ser necessários
                     //e abre na respetiva biblioteca
                     break;
                 case 2:
@@ -70,7 +75,9 @@ public class Menus {
                     //eliminar biblioteca
                     break;
                 default:
-                    System.out.println("abrir com a biblioteca: "+pastas.get(indice-5));
+                    System.out.println("abrir com a biblioteca: "+pastas.get(indice-6));
+                    biblioteca.setBibliotecaAtual(pastas.get(indice-6));
+
                     //continua o ciclo
                     break;
             }
@@ -79,7 +86,8 @@ public class Menus {
         //abre com a respetiva biblioteca
 
     }
-    public static void menuPrincipal() {
+
+    public void menuPrincipal() {
         menuBiblioteca();
         int op;
         String[] menu = {
@@ -122,6 +130,7 @@ public class Menus {
 
         } while (op != 0);
     }
+
     public static void menuLivro() {
         int op;
         String[] menu = {
@@ -286,10 +295,12 @@ public class Menus {
         } while (op != 0);
     }
 
-    public static void menuUtente() {
+    public void menuUtente() {
         int op;
+
         String[] menu = {
                 "\n==== MENU Utente ====",
+                //"Utente Atual:"+this.utente.getNif()+this.utente.getNome()+this.utente.getGenero()+this.utente.getContacto(),
                 "1. Adicionar Utente",
                 "2. Editar Utente",
                 "3. Remover Utente",
@@ -299,20 +310,43 @@ public class Menus {
         do {
             op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
+            int cont = 1;
+            boolean first = true;
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: Adicionar Utente");
-                    // Utente.registar();
+                    utente = Utente.registar();
+                    //verificar se o utente fica bem na memoria
                     break;
                 case 2:
                     System.out.println("Escolheu: Editar Utente");
-                    //faz o pedido e a leitura do Nif/nome/contacto ate encontrar o utente
+                    do {
+                        if (!first) {
+                            cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+                        }
+                        if (cont == 1) {
+                            String dadoPesquisa = Funcionalidades.lerString("Introduza o Nif, Nome ou Contacto a Procurar");
+                            utente = Utente.procurar(dadoPesquisa);
+                            first = false;
+                        }
+                    } while (utente == null && cont == 1);
                     menuUtenteAlterar();
                     //apaga o utente de memoria
                     break;
                     //MenuUtentePesquisa(0);
                 case 3:
                     System.out.println("Escolheu: Remover Utente");
+                    do {
+                        if (!first) {
+                            cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+                        }
+                        if (cont == 1) {
+                            String dadoPesquisa = Funcionalidades.lerString("Introduza o Nif, Nome ou Contacto a Procurar");
+                            utente = Utente.procurar(dadoPesquisa);
+                            first = false;
+                        }
+                    } while (utente == null && cont == 1);
+                    utente.eliminar();
                     //faz o pedido e a leitura do Nif/nome/contacto ate encontrar o utente
                     //chama a função apagar com o nif do utente
                     break;
@@ -327,10 +361,11 @@ public class Menus {
         } while (op != 0);
     }
 
-    public static void menuUtenteAlterar () {
+    public  void menuUtenteAlterar () {
         int op;
         String[] menu = {
                 "\n==== MENU Utente Edição ====",
+                "Utente Atual:"+"|"+utente.getNif()+"|"+utente.getNome()+"|"+utente.getGenero()+"|"+utente.getContacto()+"|",
                 "1. Alterar o NIF",
                 "2. Alterar o Nome",
                 "3. Alterar o Contacto",
@@ -339,24 +374,11 @@ public class Menus {
         };
         do {
             op = Funcionalidades.lerOpcoesMenus(3,menu);
-            System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
-                    System.out.println("Escolheu: NIF");
-                    // Ler o novo NIF
-                    // Chamar a função editar
-
-                    break;
                 case 2:
-                    System.out.println("Escolheu: Nome");
-                    // Ler o novo Nome
-                    // Chamar a função editar
-                    break;
                 case 3:
-                    System.out.println("Escolheu: Contacto");
-                    // Ler o novo Contacto
-                    // Chamar a função editar
-                    op ++;
+                    utente.editar(op);
                     break;
                 case 0:
                     System.out.println("Voltar");
