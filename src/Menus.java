@@ -138,21 +138,21 @@ public class Menus {
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: Adicionar Livro");
-                    // Utente.registar();
+                    // Livro.registar();
                     break;
                 case 2:
                     System.out.println("Escolheu: Editar Livro");
-                    //faz o pedido e a leitura do Nif/nome/contacto ate encontrar o utente
+                    //faz o pedido e a leitura do nome ate encontrar o Livto
                     menuLivroEditar();
-                    //apaga o utente de memoria
+                    //apaga o Livro de memoria
                     break;
-                //MenuUtentePesquisa(0);
+                //MenuLivroPesquisa(0);
                 case 3:
                     System.out.println("Escolheu: Remover Livro");
-                    //faz o pedido e a leitura do Nif/nome/contacto ate encontrar o utente
-                    //chama a função apagar com o nif do utente
+                    //faz o pedido e a leitura do nome ate encontrar o Livro
+                    //chama a função apagar com o nome do Livro
                     break;
-                // MenuUtentePesquisa(1);
+                // MenuLivroPesquisa(1);
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");
@@ -167,9 +167,12 @@ public class Menus {
         int op;
         String[] menu = {
                 "\n==== MENU Livro Edição ====",
-                "1. Alterar o NIF",
-                "2. Alterar o Nome",
-                "3. Alterar o Contacto",
+                "1. Alterar o Titulo",
+                "2. Alterar a Editora",
+                "3. Alterar a Categoria",
+                "4. Alterar o Ano/Edição",
+                "5. Alterar o ISBN",
+                "6. Alterar o/a(s) Autores",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -178,19 +181,37 @@ public class Menus {
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
-                    System.out.println("Escolheu: NIF");
-                    // Ler o novo NIF
+                    System.out.println("Escolheu: Titulo");
+                    // Ler o novo Titulo
                     // Chamar a função editar
 
                     break;
                 case 2:
-                    System.out.println("Escolheu: Nome");
-                    // Ler o novo Nome
+                    System.out.println("Escolheu: Editora");
+                    // Ler a nova Editora
                     // Chamar a função editar
                     break;
                 case 3:
-                    System.out.println("Escolheu: Contacto");
-                    // Ler o novo Contacto
+                    System.out.println("Escolheu: Categoria");
+                    // Ler a nova Categoria
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 4:
+                    System.out.println("Escolheu: Ano/Edição");
+                    // Ler o novo Ano/Edição
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 5:
+                    System.out.println("Escolheu: ISBN");
+                    // Ler o novo ISBN
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 6:
+                    System.out.println("Escolheu: Autores");
+                    // Ler os novos Autores
                     // Chamar a função editar
                     op ++;
                     break;
@@ -220,21 +241,21 @@ public class Menus {
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: Adicionar Jornal ou Revista");
-                    // Utente.registar();
+                    // JornalRevista.registar();
                     break;
                 case 2:
                     System.out.println("Escolheu: Editar Jornal ou Revista");
-                    //faz o pedido e a leitura do Nif/nome/contacto ate encontrar o utente
+                    //faz o pedido e a leitura do nome ate encontrar o JornalRevista
                     menuJornalRevistaEditar();
-                    //apaga o utente de memoria
+                    //apaga o JornalRevista de memoria
                     break;
-                //MenuUtentePesquisa(0);
+                //MenuJornalRevistaPesquisa(0);
                 case 3:
                     System.out.println("Escolheu: Remover Jornal ou Revista");
-                    //faz o pedido e a leitura do Nif/nome/contacto ate encontrar o utente
-                    //chama a função apagar com o nif do utente
+                    //faz o pedido e a leitura do nome ate encontrar o JornalRevista
+                    //chama a função apagar com o nome do JornalRevista
                     break;
-                // MenuUtentePesquisa(1);
+                // MenuJornalRevistaPesquisa(1);
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");
@@ -249,9 +270,11 @@ public class Menus {
         int op;
         String[] menu = {
                 "\n==== MENU Jornal/Revista Edição ====",
-                "1. Alterar o NIF",
-                "2. Alterar o Nome",
-                "3. Alterar o Contacto",
+                "1. Alterar o Titulo",
+                "2. Alterar a Editora",
+                "3. Alterar a Categoria",
+                "4. Alterar o ISSN",
+                "5. Alterar a Data de Publicação",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -260,19 +283,31 @@ public class Menus {
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
-                    System.out.println("Escolheu: NIF");
-                    // Ler o novo NIF
+                    System.out.println("Escolheu: Titulo");
+                    // Ler o novo Titulo
                     // Chamar a função editar
 
                     break;
                 case 2:
-                    System.out.println("Escolheu: Nome");
-                    // Ler o novo Nome
+                    System.out.println("Escolheu: Editora");
+                    // Ler a nova Editora
                     // Chamar a função editar
                     break;
                 case 3:
-                    System.out.println("Escolheu: Contacto");
-                    // Ler o novo Contacto
+                    System.out.println("Escolheu: Categoria");
+                    // Ler a nova Categoria
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 4:
+                    System.out.println("Escolheu: ISSN");
+                    // Ler o novo ISSN
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 5:
+                    System.out.println("Escolheu: Data de Publicação");
+                    // Ler a nova Data de Publicação
                     // Chamar a função editar
                     op ++;
                     break;
