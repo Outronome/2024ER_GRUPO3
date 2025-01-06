@@ -75,7 +75,7 @@ public class Livro extends Obra {
         tempLivro.introAnoEdicao();
         tempLivro.introIsbn();
         tempLivro.introAutores();
-       
+
         Livro newLivro = new Livro(tempLivro.titulo, tempLivro.editora, tempLivro.categoria, tempLivro.anoEdicao,tempLivro.isbn, tempLivro.autores);
         Ficheiros.escrever(NOME_FICHEIRO,newLivro,FORMATO);
         int sucesso = newLivro.verficarLivro(newLivro);
@@ -88,6 +88,7 @@ public class Livro extends Obra {
     }
 
     public static void eliminar(){
+        //falta verificar se exite alguma dependencia
         String isbneliminado = Funcionalidades.lerString("Introduza o Isbn do livro que deseja apagar:");
         Ficheiros.apagar(NOME_FICHEIRO,isbneliminado);
     }

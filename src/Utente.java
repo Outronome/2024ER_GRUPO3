@@ -202,6 +202,7 @@ public class Utente {
     }
 
     public void eliminar (){
+        //falta verificar se exite alguma dependencia
         Ficheiros.apagar(NOME_FICHEIRO,Integer.toString(nif));
     }
 

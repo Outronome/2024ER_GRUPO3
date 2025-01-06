@@ -19,7 +19,7 @@ public class Emprestimo{
         this.devolucaoPrevista = devolucaoPrevista;
         this.devolucaoDefinitiva = devolucaoDefinitiva;
     }
-
+    //ler toda a informação de um emprestimo e colocar em memória
     public int getNum() {
         return num;
     }

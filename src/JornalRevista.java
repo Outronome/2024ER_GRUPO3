@@ -37,6 +37,7 @@ public class JornalRevista extends Obra {
     }
 
     public static void eliminar(){
+        //falta verificar se exite alguma dependencia
         String isnneliminado = Funcionalidades.lerString("Introduza o Isnn do jornal ou reista que deseja apagar:");
         Ficheiros.apagar(NOME_FICHEIRO,isnneliminado);
     }

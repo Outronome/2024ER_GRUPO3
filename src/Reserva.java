@@ -14,6 +14,9 @@ public class Reserva {
         this.registo = registo;
         this.fim = fim;
     }
+    //ler toda a informação de uma reseva e colocar em memória
+    //transformar uma reserva num emprestimo
+    //retirar uma reserva de um utilizador
     public String registar (){
         //código de registar o reserva no ficheiro
         return "Resultado";
