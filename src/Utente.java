@@ -174,7 +174,6 @@ public class Utente {
         return newUtente;
     }
 
-
     public void editar(int op){
         String novoDado = null;
         String dadoPesquisa = null;
@@ -183,6 +182,7 @@ public class Utente {
                 dadoPesquisa = Integer.toString(nif);
                 novoDado = Integer.toString(introNif("Introduza o novo Nif"));
                 setNif(Integer.parseInt(novoDado));
+                //verificar se o nif já existe
                 break;
             case 2:
                 dadoPesquisa = nome;
@@ -197,14 +197,14 @@ public class Utente {
                 break;
         }
 
-
         Ficheiros.atualizar(NOME_FICHEIRO,dadoPesquisa,dadoPesquisa,novoDado,"");
 
-
     }
+
     public void eliminar (){
         Ficheiros.apagar(NOME_FICHEIRO,Integer.toString(nif));
     }
+
     public Object[] getData() {
         return new Object[]{getNif(), getNome(), getGenero(), getContacto()};
     }
