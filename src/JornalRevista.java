@@ -117,10 +117,110 @@ public class JornalRevista extends Obra {
         return ultimoDigito == digitoEsperado;
     }
 
+    public static boolean validarData(String data) {
+        // Verifica se a data está no formato correto "dd/MM/yyyy"
+        if (data == null || data.length() != 10 || data.charAt(2) != '/' || data.charAt(5) != '/') {
+            return false;
+        }
+
+        try {
+            // Extrai o dia, mês e ano da string
+            int dia = Integer.parseInt(data.substring(0, 2));
+            int mes = Integer.parseInt(data.substring(3, 5));
+            int ano = Integer.parseInt(data.substring(6, 10));
+
+            // Valida o mês
+            if (mes < 1 || mes > 12) {
+                return false;
+            }
+
+            // Valida os dias de acordo com o mês
+            int diasNoMes = diasNoMes(mes, ano);
+            if (dia < 1 || dia > diasNoMes) {
+                return false;
+            }
+
+            return true; // A data é válida
+        } catch (NumberFormatException e) {
+            return false; // Não conseguiu converter para número
+        }
+    }
+
+    private static int diasNoMes(int mes, int ano) {
+        switch (mes) {
+            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+                return 31; // Meses com 31 dias
+            case 4: case 6: case 9: case 11:
+                return 30; // Meses com 30 dias
+            case 2:
+                // Verifica se é ano bissexto para fevereiro
+                return (anoBissexto(ano)) ? 29 : 28;
+            default:
+                return 0; // Mês inválido (não deveria chegar aqui)
+        }
+    }
+
+    private static boolean anoBissexto(int ano) {
+        // Regras para anos bissextos:
+        // - Divisível por 4 e (não divisível por 100 ou divisível por 400)
+        return (ano % 4 == 0 && (ano % 100 != 0 || ano % 400 == 0));
+    }
+
     private void introDataPublicacao() {
+        do {
+            dataPublicacao = Funcionalidades.lerString("Introduza a Data de Publicação (dd/MM/yyyy):");
+            if (!validarData(dataPublicacao)){
+                Funcionalidades.escreverString("Erro: Introduza uma data válida.");
+                continue;
+            }
+            break;
+        } while (true);
+    }
 
-        dataPublicacao = Funcionalidades.lerString("Data;");
+    public static JornalRevista procurar(String isbn){
+        List<String> jornalRevistas;
+        jornalRevistas = ler();
+        for (String jornalRevista : jornalRevistas){
+            String[] partes = jornalRevista.split("\\|");
+            String[] partesFiltradas = { partes[3] };
+            for (String parte : partesFiltradas) {
+                if (parte.equals(isbn)){
+                    return new JornalRevista(partes[0],partes[1],partes[2],partes[3],partes[4]);
+                }
+            }
+        }
+        System.out.println("Utilizador não encontrado");
+        return null;
+        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro livro
+    }
 
+    private static List<String> ler(){
+        return Ficheiros.ler(NOME_FICHEIRO);
+    }
+
+    public static void editarCampo(String issn, String palavraAntiga, String palavraNova, int posCampo){
+
+        JornalRevista jornalRevista = procurar(issn);
+        if (jornalRevista == null) {
+            System.out.println("Livro não encontrado.");
+            return;
+        }
+
+        String palavraAnterior = switch (posCampo) {
+            case 0 -> jornalRevista.getTitulo();
+            case 1 -> jornalRevista.getEditora();
+            case 2 -> jornalRevista.getCategoria();
+            case 3 -> jornalRevista.getIssn();
+            case 4 -> jornalRevista.getDataPublicacao();
+            default -> null;
+        };
+
+        if (palavraAntiga != null) {
+            Ficheiros.atualizar(NOME_FICHEIRO, issn, palavraAntiga, palavraNova, "");
+            System.out.println("Atualizado com sucesso.");
+        } else {
+            System.out.println("Posição do campo inválida.");
+        }
     }
 
 

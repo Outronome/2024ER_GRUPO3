@@ -1,8 +1,11 @@
+import java.util.List;
+
 // Classe base Obra
 public class Obra {
     protected String titulo;
     protected String editora;
     protected String categoria;
+    protected static String NOME_FICHEIRO;
 
     // Construtor
     public Obra(String titulo, String editora, String categoria) {
@@ -66,6 +69,7 @@ public class Obra {
             Funcionalidades.escreverString("Erro: Introduza uma Categoria válida (entre 3 e 100 caracteres)");
         }
     } while (categoria.length() <= 3 || categoria.length() >= 100);}
+
 
 }
 

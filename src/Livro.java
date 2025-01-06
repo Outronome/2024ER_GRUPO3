@@ -91,7 +91,6 @@ public class Livro extends Obra {
         String isbneliminado = Funcionalidades.lerString("Introduza o Isbn do livro que deseja apagar:");
         Ficheiros.apagar(NOME_FICHEIRO,isbneliminado);
     }
-
     private static List<String> ler(){
         return Ficheiros.ler(NOME_FICHEIRO);
     }
