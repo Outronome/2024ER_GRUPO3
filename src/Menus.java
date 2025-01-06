@@ -129,6 +129,8 @@ public class Menus {
                 "1. Adicionar Livro",
                 "2. Editar Livro",
                 "3. Remover Livro",
+                "4. Ler Livro",
+                "5. Pesquisar Livro",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -151,6 +153,16 @@ public class Menus {
                     System.out.println("Escolheu: Remover Livro");
                     //faz o pedido e a leitura do nome ate encontrar o Livro
                     //chama a função apagar com o nome do Livro
+                    break;
+                case 4:
+                    System.out.println("Escolheu: Ler Livro");
+                    //faz o pedido e a leitura do nome ate encontrar o Livro
+                    //chama a função leitura com o nome do Livro
+                    break;
+                case 5:
+                    System.out.println("Escolheu: Pesquisar Livro");
+                    //faz o pedido e a leitura do nome ate encontrar o Livro
+                    //chama a função pesquisar com o nome do Livro
                     break;
                 // MenuLivroPesquisa(1);
                 case 0:
@@ -402,5 +414,111 @@ public class Menus {
 
         } while (op != 0);
     }
+
+    public static void menuEmprestimo() {
+        int op;
+        String[] menu = {
+                "\n==== MENU Empréstimo ====",
+                "1. Adicionar Empréstimo",
+                "2. Editar Empréstimo",
+                "3. Visualizar Empréstimo",
+                "0. Voltar",
+                "Escolha uma opção: "
+        };
+        do {
+            op = Funcionalidades.lerInt(3,menu);
+            System.out.printf(String.valueOf(op));
+            switch (op) {
+                case 1:
+                    System.out.println("Escolheu: Adicionar Livro");
+                    // Livro.registar();
+                    break;
+                case 2:
+                    System.out.println("Escolheu: Editar Livro");
+                    //faz o pedido e a leitura do nome ate encontrar o Livto
+                    menuLivroEditar();
+                    //apaga o Livro de memoria
+                    break;
+                //MenuLivroPesquisa(0);
+                case 3:
+                    System.out.println("Escolheu: Remover Livro");
+                    //faz o pedido e a leitura do nome ate encontrar o Livro
+                    //chama a função apagar com o nome do Livro
+                    break;
+                // MenuLivroPesquisa(1);
+                case 0:
+                    // op = 0;
+                    System.out.println("Voltar");
+                    break;
+                default:
+                    System.out.println("Opcão inválida! Digite novamente. ");
+            }
+        } while (op != 0);
+    }
+
+    public static void menuEmprestimoEditar () {
+        int op;
+        String[] menu = {
+                "\n==== MENU Livro Edição ====",
+                "1. Alterar o Titulo",
+                "2. Alterar a Editora",
+                "3. Alterar a Categoria",
+                "4. Alterar o Ano/Edição",
+                "5. Alterar o ISBN",
+                "6. Alterar o/a(s) Autores",
+                "0. Voltar",
+                "Escolha uma opção: "
+        };
+        do {
+            op = Funcionalidades.lerInt(3,menu);
+            System.out.printf(String.valueOf(op));
+            switch (op) {
+                case 1:
+                    System.out.println("Escolheu: Titulo");
+                    // Ler o novo Titulo
+                    // Chamar a função editar
+
+                    break;
+                case 2:
+                    System.out.println("Escolheu: Editora");
+                    // Ler a nova Editora
+                    // Chamar a função editar
+                    break;
+                case 3:
+                    System.out.println("Escolheu: Categoria");
+                    // Ler a nova Categoria
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 4:
+                    System.out.println("Escolheu: Ano/Edição");
+                    // Ler o novo Ano/Edição
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 5:
+                    System.out.println("Escolheu: ISBN");
+                    // Ler o novo ISBN
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 6:
+                    System.out.println("Escolheu: Autores");
+                    // Ler os novos Autores
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 0:
+                    System.out.println("Voltar");
+                    break;
+                default:
+                    System.out.println("Opcão inválida! Digite novamente. ");
+            }
+
+        } while (op != 0);
+    }
+
+
+
 
 }
