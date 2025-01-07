@@ -4,8 +4,9 @@ public class Main {
         //Menus menu = new Menus();
         //menu.menuPrincipal();
         Biblioteca biblioteca = new Biblioteca("");
-
         biblioteca.setBibliotecaAtual("BibPorto2");
-        JornalRevista.editarCampo("1476-4687","aaaaaaaaaaa","BINGCHILLING",3);
+
+        Reserva reserva = new Reserva(0,null,null,null,null,null);
+        reserva.registar();
     }
 }

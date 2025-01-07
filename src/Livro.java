@@ -101,14 +101,14 @@ public class Livro extends Obra {
         livros = ler();
         for (String livro : livros){
             String[] partes = livro.split("\\|");
-            String[] partesFiltradas = { partes[3] };
+            String[] partesFiltradas = { partes[4] };
             for (String parte : partesFiltradas) {
                 if (parte.equals(isbn)){
                     return new Livro(partes[0],partes[1],partes[2],Integer.parseInt(partes[3]),partes[4],partes[5]);
                 }
             }
         }
-        System.out.println("Utilizador não encontrado");
+        System.out.println("Livro não encontrado");
         return null;
         //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro livro
     }
@@ -192,52 +192,6 @@ public class Livro extends Obra {
         } while (anoEdicao < 0 || anoEdicao > 2024);
     }
 
-    private boolean validarIsbn10(String isbn) {
-        int soma = 0;
-
-        for (int i = 0; i < 9; i++) {
-            soma += (isbn.charAt(i) - '0') * (10 - i);
-        }
-
-        char ultimo = isbn.charAt(9);
-        if (ultimo == 'X') {
-            soma += 10; //
-        } else if (Character.isDigit(ultimo)) {
-            soma += (ultimo - '0');
-        } else {
-            return false;
-        }
-
-        return soma % 11 == 0;
-    }
-    private boolean validarIsbn13(String isbn){
-        int soma = 0;
-        for (int i = 0; i < 12; i++) {
-            int digito = isbn.charAt(i) - '0';
-            soma += (i % 2 == 0) ? digito : digito * 3;
-        }
-
-        int checkDigitEsperado = (10 - (soma % 10)) % 10;
-
-        int checkDigitReal = isbn.charAt(12) - '0';
-        return checkDigitEsperado == checkDigitReal;
-    }
-
-    private boolean isbnValido(String isbn) {
-        if (isbn == null) return false;
-
-        // Regex para validar formatos
-        String regexISBN10 = "^[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9X]$";
-        String regexISBN13 = "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9]$";
-
-        if (isbn.matches(regexISBN10)) {
-            return validarIsbn10(isbn.replace("-", ""));
-        }
-        if (isbn.matches(regexISBN13)) {
-            return validarIsbn13(isbn.replace("-", ""));
-        }
-        return false;
-    }
 
     private void introIsbn() {
 

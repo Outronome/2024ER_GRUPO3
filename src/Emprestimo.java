@@ -1,8 +1,8 @@
 import java.util.List;
 
-public class Emprestimo{
+public class Emprestimo {
     int num;
-    String nomeObra ;
+    String nomeObra;
     Utente utente;
     Data inicio;
     Data devolucaoPrevista;
@@ -19,6 +19,7 @@ public class Emprestimo{
         this.devolucaoPrevista = devolucaoPrevista;
         this.devolucaoDefinitiva = devolucaoDefinitiva;
     }
+
     //ler toda a informação de um emprestimo e colocar em memória
     public int getNum() {
         return num;
@@ -68,25 +69,25 @@ public class Emprestimo{
         this.devolucaoDefinitiva = devolucaoDefinitiva;
     }
 
-    private void introNum (){
+    private void introNum() {
         num = generateId();
     }
 
-    private void introUtente (){
-        Utente utente = new Utente(0,"",0,0);
+    private void introUtente() {
+        Utente utente = new Utente(0, "", 0, 0);
         int cont = 1;
         boolean first = true;
-        int nif=0;
+        int nif = 0;
         do {
             if (!first) {
                 cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
             }
             if (cont == 1) {
-                if (first){
+                if (first) {
                     nif = utente.introNif("Introduza o Nif do utente que deseja Associar");
                     Utente.procurar(String.valueOf(nif));
                     first = false;
-                }else{
+                } else {
                     nif = utente.introNif("Introduza o Nif de um o utente que esteja registado e que deseje Associar");
                     Utente.procurar(String.valueOf(nif));
                 }
@@ -94,10 +95,11 @@ public class Emprestimo{
         } while (utente == null && cont == 1);
     }
 
-    private void introObra (){
+    private void introObra() {
 
     }
-    private void introDatas (){
+
+    private void introDatas() {
 
     }
 
@@ -108,20 +110,21 @@ public class Emprestimo{
         }
         return lista.size();
     }
-    private Utente PesqUtente(String pergunta){
+
+    private Utente PesqUtente(String pergunta) {
         Utente utente = null;
         utente.introNif(pergunta);
         return utente;
     }
 
-    private static List<String> ler(){
+    private static List<String> ler() {
         return Ficheiros.ler(NOME_FICHEIRO);
     }
-
-    public static Emprestimo registar(){
-        Emprestimo tempEmprestimo = new Emprestimo(0,null,null,null,null,null);
-        Emprestimo newEmprestimo=null;
-        Emprestimo emprestimo=null;
+/*
+    public static Emprestimo registar() {
+        Emprestimo tempEmprestimo = new Emprestimo(0, null, null, null, null, null);
+        Emprestimo newEmprestimo = null;
+        Emprestimo emprestimo = null;
         int cont = 1;
         boolean first = true;
         do {
@@ -132,23 +135,22 @@ public class Emprestimo{
                 tempEmprestimo.introNum();
                 tempEmprestimo.introUtente();
                 tempEmprestimo.introObra();
-                tempEmprestimo.IntroDatas();
+              //  tempEmprestimo.IntroDatas();
 
 
-
-                newEmprestimo = new Emprestimo(tempEmprestimo.num, tempEmprestimo.nomeObra, tempEmprestimo.utente, tempEmprestimo.inicio,tempEmprestimo.devolucaoPrevista,tempEmprestimo.devolucaoDefinitiva);
+                newEmprestimo = new Emprestimo(tempEmprestimo.num, tempEmprestimo.nomeObra, tempEmprestimo.utente, tempEmprestimo.inicio, tempEmprestimo.devolucaoPrevista, tempEmprestimo.devolucaoDefinitiva);
                 List<String> emprestimos;
                 emprestimos = ler();
-                emprestimo = verificarSeExiste(emprestimos,String.valueOf(newEmprestimo.num));
-                if (emprestimo!=null){
+               // emprestimo = verificarSeExiste(emprestimos, String.valueOf(newEmprestimo.num));
+                if (emprestimo != null) {
                     Funcionalidades.escreverString("Não foi possivel inserir o emprestimo pois ele já existe");
                 }
                 first = false;
             }
         } while (emprestimo != null && cont == 1);
-        Ficheiros.escrever(NOME_FICHEIRO,newEmprestimo,FORMATO);
+        Ficheiros.escrever(NOME_FICHEIRO, newEmprestimo, FORMATO);
         int sucesso = newEmprestimo.verficarEmprestimo(newEmprestimo);
-        if (sucesso == 1){
+        if (sucesso == 1) {
             Funcionalidades.escreverString("Emprestimo registado com sucesso.");
         } else if (sucesso == 0) {
             Funcionalidades.escreverString("Erro:Emprestimo não foi registado.");
@@ -156,12 +158,13 @@ public class Emprestimo{
         return newEmprestimo;
     }
 
-    public String editar (){
+    public String editar() {
         //código de editar o emprestimo no ficheiro
         return "Resultado";
     }
+
     public Object[] getData() {
-        return new Object[]{getTitulo(), getEditora(), getCategoria(), getAnoEdicao(),getIsbn(), getAutores()};
+        return new Object[]{getTitulo(), getEditora(), getCategoria(), getAnoEdicao(), getIsbn(), getAutores()};
     }
     /*public List<Emprestimo> mostrar (){
         //código de enviar o range de emprestimos que estão no ficheiro caso não receba range enviar tudo

@@ -124,7 +124,7 @@ public class Utente {
         //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro utente
     }
 
-    private static Utente verificarSeExiste(List<String> utentes, String dado){
+    public static Utente verificarSeExiste(List<String> utentes, String dado){
         //o dado tem que ser o nif o nome ou o contacto
         for (String utente : utentes){
             String[] partes = utente.split("\\|");

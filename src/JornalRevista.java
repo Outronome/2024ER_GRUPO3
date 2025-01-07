@@ -101,22 +101,6 @@ public class JornalRevista extends Obra {
         } while (true);
     }
 
-    private boolean validarIssn(String issn) {
-        String issnSemHifen = issn.replace("-", "");
-        String primeirosSete = issnSemHifen.substring(0, 7);
-        char ultimoDigito = issnSemHifen.charAt(7);
-        // Calcular a soma ponderada dos primeiros 7 dígitos
-        int soma = 0;
-        for (int i = 0; i < 7; i++) {
-            int digito = Character.getNumericValue(primeirosSete.charAt(i));
-            soma += digito * (8 - i); // Peso decrescente de 8 a 2
-        }
-        // Calcular o dígito de verificação
-        int resto = soma % 11;
-        int digitoVerificador = (11 - resto) % 11;
-        char digitoEsperado = (digitoVerificador == 10) ? 'X' : Character.forDigit(digitoVerificador, 10);
-        return ultimoDigito == digitoEsperado;
-    }
 
     public static boolean validarData(String data) {
         // Verifica se a data está no formato correto "dd/MM/yyyy"
