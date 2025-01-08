@@ -477,9 +477,9 @@ public class Menus {
                 "1. Alterar o N.º Empréstimo",
                 "2. Alterar o Utente do Empréstrimo",
                 "3. Alterar o Livro do Empréstrimo",
-                "4. Alterar o Ano/Edição",
-                "5. Alterar o ISBN",
-                "6. Alterar o/a(s) Autores",
+                "4. Alterar a Data de Início",
+                "5. Alterar a Data Prevista de Devolução",
+                "6. Alterar a Data Efetiva de Devolução",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -488,37 +488,37 @@ public class Menus {
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
-                    System.out.println("Escolheu: Titulo");
-                    // Ler o novo Titulo
+                    System.out.println("Escolheu: N.º Empréstimo");
+                    // Ler o novo N.º Empréstimo
                     // Chamar a função editar
 
                     break;
                 case 2:
-                    System.out.println("Escolheu: Editora");
-                    // Ler a nova Editora
+                    System.out.println("Escolheu: Utente do Empréstrimo\"");
+                    // Ler o novo Utente do Empréstrimo"
                     // Chamar a função editar
                     break;
                 case 3:
-                    System.out.println("Escolheu: Categoria");
-                    // Ler a nova Categoria
+                    System.out.println("Escolheu: Livro do Empréstrimo");
+                    // Ler o novo Livro do Empréstrimo
                     // Chamar a função editar
                     op ++;
                     break;
                 case 4:
-                    System.out.println("Escolheu: Ano/Edição");
-                    // Ler o novo Ano/Edição
+                    System.out.println("Escolheu: Data de Início");
+                    // Ler a nova Data de Início
                     // Chamar a função editar
                     op ++;
                     break;
                 case 5:
-                    System.out.println("Escolheu: ISBN");
-                    // Ler o novo ISBN
+                    System.out.println("Escolheu: Data Prevista de Devolução");
+                    // Ler a nova Data Prevista de Devolução
                     // Chamar a função editar
                     op ++;
                     break;
                 case 6:
-                    System.out.println("Escolheu: Autores");
-                    // Ler os novos Autores
+                    System.out.println("Escolheu: Data Efetiva de Devolução");
+                    // Ler a nova Data Efetiva de Devolução
                     // Chamar a função editar
                     op ++;
                     break;
@@ -531,7 +531,104 @@ public class Menus {
 
         } while (op != 0);
     }
+    public static void menuReserva() {
+        int op;
+        String[] menu = {
+                "\n==== MENU Reserva ====",
+                "1. Adicionar Reserva",
+                "2. Editar Reserva",
+                "3. Visualizar Reserva",
+                "0. Voltar",
+                "Escolha uma opção: "
+        };
+        do {
+            op = Funcionalidades.lerInt(3,menu);
+            System.out.printf(String.valueOf(op));
+            switch (op) {
+                case 1:
+                    System.out.println("Escolheu: Adicionar Reserva");
+                    // Reserva.registar();
+                    break;
+                case 2:
+                    System.out.println("Escolheu: Editar Reserva");
+                    //faz o pedido e a leitura do número ate encontrar a Reserva
+                    menuReservaEditar();
+                    break;
+                case 3:
+                    System.out.println("Escolheu: Visualizar Reserva");
+                    //faz o pedido e a leitura do número ate encontrar a Reserva
+                    //chama a função visualizar com o número da Reserva
+                    break;
+                case 0:
+                    // op = 0;
+                    System.out.println("Voltar");
+                    break;
+                default:
+                    System.out.println("Opcão inválida! Digite novamente. ");
+            }
+        } while (op != 0);
+    }
 
+    public static void menuReservaEditar () {
+        int op;
+        String[] menu = {
+                "\n==== MENU Reserva Edição ====",
+                "1. Alterar o N.º Reserva",
+                "2. Alterar o Utente da Reserva",
+                "3. Alterar o Livro da Reserva",
+                "4. Alterar a Data de Registo da Reserva",
+                "5. Alterar a Data de Início da Reserva",
+                "6. Alterar a Data de Fim da Reserva",
+                "0. Voltar",
+                "Escolha uma opção: "
+        };
+        do {
+            op = Funcionalidades.lerInt(3,menu);
+            System.out.printf(String.valueOf(op));
+            switch (op) {
+                case 1:
+                    System.out.println("Escolheu: N.º Reserva");
+                    // Ler o novo N.º Reserva
+                    // Chamar a função editar
+                    break;
+                case 2:
+                    System.out.println("Escolheu: Utente da Reserva");
+                    // Ler o novo Utente da Reserva"
+                    // Chamar a função editar
+                    break;
+                case 3:
+                    System.out.println("Escolheu: Livro da Reserva");
+                    // Ler o novo Livro da Reserva
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 4:
+                    System.out.println("Escolheu: Data de Registo da Reserva");
+                    // Ler o novo Registo da Reserva
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 5:
+                    System.out.println("Escolheu: Data de Início da Reserva");
+                    // Ler a nova Data de Início da Reserva
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 6:
+                    System.out.println("Escolheu: Data de Fim da Reserva");
+                    // Ler a nova Data de Fim da Reserva
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 0:
+                    System.out.println("Voltar");
+                    break;
+                default:
+                    System.out.println("Opcão inválida! Digite novamente. ");
+            }
+
+        } while (op != 0);
+    }
 
 
 
