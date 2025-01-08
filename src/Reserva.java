@@ -1,35 +1,37 @@
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
+import java.io.File;
 
 public class Reserva {
-    int num=0;
-    Utente utente;
+    String num;
+    int nif;
     List<String> obras;
     String inicio;
     String registo;
     String fim;
     String obra;
-    private static String FORMATO = "%d|%s|%s|%s|%s|%s%n";
+    private static String FORMATO = "%s|%s|%s|%s|%s|%s%n";
     private static String NOME_FICHEIRO = "reservas.txt";
 
-    public int getNum() {
+    public String getNum() {
         return num;
     }
 
-    public void setNum(int num) {
+    public void setNum(String num) {
         this.num = num;
     }
 
-    public Utente getUtente() {
-        return utente;
+    public int getNif() {
+        return nif;
     }
 
     public void setUtente(Utente utente) {
-        this.utente = utente;
+        this.nif = nif;
     }
 
     public String getInicio() {
@@ -64,30 +66,33 @@ public class Reserva {
         this.obra = obra;
     }
 
-    public Reserva(int num, Utente utente, String obra, String inicio, String registo, String fim) {
+    public Reserva(String num, int nif, String obra, String inicio, String registo, String fim) {
         this.num = num;
-        this.utente = utente;
+        this.nif = nif;
         this.obra = obra;
         this.inicio = inicio;
         this.registo = registo;
         this.fim = fim;
     }
     public Reserva registar () {
-        Reserva tempReserva = new Reserva(0,null,null,null,null,null);
+        num= "R"+Ficheiros.atualizarNum(NOME_FICHEIRO);
+        Reserva tempReserva = new Reserva(num,0,null,null,null,null);
          obras = introObras();
-        tempReserva.introUtente();
+        tempReserva.introNif();
         tempReserva.introInicio();
         tempReserva.introRegisto();
         tempReserva.introFim();
         for (String obra : obras) {
-            Reserva newReserva = new Reserva(num, tempReserva.utente, obra, tempReserva.inicio, tempReserva.registo, tempReserva.fim);
+            Reserva newReserva = new Reserva(num, tempReserva.nif, obra, tempReserva.inicio, tempReserva.registo, tempReserva.fim);
             Ficheiros.escrever(NOME_FICHEIRO,newReserva,FORMATO);
         }
        return null;
     }
     public Object[] getData() {
-        return new Object[]{getNum(), getUtente(),getObra(), getInicio(), getRegisto(), getFim()};
+        return new Object[]{getNum(), getNif(),getObra(), getInicio(), getRegisto(), getFim()};
     }
+
+
 
 
     public static Boolean procurar(String codigo,String nomeFicheiroObra){
@@ -148,26 +153,26 @@ public class Reserva {
         registo = ldt.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
     }
 
-    private void introUtente (){
-        Utente utente = new Utente(0,"",0,0);
+    private void introNif (){
         int cont = 1;
         boolean first = true;
-        int nif=0;
+
         do {
             if (!first) {
                 cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
             }
             if (cont == 1) {
-                if (first){
-                    nif = utente.introNif("Introduza o Nif do utente que deseja Associar");
-                    Utente.procurar(String.valueOf(nif));
-                    first = false;
-                }else{
-                    nif = utente.introNif("Introduza o Nif de um o utente que esteja registado e que deseje Associar");
-                    Utente.procurar(String.valueOf(nif));
+                if (first) {
+                    nif =Funcionalidades.lerInt("Introduza o Nif do utente que deseja Associar");
+                    if (Utente.procurar(String.valueOf(nif)) != null) {
+                    break;
+                    } else continue;
+
+
                 }
             }
-        } while (utente == null && cont == 1);
+
+        } while (cont == 1);
     }
 
     public static boolean validarData(String data) {
@@ -284,13 +289,15 @@ public class Reserva {
 
 
     public String editar (){
-        //código de editar o reserva no ficheiro
+
         return "Resultado";
     }
-    public String eliminar (){
-        //código de eliminar o reserva no ficheiro
-        return "Resultado";
+    public void eliminar (){
+        String numEliminado = Funcionalidades.lerString("Introduza o numero da reserva que deseja apagar:");
+        Ficheiros.apagar(NOME_FICHEIRO, numEliminado);
+
     }
+
     /*public List<Reserva> mostrar (){
         //código de enviar o range de reservas que estão no ficheiro caso não receba range enviar tudo
     }*/

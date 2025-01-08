@@ -6,7 +6,8 @@ public class Main {
         Biblioteca biblioteca = new Biblioteca("");
         biblioteca.setBibliotecaAtual("BibPorto2");
 
-        Reserva reserva = new Reserva(0,null,null,null,null,null);
-        reserva.registar();
+        Reserva reserva = new Reserva(null,0,null,null,null,null);
+
+        reserva.eliminar();
     }
 }

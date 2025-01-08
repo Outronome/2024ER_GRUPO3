@@ -182,4 +182,36 @@ public abstract class Ficheiros<T> {
             }
         }
     }
+
+    public static int atualizarNum(String nomeFicheiro) {
+        int maxNum = 0;
+        Scanner scanner = null;
+        String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
+         nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
+        try {
+            scanner = new Scanner(new File(nomeFicheiro));
+
+            while (scanner.hasNextLine()) {
+
+                String linha = scanner.nextLine();
+
+                // Divide a linha pelo delimitador '|'
+                String[] campos = linha.split("\\|");
+
+                // Extrai o valor de 'num' (assumindo que está na primeira posição)
+
+                String numeros = campos[0].replaceAll("\\D", "");
+                int numAtual = Integer.parseInt(numeros);
+                // Atualiza o máximo se necessário
+                if (numAtual > maxNum) {
+                    maxNum = numAtual;
+                }
+
+            }}catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        scanner.close();
+        return maxNum+1;
+    }
 }
