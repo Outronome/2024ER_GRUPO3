@@ -85,22 +85,50 @@ public class Emprestimo {
             if (cont == 1) {
                 if (first) {
                     nif = utente.introNif("Introduza o Nif do utente que deseja Associar");
-                    Utente.procurar(String.valueOf(nif));
+                    utente = Utente.procurar(String.valueOf(nif));
                     first = false;
                 } else {
                     nif = utente.introNif("Introduza o Nif de um o utente que esteja registado e que deseje Associar");
-                    Utente.procurar(String.valueOf(nif));
+                    utente = Utente.procurar(String.valueOf(nif));
+                }
+            }
+        } while (utente == null && cont == 1);
+    }
+    private void introObra() {
+        Obra obra = null;
+        int cont = 1;
+        boolean first = true;
+        int nif = 0;
+        String codigo;
+        do {
+            if (!first) {
+                cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+            }
+            if (cont == 1) {
+
+                if (first) {
+                    obra.introCodigo("Introduza o ISBN/ISNN (com hífens) que quer pedir Emprestimo:");
+                    Obra obraTemp = new Obra(obra.codigo,"","","");
+                    obra = obraTemp.pesquisar();
+                    first = false;
+                } else {
+                    obra.introCodigo("Introduza o ISBN/ISNN (com hífens) correto que quer pedir Emprestimo:");
+                    Obra obraTemp = new Obra(obra.codigo,"","","");
+                    obra = obraTemp.pesquisar();
                 }
             }
         } while (utente == null && cont == 1);
     }
 
-    private void introObra() {
+    private void introDatas () {
+        int cont = 1;
+        boolean first = true;
 
-    }
+        while (cont == 1) {
+            System.out.println("Insira a data de início do emprestimo");
+            this.inicio = Data.dataUser();
 
-    private void introDatas() {
-
+        }
     }
 
     private int generateId() {
@@ -120,7 +148,7 @@ public class Emprestimo {
     private static List<String> ler() {
         return Ficheiros.ler(NOME_FICHEIRO);
     }
-/*
+
     public static Emprestimo registar() {
         Emprestimo tempEmprestimo = new Emprestimo(0, null, null, null, null, null);
         Emprestimo newEmprestimo = null;

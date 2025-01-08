@@ -1,14 +1,14 @@
-import java.util.List;
-
 // Classe base Obra
 public class Obra {
+    String codigo;
     protected String titulo;
     protected String editora;
     protected String categoria;
     protected static String NOME_FICHEIRO;
 
     // Construtor
-    public Obra(String titulo, String editora, String categoria) {
+    public Obra(String codigo, String titulo, String editora, String categoria) {
+        this.codigo = codigo;
         this.titulo = titulo;
         this.editora = editora;
         this.categoria = categoria;
@@ -126,6 +126,60 @@ public class Obra {
         }
         return false;
     }
+    protected void introCodigo(String pergunta) {
+
+        do {
+            codigo = Funcionalidades.lerString(pergunta);
+            if (!identificarEValidar(codigo)) {
+                Funcionalidades.escreverString("Erro: Codigo é inválido. Certifique-se de que seja um ISBN-10 ou ISBN-13 ou um ISNN válido (com hífens).");
+            }
+        } while (!identificarEValidar(codigo));
+
+        Funcionalidades.escreverString("Codigo válido: " + codigo);
+    }
+    protected boolean identificarEValidar(String codigo) {
+        if (codigo == null || codigo.isEmpty()) {
+            return false;
+        }
+
+        // Remover possíveis hifens para a validação
+        String codigoSemHifen = codigo.replace("-", "");
+
+        // Verificar comprimento e formato para ISSN
+        if (codigoSemHifen.length() == 8 && codigo.matches("^[0-9]{4}-[0-9]{3}[0-9X]$")) {
+            boolean valido = validarIssn(codigo);
+            return true;
+        }
+
+        // Verificar comprimento e formato para ISBN
+        if (codigoSemHifen.length() == 10 && codigo.matches("^[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9X]$")) {
+            boolean valido = validarIsbn10(codigoSemHifen);
+            return true;
+        }
+
+        if (codigoSemHifen.length() == 13 && codigo.matches("^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9]$")) {
+            boolean valido = validarIsbn13(codigoSemHifen);
+            return true;
+        }
+
+        return false;
+    }
+    public Obra pesquisar() {
+        String codigoSemHifen = codigo.replace("-", "");
+        int comprimento = codigoSemHifen.length();
+
+        if (comprimento == 8) {
+            // Verificar nos jornais/revistas
+            return JornalRevista.procurar(codigo);
+        } else if (comprimento == 10 || comprimento == 13) {
+            // Verificar nos livros
+            return Livro.procurar(codigo);
+        } else {
+            System.out.println("Código inválido.");
+            return null;
+        }
+    }
+
 
     protected void introCategoria() {do {
         categoria = Funcionalidades.lerString("Introduza a Categoria:");
