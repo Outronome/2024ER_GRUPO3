@@ -168,7 +168,7 @@ public class Reserva {
 
     private void introRegisto(){
         LocalDateTime ldt = LocalDateTime.now();
-        registo = ldt.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+        registo = ldt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     private void introNif (){
@@ -254,53 +254,21 @@ public class Reserva {
     }
 
     private void introFim() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // Formato esperado para a data
-
         do {
-            // Solicitar a data de fim
-            fim = Funcionalidades.lerString("Introduza a Data de fim da reserva (dd/MM/yyyy");
-
-            // Separar a data da hora (caso haja hora na entrada)
-            String[] fimParts = fim.split(" "); // Divide a data e a hora
-            String fimData = fimParts[0]; // Pega apenas a parte da data (dd-MM-yyyy)
-
-            // Validar e dividir a data de fim
-            if (!validarData(fimData)) {
+            fim = Funcionalidades.lerString("Introduza a Data de fim da reserva (dd/MM/yyyy):");
+            if (!validarData(fim)) {
                 Funcionalidades.escreverString("Erro: Introduza uma data válida no formato dd/MM/yyyy.");
-                continue; // Volta ao início do loop se a data não for válida
+                continue;
             }
 
-            // Dividir a data de início (supondo que já foi validada)
-            String[] startParts = inicio.split("/"); // Divida a data de início (dd-MM-yyyy)
-            String[] endParts = fimData.split("/"); // Divida a data de fim (dd-MM-yyyy)
+            LocalDate dataInicio = LocalDate.parse(inicio, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            LocalDate dataFim = LocalDate.parse(fim, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-            // Converter as partes da data para inteiros
-            int[] startValues = new int[3];
-            int[] endValues = new int[3];
-
-            for (int i = 0; i < 3; i++) {
-                startValues[i] = Integer.parseInt(startParts[i]); // Converter partes da data de início
-                endValues[i] = Integer.parseInt(endParts[i]); // Converter partes da data de fim
-            }
-
-            // Comparar as datas
-            boolean isFimValida = false;
-            for (int i = 2; i >= 0; i--) { // Começa pelo ano, depois mês, depois dia
-                if (endValues[i] < startValues[i]) {
-                    Funcionalidades.escreverString("Erro: Data de fim de reserva inferior à inicial.");
-                    isFimValida = false;
-                    break;
-                } else if (endValues[i] > startValues[i]) {
-                    isFimValida = true; // Se a data de fim for maior, é válida
-                    break;
-                }
-            }
-
-            // Se a data de fim for válida, saia do loop
-            if (isFimValida) {
+            if (dataFim.isBefore(dataInicio)) {
+                Funcionalidades.escreverString("Erro: A data de fim não pode ser anterior à data de início.");
+            } else {
                 break;
             }
-
         } while (true);
     }
 

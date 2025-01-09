@@ -22,7 +22,7 @@ public class Utente {
         for ( String utente : utentes ) {
             String[] partes = utente.split("\\|");  // Usa expressão regular para dividir por "|"
             int nifCompararLista = Integer.parseInt(partes[0].trim());
-            if (newUtente.nif == nifCompararLista) {
+            if (newUtente.nif != nifCompararLista) {
                 sucesso = 1;
                 break;
             }

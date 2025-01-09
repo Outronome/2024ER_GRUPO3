@@ -75,8 +75,8 @@ public class Menus {
                     //eliminar biblioteca
                     break;
                 default:
-                    System.out.println("abrir com a biblioteca: "+pastas.get(indice-6));
-                    biblioteca.setBibliotecaAtual(pastas.get(indice-6));
+                    System.out.println("abrir com a biblioteca: "+pastas.get(indice-5));
+                    biblioteca.setBibliotecaAtual(pastas.get(indice-5));
 
                     //continua o ciclo
                     break;
@@ -116,6 +116,7 @@ public class Menus {
                     System.out.println("Escolheu: Menu Utente");
                     break;
                 case 4:
+                    menuEmprestimo();
                     System.out.println("Escolheu: Menu Empréstimo");
                     break;
                 case 5:
@@ -465,12 +466,12 @@ public class Menus {
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerInt(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: Adicionar Empréstimo");
-                    // Emprestimo.registar();
+                    Emprestimo.registar();
                     break;
                 case 2:
                     System.out.println("Escolheu: Editar Empréstimo");
@@ -506,7 +507,7 @@ public class Menus {
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerInt(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
@@ -564,7 +565,7 @@ public class Menus {
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerInt(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
@@ -605,7 +606,7 @@ public class Menus {
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerInt(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:

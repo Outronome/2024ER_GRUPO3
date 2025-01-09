@@ -9,7 +9,7 @@ public class Data {
     }
 
     // Função para buscar a data fornecida pelo usuário (mês, dia e ano)
-    public static LocalDate dataUser() {
+    public static LocalDate introData() {
         int cont = 1;
         boolean first = true;
         Scanner scanner = new Scanner(System.in);
@@ -30,7 +30,7 @@ public class Data {
                     dia = scanner.nextInt();
                 }
             }
-        }while( dia>=1 && dia<=31 && cont == 1);
+        }while( dia<=1 && dia>=31 && cont == 1);
         do{
             if (!first) {
                 cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
@@ -44,7 +44,7 @@ public class Data {
                     mes = scanner.nextInt();
                 }
             }
-        }while(mes>=1 && mes<=12 && cont == 1);
+        }while(mes<=1 && mes>=12 && cont == 1);
         do{
             if (!first) {
                 cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
@@ -60,14 +60,20 @@ public class Data {
 
 
             }
-        }while( ano>=868 && ano<=2025 && cont == 1);
+        }while( ano<=868 && ano>=2025 && cont == 1);
         /*o ano foi escolhido apatir da seguinte informação
         No entanto, se considerarmos o conceito de "publicação" como a produção de um livro impresso,
         o "Sutra do Diamante" é o mais antigo conhecido. Este texto budista foi impresso na China em 868 d.C.,
         utilizando a técnica de xilogravura, que consiste em entalhar caracteres em blocos de madeira para
         impressão.
         */
-        return LocalDate.of(ano, mes, dia);
+        try {
+            LocalDate data = LocalDate.of(ano, mes, dia);
+            return data;
+        } catch (Exception e) {
+            System.out.println("Data inválida. Tente novamente.");
+            return introData(); // Rechama o método para tentar novamente
+        }
     }
 
 

@@ -170,6 +170,7 @@ public class Obra {
 
         return false;
     }
+
     public Obra pesquisar() {
         String codigoSemHifen = codigo.replace("-", "");
         int comprimento = codigoSemHifen.length();
