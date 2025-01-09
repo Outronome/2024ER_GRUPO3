@@ -138,6 +138,8 @@ public class Menus {
                 "1. Adicionar Livro",
                 "2. Editar Livro",
                 "3. Remover Livro",
+                "4. Ler Livro",
+                "5. Pesquisar Livro",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -155,13 +157,21 @@ public class Menus {
                     menuLivroEditar();
                     //apaga o Livro de memoria
                     break;
-                //MenuLivroPesquisa(0);
                 case 3:
                     System.out.println("Escolheu: Remover Livro");
                     //faz o pedido e a leitura do nome ate encontrar o Livro
                     //chama a função apagar com o nome do Livro
                     break;
-                // MenuLivroPesquisa(1);
+                case 4:
+                    System.out.println("Escolheu: Ler Livro");
+                    //faz o pedido e a leitura do nome ate encontrar o Livro
+                    //chama a função leitura com o nome do Livro
+                    break;
+                case 5:
+                    System.out.println("Escolheu: Pesquisar Livro");
+                    //faz o pedido e a leitura do nome ate encontrar o Livro
+                    //chama a função pesquisar com o nome do Livro
+                    break;
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");
@@ -241,6 +251,8 @@ public class Menus {
                 "1. Adicionar Jornal ou Revista",
                 "2. Editar Jornal ou Revista",
                 "3. Remover Jornal ou Revista",
+                "4. Ler Jornal ou Revista",
+                "5. Pesquisar Jornal ou Revista",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -258,13 +270,20 @@ public class Menus {
                     menuJornalRevistaEditar();
                     //apaga o JornalRevista de memoria
                     break;
-                //MenuJornalRevistaPesquisa(0);
                 case 3:
                     System.out.println("Escolheu: Remover Jornal ou Revista");
                     //faz o pedido e a leitura do nome ate encontrar o JornalRevista
                     //chama a função apagar com o nome do JornalRevista
                     break;
-                // MenuJornalRevistaPesquisa(1);
+                case 4:
+                    System.out.println("Escolheu: Ler JornalRevista");
+                    //faz o pedido e a leitura do nome ate encontrar o JornalRevista
+                    //chama a função leitura com o nome do JornalRevista
+                    break;
+                case 5:
+                    System.out.println("Escolheu: Pesquisar JornalRevista");
+                    //faz o pedido e a leitura do nome ate encontrar o JornalRevista
+                    //chama a função pesquisar com o nome do JornalRevista
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");
@@ -339,6 +358,8 @@ public class Menus {
                 "1. Adicionar Utente",
                 "2. Editar Utente",
                 "3. Remover Utente",
+                "4. Ler Utente",
+                "5. Pesquisar Utente",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -385,7 +406,15 @@ public class Menus {
                     //faz o pedido e a leitura do Nif/nome/contacto ate encontrar o utente
                     //chama a função apagar com o nif do utente
                     break;
-                   // MenuUtentePesquisa(1);
+                case 4:
+                    System.out.println("Escolheu: Ler Utente");
+                    //faz o pedido e a leitura do nome ate encontrar o Utente
+                    //chama a função leitura com o nome do Utente
+                    break;
+                case 5:
+                    System.out.println("Escolheu: Pesquisar Utente");
+                    //faz o pedido e a leitura do nome ate encontrar o JornalRevista
+                    //chama a função pesquisar com o nome do JornalRevista
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");
@@ -424,5 +453,205 @@ public class Menus {
 
         } while (op != 0);
     }
+
+    public static void menuEmprestimo() {
+        int op;
+        String[] menu = {
+                "\n==== MENU Empréstimo ====",
+                "1. Adicionar Empréstimo",
+                "2. Editar Empréstimo",
+                "3. Visualizar Empréstimo",
+                "0. Voltar",
+                "Escolha uma opção: "
+        };
+        do {
+            op = Funcionalidades.lerInt(3,menu);
+            System.out.printf(String.valueOf(op));
+            switch (op) {
+                case 1:
+                    System.out.println("Escolheu: Adicionar Empréstimo");
+                    // Emprestimo.registar();
+                    break;
+                case 2:
+                    System.out.println("Escolheu: Editar Empréstimo");
+                    //faz o pedido e a leitura do número ate encontrar o Empréstimo
+                    menuEmprestimoEditar();
+                    break;
+                case 3:
+                    System.out.println("Escolheu: Visualizar Empréstimo");
+                    //faz o pedido e a leitura do número ate encontrar o Empréstimo
+                    //chama a função visualizar com o número do Empréstimo
+                    break;
+                case 0:
+                    // op = 0;
+                    System.out.println("Voltar");
+                    break;
+                default:
+                    System.out.println("Opcão inválida! Digite novamente. ");
+            }
+        } while (op != 0);
+    }
+
+    public static void menuEmprestimoEditar () {
+        int op;
+        String[] menu = {
+                "\n==== MENU Empréstimo Edição ====",
+                "1. Alterar o N.º Empréstimo",
+                "2. Alterar o Utente do Empréstrimo",
+                "3. Alterar o Livro do Empréstrimo",
+                "4. Alterar a Data de Início",
+                "5. Alterar a Data Prevista de Devolução",
+                "6. Alterar a Data Efetiva de Devolução",
+                "0. Voltar",
+                "Escolha uma opção: "
+        };
+        do {
+            op = Funcionalidades.lerInt(3,menu);
+            System.out.printf(String.valueOf(op));
+            switch (op) {
+                case 1:
+                    System.out.println("Escolheu: N.º Empréstimo");
+                    // Ler o novo N.º Empréstimo
+                    // Chamar a função editar
+
+                    break;
+                case 2:
+                    System.out.println("Escolheu: Utente do Empréstrimo\"");
+                    // Ler o novo Utente do Empréstrimo"
+                    // Chamar a função editar
+                    break;
+                case 3:
+                    System.out.println("Escolheu: Livro do Empréstrimo");
+                    // Ler o novo Livro do Empréstrimo
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 4:
+                    System.out.println("Escolheu: Data de Início");
+                    // Ler a nova Data de Início
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 5:
+                    System.out.println("Escolheu: Data Prevista de Devolução");
+                    // Ler a nova Data Prevista de Devolução
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 6:
+                    System.out.println("Escolheu: Data Efetiva de Devolução");
+                    // Ler a nova Data Efetiva de Devolução
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 0:
+                    System.out.println("Voltar");
+                    break;
+                default:
+                    System.out.println("Opcão inválida! Digite novamente. ");
+            }
+
+        } while (op != 0);
+    }
+    public static void menuReserva() {
+        int op;
+        String[] menu = {
+                "\n==== MENU Reserva ====",
+                "1. Adicionar Reserva",
+                "2. Editar Reserva",
+                "3. Visualizar Reserva",
+                "0. Voltar",
+                "Escolha uma opção: "
+        };
+        do {
+            op = Funcionalidades.lerInt(3,menu);
+            System.out.printf(String.valueOf(op));
+            switch (op) {
+                case 1:
+                    System.out.println("Escolheu: Adicionar Reserva");
+                    // Reserva.registar();
+                    break;
+                case 2:
+                    System.out.println("Escolheu: Editar Reserva");
+                    //faz o pedido e a leitura do número ate encontrar a Reserva
+                    menuReservaEditar();
+                    break;
+                case 3:
+                    System.out.println("Escolheu: Visualizar Reserva");
+                    //faz o pedido e a leitura do número ate encontrar a Reserva
+                    //chama a função visualizar com o número da Reserva
+                    break;
+                case 0:
+                    // op = 0;
+                    System.out.println("Voltar");
+                    break;
+                default:
+                    System.out.println("Opcão inválida! Digite novamente. ");
+            }
+        } while (op != 0);
+    }
+
+    public static void menuReservaEditar () {
+        int op;
+        String[] menu = {
+                "\n==== MENU Reserva Edição ====",
+                "1. Alterar o N.º Reserva",
+                "2. Alterar o Utente da Reserva",
+                "3. Alterar o Livro da Reserva",
+                "4. Alterar a Data de Registo da Reserva",
+                "5. Alterar a Data de Início da Reserva",
+                "6. Alterar a Data de Fim da Reserva",
+                "0. Voltar",
+                "Escolha uma opção: "
+        };
+        do {
+            op = Funcionalidades.lerInt(3,menu);
+            System.out.printf(String.valueOf(op));
+            switch (op) {
+                case 1:
+                    System.out.println("Escolheu: N.º Reserva");
+                    // Ler o novo N.º Reserva
+                    // Chamar a função editar
+                    break;
+                case 2:
+                    System.out.println("Escolheu: Utente da Reserva");
+                    // Ler o novo Utente da Reserva"
+                    // Chamar a função editar
+                    break;
+                case 3:
+                    System.out.println("Escolheu: Livro da Reserva");
+                    // Ler o novo Livro da Reserva
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 4:
+                    System.out.println("Escolheu: Data de Registo da Reserva");
+                    // Ler o novo Registo da Reserva
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 5:
+                    System.out.println("Escolheu: Data de Início da Reserva");
+                    // Ler a nova Data de Início da Reserva
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 6:
+                    System.out.println("Escolheu: Data de Fim da Reserva");
+                    // Ler a nova Data de Fim da Reserva
+                    // Chamar a função editar
+                    op ++;
+                    break;
+                case 0:
+                    System.out.println("Voltar");
+                    break;
+                default:
+                    System.out.println("Opcão inválida! Digite novamente. ");
+            }
+
+        } while (op != 0);
+    }
+
+
 
 }
