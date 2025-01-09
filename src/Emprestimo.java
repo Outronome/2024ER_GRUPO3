@@ -70,7 +70,7 @@ public class Emprestimo {
     }
 
     private void introNum() {
-        num = generateId();
+  //      num = generateId();
     }
 
     private void introUtente() {
@@ -119,7 +119,7 @@ public class Emprestimo {
             }
         } while (utente == null && cont == 1);
     }
-
+/*
     private void introDatas () {
         int cont = 1;
         boolean first = true;

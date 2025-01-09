@@ -92,15 +92,33 @@ public class Reserva {
         return new Object[]{getNum(), getNif(),getObra(), getInicio(), getRegisto(), getFim()};
     }
 
+    private static List<String> ler(){
+        return Ficheiros.ler(NOME_FICHEIRO);
+    }
 
-
+    public static Reserva procurarReservas(String num){
+        List<String> reservas;
+        reservas = ler();
+        for (String reserva : reservas) {
+            String[] partes = reserva.split("\\|");
+            String[] partesFiltradas = { partes[0] };
+            for (String parte : partesFiltradas) {
+                if (parte.equals(num)){
+                    return new Reserva(partes[0],Integer.parseInt(partes[1]),partes[2],partes[3],partes[4],partes[5]);
+                }
+            }
+        }
+        System.out.println("Reserva não encontrada");
+        return null;
+        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro livro
+    }
 
     public static Boolean procurar(String codigo,String nomeFicheiroObra){
-        List<String> livros;
+        List<String> Reservas;
         String[] partesFiltradas;
-        livros = Ficheiros.ler(nomeFicheiroObra);
-        for (String livro : livros){
-            String[] partes = livro.split("\\|");
+        Reservas = Ficheiros.ler(nomeFicheiroObra);
+        for (String Reserva : Reservas){
+            String[] partes = Reserva.split("\\|");
             if(nomeFicheiroObra.equals("JornalRevista.txt")) {
                 partesFiltradas = new String[]{partes[3]};
             }
@@ -113,9 +131,9 @@ public class Reserva {
                 }
             }
         }
-        System.out.println("Livro não encontrado");
+        System.out.println("Não encontrado");
         return false;
-        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro livro
+        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro Reserva
     }
 
     public List<String> introObras() {
@@ -288,15 +306,37 @@ public class Reserva {
 
 
 
-    public String editar (){
+    public void editarCampo(String num, String palavraAntiga, String palavraNova, int posCampo){
 
-        return "Resultado";
+        Reserva reserva = procurarReservas(num);
+        if (reserva == null) {
+            System.out.println("Reserva não encontrado.");
+            return;
+        }
+
+        String palavraAnterior = switch (posCampo) {
+            case 0 -> reserva.getNum();
+            case 1 -> String.valueOf(reserva.getNif());
+            case 2 -> reserva.getObra();
+            case 3 -> reserva.getInicio();
+            case 4 -> reserva.getRegisto();
+            case 5 -> reserva.getFim();
+            default -> null;
+        };
+
+        if (palavraAntiga != null) {
+            Ficheiros.atualizar(NOME_FICHEIRO, num, palavraAntiga, palavraNova, "");
+            System.out.println("Reserva atualizado com sucesso.");
+        } else {
+            System.out.println("Posição do campo inválida.");
+        }
     }
     public void eliminar (){
         String numEliminado = Funcionalidades.lerString("Introduza o numero da reserva que deseja apagar:");
         Ficheiros.apagar(NOME_FICHEIRO, numEliminado);
 
     }
+
 
     /*public List<Reserva> mostrar (){
         //código de enviar o range de reservas que estão no ficheiro caso não receba range enviar tudo

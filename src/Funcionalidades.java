@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class Funcionalidades {
@@ -36,5 +37,16 @@ public class Funcionalidades {
         for (String elemento : lista) {
             System.out.println(elemento);
         }
+    }
+    public static boolean verificarDependencias(String identificador) {
+        List<String> linhas = Ficheiros.ler("reservas.txt");
+
+        for (String linha : linhas) {
+            if (linha.contains(identificador.trim())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

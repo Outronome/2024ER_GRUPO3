@@ -8,6 +8,7 @@ public class Main {
 
         Reserva reserva = new Reserva(null,0,null,null,null,null);
 
-        reserva.eliminar();
-    }
+
+        Livro.eliminar();
+        }
 }

@@ -14,6 +14,12 @@ public class Obra {
         this.categoria = categoria;
     }
 
+    public Obra(String titulo, String editora, String categoria) {
+        this.titulo = titulo;
+        this.editora = editora;
+        this.categoria = categoria;
+    }
+
     // Getters e Setters
     public String getTitulo() {
         return titulo;

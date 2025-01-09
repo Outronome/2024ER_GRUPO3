@@ -139,6 +139,7 @@ public class Utente {
         return null;
     }
 
+
     public static Utente registar(){
         Utente tempUtente = new Utente(0,"",0,0);
         Utente newUtente=null;

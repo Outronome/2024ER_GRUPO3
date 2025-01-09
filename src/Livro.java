@@ -88,10 +88,18 @@ public class Livro extends Obra {
     }
 
     public static void eliminar(){
-        //falta verificar se exite alguma dependencia
+
         String isbneliminado = Funcionalidades.lerString("Introduza o Isbn do livro que deseja apagar:");
+        if (Funcionalidades.verificarDependencias(isbneliminado)){
         Ficheiros.apagar(NOME_FICHEIRO,isbneliminado);
-    }
+        }
+        else {
+            System.out.println("O livro tem Reservas/Emprestimos pendentes.");
+        }
+        }
+
+
+
     private static List<String> ler(){
         return Ficheiros.ler(NOME_FICHEIRO);
     }
