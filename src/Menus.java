@@ -60,10 +60,7 @@ public class Menus {
             //falta definir a biblioteca
             switch(op) {
                 case 1:
-                    System.out.println("Adicionar Biblioteca: ");
-                    //adicionar biblioteca
-                    //cria todos os ficheiros que vão ser necessários
-                    //e abre na respetiva biblioteca
+                    biblioteca.criarBiblioteca(Funcionalidades.lerString("Adicionar Biblioteca: "));
                     break;
                 case 2:
                     System.out.println("Editar Biblioteca: ");
@@ -71,8 +68,7 @@ public class Menus {
                     //e abre na respetiva biblioteca
                     break;
                 case 3:
-                    System.out.println("Apagar Biblioteca: ");
-                    //eliminar biblioteca
+                    biblioteca.eliminarBiblioteca(Funcionalidades.lerString("Eliminar Biblioteca:"));
                     break;
                 default:
                     System.out.println("abrir com a biblioteca: "+pastas.get(indice-5));
@@ -150,7 +146,7 @@ public class Menus {
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: Adicionar Livro");
-                    // Livro.registar();
+                    Livro.registar();
                     break;
                 case 2:
                     System.out.println("Escolheu: Editar Livro");
@@ -160,8 +156,7 @@ public class Menus {
                     break;
                 case 3:
                     System.out.println("Escolheu: Remover Livro");
-                    //faz o pedido e a leitura do nome ate encontrar o Livro
-                    //chama a função apagar com o nome do Livro
+                    Livro.eliminar();
                     break;
                 case 4:
                     System.out.println("Escolheu: Ler Livro");
