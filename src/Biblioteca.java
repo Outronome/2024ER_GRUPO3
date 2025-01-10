@@ -1,5 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.*;
 
 public class Biblioteca {
 
@@ -48,21 +50,36 @@ public class Biblioteca {
         }
     }
 */
-    public void criarBiblioteca(String nomeBiblioteca) {
-        File novaBiblioteca = new File(nomeBiblioteca);
+   public void criarBiblioteca(String nomeBiblioteca) {
+       File novaBiblioteca = new File(nomeBiblioteca);
 
-        if (novaBiblioteca.exists()) {
-            System.out.println("A biblioteca já existe. Escolha outro nome.");
-        }
-        else{
-            if(novaBiblioteca.mkdir()){
-                System.out.println("Biblioteca criada com sucesso.");
-            }
-            else{
-                System.out.println("Erro ao criar biblioteca.");
-            }
-        }
-    }
+       if (novaBiblioteca.exists()) {
+           System.out.println("A biblioteca já existe. Escolha outro nome.");
+       } else {
+           if (novaBiblioteca.mkdir()) {
+               System.out.println("Biblioteca criada com sucesso.");
+
+           } else {
+               System.out.println("Erro ao criar biblioteca.");
+           }
+       }
+   }
+
+   public void RenomearBiblioteca(String nomeBiblioteca) {
+           File pastaAntiga = new File(bibliotecaAtual);
+           File pastaNova = new File(nomeBiblioteca);
+
+           // Verifica se a pasta antiga existe
+           if (!pastaAntiga.exists()) {
+               System.out.println("A pasta atual não existe.");
+
+           }
+
+           // Renomeia a pasta
+           pastaAntiga.renameTo(pastaNova);
+       }
+
+
 
     public static String getBibliotecaAtual() {
         return bibliotecaAtual;

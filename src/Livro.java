@@ -241,4 +241,23 @@ public class Livro extends Obra {
         }
 
     }
+
+    public static void mostrarLivroPorISBN(String isbn) {
+        Livro livro = procurar(isbn);
+
+        if (livro == null) {
+            System.out.println("Livro não encontrado.");
+            return;
+        }
+
+        // Exibir os campos do livro de forma organizada
+        System.out.println("===== Detalhes do Livro =====");
+        System.out.println("Título: " + livro.getTitulo());
+        System.out.println("Editora: " + livro.getEditora());
+        System.out.println("Categoria: " + livro.getCategoria());
+        System.out.println("Ano de Edição: " + livro.getAnoEdicao());
+        System.out.println("ISBN: " + livro.getIsbn());
+        System.out.println("Autores: " + livro.getAutores());
+        System.out.println("=============================");
+    }
 }

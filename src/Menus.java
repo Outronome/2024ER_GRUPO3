@@ -44,12 +44,13 @@ public class Menus {
     }
 
     private void menuBiblioteca(){
-        ArrayList<String> pastas = pesquisarBibliotecas();
+
         int op;
         String[] opcoes = new String[]{"1. Adicionar Biblioteca: ","2. Editar Biblioteca","3. Apagar Biblioteca"};
         String[] pergunta = new String[]{"Escolha uma opção: "};
         int indice = 4;
         do {
+            ArrayList<String> pastas = pesquisarBibliotecas();
             indice = 4;
             Funcionalidades.escreverStrings(opcoes);
             for (String pasta : pastas) {
@@ -61,17 +62,17 @@ public class Menus {
             switch(op) {
                 case 1:
                     biblioteca.criarBiblioteca(Funcionalidades.lerString("Adicionar Biblioteca: "));
+
                     break;
                 case 2:
-                    System.out.println("Editar Biblioteca: ");
-                    //editar biblioteca
-                    //e abre na respetiva biblioteca
+                    biblioteca.setBibliotecaAtual(Funcionalidades.lerString("Editar Biblioteca: "));
+                    biblioteca.RenomearBiblioteca(Funcionalidades.lerString("Qual nome deseja colocar: "));
                     break;
                 case 3:
                     biblioteca.eliminarBiblioteca(Funcionalidades.lerString("Eliminar Biblioteca:"));
                     break;
                 default:
-                    System.out.println("abrir com a biblioteca: "+pastas.get(indice-5));
+                    System.out.println("Abrir com a biblioteca: "+pastas.get(indice-5));
                     biblioteca.setBibliotecaAtual(pastas.get(indice-5));
 
                     //continua o ciclo
@@ -136,7 +137,6 @@ public class Menus {
                 "2. Editar Livro",
                 "3. Remover Livro",
                 "4. Ler Livro",
-                "5. Pesquisar Livro",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -150,9 +150,9 @@ public class Menus {
                     break;
                 case 2:
                     System.out.println("Escolheu: Editar Livro");
-                    //faz o pedido e a leitura do nome ate encontrar o Livto
-                    menuLivroEditar();
-                    //apaga o Livro de memoria
+                    //faz o pedido e a leitura do nome ate encontrar o Livro
+                    String isbn = Funcionalidades.lerString("Introduza o Isbn do livro a editar:");
+                    menuLivroEditar(isbn);
                     break;
                 case 3:
                     System.out.println("Escolheu: Remover Livro");
@@ -160,13 +160,8 @@ public class Menus {
                     break;
                 case 4:
                     System.out.println("Escolheu: Ler Livro");
-                    //faz o pedido e a leitura do nome ate encontrar o Livro
-                    //chama a função leitura com o nome do Livro
-                    break;
-                case 5:
-                    System.out.println("Escolheu: Pesquisar Livro");
-                    //faz o pedido e a leitura do nome ate encontrar o Livro
-                    //chama a função pesquisar com o nome do Livro
+                    String isbn2 = Funcionalidades.lerString("Introduza o ISBN do livro que deseja visualizar:");
+                    Livro.mostrarLivroPorISBN(isbn2);
                     break;
                 case 0:
                     // op = 0;
@@ -178,7 +173,7 @@ public class Menus {
         } while (op != 0);
     }
 
-    public static void menuLivroEditar () {
+    public static void menuLivroEditar (String isbn) {
         int op;
         String[] menu = {
                 "\n==== MENU Livro Edição ====",
@@ -197,37 +192,37 @@ public class Menus {
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: Titulo");
-                    // Ler o novo Titulo
-                    // Chamar a função editar
+                    String novoTitulo = Funcionalidades.lerString("Introduza o Titulo: ");
+                    Livro.editarCampo(isbn,Livro.procurar(isbn).getTitulo(),novoTitulo,1);
 
                     break;
                 case 2:
                     System.out.println("Escolheu: Editora");
-                    // Ler a nova Editora
-                    // Chamar a função editar
+                    String novoEditora = Funcionalidades.lerString("Introduza a Editora: ");
+                    Livro.editarCampo(isbn,Livro.procurar(isbn).getEditora(),novoEditora,2);
                     break;
                 case 3:
                     System.out.println("Escolheu: Categoria");
-                    // Ler a nova Categoria
-                    // Chamar a função editar
+                    String novoCategoria = Funcionalidades.lerString("Introduza a Categoria: ");
+                    Livro.editarCampo(isbn,Livro.procurar(isbn).getCategoria(),novoCategoria,3);
                     op ++;
                     break;
                 case 4:
                     System.out.println("Escolheu: Ano/Edição");
-                    // Ler o novo Ano/Edição
-                    // Chamar a função editar
+                    String novoAnoEdicao = Funcionalidades.lerString("Introduza o Ano de Edição: ");
+                    Livro.editarCampo(isbn,String.valueOf(Livro.procurar(isbn).getAnoEdicao()),novoAnoEdicao,4);
                     op ++;
                     break;
                 case 5:
                     System.out.println("Escolheu: ISBN");
-                    // Ler o novo ISBN
-                    // Chamar a função editar
+                    String novoISBN = Funcionalidades.lerString("Introduza o ISBN: ");
+                    Livro.editarCampo(isbn,Livro.procurar(isbn).getIsbn(),novoISBN,5);
                     op ++;
                     break;
                 case 6:
                     System.out.println("Escolheu: Autores");
-                    // Ler os novos Autores
-                    // Chamar a função editar
+                    String novoAutores = Funcionalidades.lerString("Introduza os Autores: ");
+                    Livro.editarCampo(isbn,Livro.procurar(isbn).getAutores(),novoAutores,6);
                     op ++;
                     break;
                 case 0:
@@ -308,8 +303,7 @@ public class Menus {
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: Titulo");
-                    // Ler o novo Titulo
-                    // Chamar a função editar
+
 
                     break;
                 case 2:
