@@ -72,11 +72,11 @@ public class Menus {
                     biblioteca.eliminarBiblioteca(Funcionalidades.lerString("Eliminar Biblioteca:"));
                     break;
                 default:
-                    System.out.println("Abrir com a biblioteca: "+pastas.get(indice-6));
-                    biblioteca.setBibliotecaAtual(pastas.get(indice-6));
+                    System.out.println("Abrir com a biblioteca: "+pastas.get(op-4));
+                    biblioteca.setBibliotecaAtual(pastas.get(op-4));
 
-                    //continua o ciclo
-                    break;
+                    return;
+
             }
         }while(op<4 || op>indice);
 
