@@ -7,7 +7,7 @@ import static java.time.LocalDate.parse;
 
 public class Emprestimo {
     int num;
-    String nomeObra;
+    String isbn;
     int nif;
     LocalDate inicio;
     LocalDate devolucaoPrevista;
@@ -15,11 +15,11 @@ public class Emprestimo {
     private static final String FORMATO = "%d|%s|%d|%d%n";//falta fazer
     private static final String NOME_FICHEIRO = "emprestimos.txt";
 
-    public Emprestimo(int num, String nomeObra, int nif,
+    public Emprestimo(int num, String isbn, int nif,
                       LocalDate inicio, LocalDate devolucaoPrevista, LocalDate devolucaoDefinitiva) {
         this.num = num;
         this.nif = nif;
-        this.nomeObra = nomeObra;
+        this.isbn = isbn;
         this.inicio = inicio;
         this.devolucaoPrevista = devolucaoPrevista;
         this.devolucaoDefinitiva = devolucaoDefinitiva;
@@ -43,11 +43,11 @@ public class Emprestimo {
     }
 
     public String getObra() {
-        return nomeObra;
+        return isbn;
     }
 
     public void setObra(Obra obra) {
-        this.nomeObra = nomeObra;
+        this.isbn = isbn;
     }
 
 
@@ -56,11 +56,11 @@ public class Emprestimo {
     }
 
     public String getNomeObra() {
-        return nomeObra;
+        return isbn;
     }
 
-    public void setNomeObra(String nomeObra) {
-        this.nomeObra = nomeObra;
+    public void setNomeObra(String isbn) {
+        this.isbn = isbn;
     }
 
     public int getNif() {
@@ -121,27 +121,28 @@ public class Emprestimo {
         Obra obra = new Obra("","","","");
         int cont = 1;
         boolean first = true;
-        int nif = 0;
         String codigo;
         do {
             if (!first) {
-                cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+                cont = Funcionalidades.lerInt("Deseja sair?(1=não 0=sim)");
             }
             if (cont == 1) {
 
                 if (first) {
                     obra.introCodigo("Introduza o ISBN/ISNN (com hífens) que quer pedir Emprestimo:");
-                    Obra obraTemp = new Obra(obra.codigo,"","","");
-                    obra = obraTemp.pesquisar();
+                    obra = obra.verificarExiste();
+                    System.out.println(obra.codigo);
                     first = false;
                 } else {
+                    obra = new Obra("","","","");
                     obra.introCodigo("Introduza o ISBN/ISNN (com hífens) correto que quer pedir Emprestimo:");
-                    Obra obraTemp = new Obra(obra.codigo,"","","");
-                    obra = obraTemp.pesquisar();
+                    System.out.println(obra.codigo);
+                    obra = obra.verificarExiste();
                 }
             }
         } while (obra == null && cont == 1);
-        nomeObra = obra.titulo;
+        isbn = obra.codigo;
+
     }
 
     private int generateId() {
@@ -174,14 +175,15 @@ public class Emprestimo {
                     String[] partes = emprestimo.split("\\|");
 
                     if (partes.length >= 5) {
-                        String nomeObra = partes[2].trim();
+                        String isbnEmprestimo = partes[2].trim(); // Obter ISBN da obra no empréstimo
                         LocalDate inicio = LocalDate.parse(partes[3].trim(), formatter);
                         LocalDate devolucaoPrevista = LocalDate.parse(partes[4].trim(), formatter);
 
-                        System.out.println("Comparando empréstimo: " + nomeObra + " com novo empréstimo: " + novoEmprestimo.nomeObra);
+                        System.out.println("Comparando empréstimo: " + isbnEmprestimo + " com novo empréstimo (ISBN): " + novoEmprestimo.isbn);
                         System.out.println("Comparando datas: " + inicio + " - " + devolucaoPrevista + " com " + novoEmprestimo.inicio + " - " + novoEmprestimo.devolucaoPrevista);
 
-                        if (nomeObra.equals(novoEmprestimo.nomeObra) &&
+                        // Comparar ISBN e verificar sobreposição de datas
+                        if (isbnEmprestimo.equals(novoEmprestimo.isbn) &&
                                 !novoEmprestimo.inicio.isAfter(devolucaoPrevista) &&
                                 !novoEmprestimo.devolucaoPrevista.isBefore(inicio)) {
                             System.out.println("Sobreposição detectada em empréstimo.");
@@ -201,14 +203,15 @@ public class Emprestimo {
                     String[] partes = reserva.split("\\|");
 
                     if (partes.length >= 6) {
-                        String nomeObra = partes[2].trim();
+                        String isbnReserva = partes[2].trim(); // Obter ISBN da obra na reserva
                         LocalDate dataInicio = LocalDate.parse(partes[3].trim(), formatter);
                         LocalDate dataFim = LocalDate.parse(partes[4].trim(), formatter);
 
-                        System.out.println("Comparando reserva: " + nomeObra + " com novo empréstimo: " + novoEmprestimo.nomeObra);
+                        System.out.println("Comparando reserva: " + isbnReserva + " com novo empréstimo (ISBN): " + novoEmprestimo.isbn);
                         System.out.println("Comparando datas: " + dataInicio + " - " + dataFim + " com " + novoEmprestimo.inicio + " - " + novoEmprestimo.devolucaoPrevista);
 
-                        if (nomeObra.equals(novoEmprestimo.nomeObra) &&
+                        // Comparar ISBN e verificar sobreposição de datas
+                        if (isbnReserva.equals(novoEmprestimo.isbn) &&
                                 !novoEmprestimo.inicio.isAfter(dataFim) &&
                                 !novoEmprestimo.devolucaoPrevista.isBefore(dataInicio)) {
                             System.out.println("Sobreposição detectada em reserva.");
@@ -223,6 +226,10 @@ public class Emprestimo {
 
         return false; // Não existe sobreposição
     }
+
+
+
+
 
 
 
@@ -259,7 +266,7 @@ public class Emprestimo {
     }*/
 
     public static Emprestimo registar() {
-        Emprestimo tempEmprestimo = new Emprestimo(0, null, 0, null, null, null);
+        Emprestimo tempEmprestimo = new Emprestimo(0, "", 0, null, null, null);
         Emprestimo newEmprestimo = null;
         Emprestimo emprestimo = null;
         boolean podeCriar = false;
@@ -284,17 +291,19 @@ public class Emprestimo {
 
 
 
-                newEmprestimo = new Emprestimo(tempEmprestimo.num, tempEmprestimo.nomeObra, tempEmprestimo.nif, tempEmprestimo.inicio, tempEmprestimo.devolucaoPrevista, tempEmprestimo.inicio);
+                newEmprestimo = new Emprestimo(tempEmprestimo.num, tempEmprestimo.isbn, tempEmprestimo.nif, tempEmprestimo.inicio, tempEmprestimo.devolucaoPrevista, tempEmprestimo.inicio);
                 List<String> emprestimos;
                 emprestimos = ler();
                 List<String> reservas = Ficheiros.ler("reservas.txt");
                 podeCriar = verificarSeExiste(emprestimos, reservas, newEmprestimo);
                 if (!podeCriar) {
                     Funcionalidades.escreverString("Não foi possivel inserir o emprestimo pois ele já existe");
+                }else{
+                    Ficheiros.escrever(NOME_FICHEIRO,newEmprestimo,FORMATO);
                 }
                 first = false;
             }
-        } while (!podeCriar && cont == 1);
+        } while (!podeCriar || cont == 1);
         Ficheiros.escrever(NOME_FICHEIRO, newEmprestimo, FORMATO);
         /*int sucesso = newEmprestimo.verficarEmprestimo(newEmprestimo);
         if (sucesso == 1) {*/

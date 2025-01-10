@@ -1,3 +1,5 @@
+import java.util.List;
+
 // Classe base Obra
 public class Obra {
     String codigo;
@@ -186,8 +188,51 @@ public class Obra {
             return null;
         }
     }
+    public Obra verificarExiste() {
+        String codigoSemHifen = codigo.replace("-", "");
+        int comprimento = codigoSemHifen.length();
 
+        if (comprimento == 8) {
+            // Verificar nos jornais/revistas
+            JornalRevista jornal = JornalRevista.procurar(codigo);
+            Obra obra = new Obra(codigo,jornal.titulo,jornal.editora,jornal.categoria);
+            System.out.println(obra);
+            return obra;
+        } else if (comprimento == 10 || comprimento == 13) {
+            // Verificar nos livros
+            Livro livro = Livro.procurar(codigo);
+            Obra obra = new Obra(codigo,livro.titulo,livro.editora,livro.categoria);
+            System.out.println(obra);
+            return obra;
+        } else {
+            System.out.println("Código inválido.");
+            return null;
+        }
+    }
 
+    public static Obra pesquisarPorTitulo(String titulo) {
+        // Pesquisar nos livros
+        List<String> livros = Ficheiros.ler(Livro.NOME_FICHEIRO);
+        for (String linha : livros) {
+            String[] partes = linha.split("\\|");
+            if (partes.length >= 6 && partes[0].toLowerCase().contains(titulo.toLowerCase())) {
+                return new Livro(partes[0], partes[1], partes[2],
+                        Integer.parseInt(partes[3]), partes[4], partes[5]);
+            }
+        }
+
+        // Pesquisar nos jornais/revistas
+        List<String> jornaisRevistas = Ficheiros.ler(JornalRevista.NOME_FICHEIRO);
+        for (String linha : jornaisRevistas) {
+            String[] partes = linha.split("\\|");
+            if (partes.length >= 5 && partes[0].toLowerCase().contains(titulo.toLowerCase())) {
+                return new JornalRevista(partes[0], partes[1], partes[2], partes[3], partes[4]);
+            }
+        }
+
+        // Retornar null se não encontrou nenhum resultado
+        return null;
+    }
     protected void introCategoria() {do {
         categoria = Funcionalidades.lerString("Introduza a Categoria:");
         if (categoria.length() <= 3 || categoria.length() >= 100) {

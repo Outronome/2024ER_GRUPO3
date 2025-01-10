@@ -2,9 +2,9 @@ import java.util.List;
 
 // Classe JornalRevista, que herda de Obra
 public class JornalRevista extends Obra {
+    public static final String NOME_FICHEIRO = "JornalRevista.txt";
     private String issn;
     private String dataPublicacao;
-    private static String NOME_FICHEIRO = "JornalRevista.txt";
     private static String FORMATO = "%s|%s|%s|%s|%s%n";
     // Construtor
     public JornalRevista(String titulo, String editora, String categoria, String issn, String dataPublicacao) {

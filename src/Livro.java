@@ -1,11 +1,11 @@
 import java.util.List;
 
 public class Livro extends Obra {
+    public static final String NOME_FICHEIRO = "livros.txt";
     private int anoEdicao;
     private String isbn;
     private String autores;
     private static String FORMATO = "%s|%s|%s|%d|%s|%s%n";
-    private static String NOME_FICHEIRO = "livros.txt";
     // Construtor
     public Livro(String titulo, String editora, String categoria, int anoEdicao, String isbn, String autores) {
         super(titulo, editora, categoria);
