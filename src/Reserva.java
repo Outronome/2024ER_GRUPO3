@@ -300,9 +300,27 @@ public class Reserva {
         }
     }
     public void eliminar (){
-        String numEliminado = Funcionalidades.lerString("Introduza o numero da reserva que deseja apagar:");
+        String numEliminado = Funcionalidades.lerString("Introduza o numero da reserva que deseja apagar (R*):");
         Ficheiros.apagar(NOME_FICHEIRO, numEliminado);
 
+    }
+
+    public  void mostrarReserva(String num) {
+        Reserva reserva = procurarReservas(num);
+
+        if (reserva == null) {
+            System.out.println("Livro não encontrado.");
+            return;
+        }
+
+        // Exibir os campos do livro de forma organizada
+        System.out.println("===== Detalhes do Livro =====");
+        System.out.println("Numero de Reserva: " + reserva.getNum());
+        System.out.println("Obra da Reserva: " + reserva.getObra());
+        System.out.println("Data de inicio da Reserva: " + reserva.getInicio());
+        System.out.println("Data de registo da Reserva: " + reserva.getRegisto());
+        System.out.println("Data de Fim da Reserva: " + reserva.getFim());
+        System.out.println("=============================");
     }
 
 

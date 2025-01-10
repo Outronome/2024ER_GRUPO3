@@ -208,5 +208,23 @@ public class JornalRevista extends Obra {
         }
     }
 
+    public static void mostrarJonalRevistaPorISBN(String issn) {
+        JornalRevista jornalRevista = procurar(issn);
+
+        if (jornalRevista == null) {
+            System.out.println("Jornal/Revista não encontrado.");
+            return;
+        }
+
+        // Exibir os campos do livro de forma organizada
+        System.out.println("===== Detalhes do Jornal/Revista =====");
+        System.out.println("Título: " + jornalRevista.getTitulo());
+        System.out.println("Editora: " + jornalRevista.getEditora());
+        System.out.println("Categoria: " + jornalRevista.getCategoria());
+        System.out.println("ISSN: " + jornalRevista.getIssn());
+        System.out.println("Autores: " + jornalRevista.getDataPublicacao());
+        System.out.println("=============================");
+    }
+
 
 }

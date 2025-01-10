@@ -253,28 +253,23 @@ public class Menus {
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: Adicionar Jornal ou Revista");
-                    // JornalRevista.registar();
+                    JornalRevista.registar();
                     break;
                 case 2:
                     System.out.println("Escolheu: Editar Jornal ou Revista");
-                    //faz o pedido e a leitura do nome ate encontrar o JornalRevista
-                    menuJornalRevistaEditar();
-                    //apaga o JornalRevista de memoria
+                    String issn = Funcionalidades.lerString("Introduza o Issn da Revista a editar:");
+                    menuJornalRevistaEditar(issn);
+
                     break;
                 case 3:
                     System.out.println("Escolheu: Remover Jornal ou Revista");
-                    //faz o pedido e a leitura do nome ate encontrar o JornalRevista
-                    //chama a função apagar com o nome do JornalRevista
+                    JornalRevista.eliminar();
                     break;
                 case 4:
                     System.out.println("Escolheu: Ler JornalRevista");
-                    //faz o pedido e a leitura do nome ate encontrar o JornalRevista
-                    //chama a função leitura com o nome do JornalRevista
+                    String issn2 = Funcionalidades.lerString("Introduza o ISSN do livro que deseja visualizar:");
+                    Livro.mostrarLivroPorISBN(issn2);
                     break;
-                case 5:
-                    System.out.println("Escolheu: Pesquisar JornalRevista");
-                    //faz o pedido e a leitura do nome ate encontrar o JornalRevista
-                    //chama a função pesquisar com o nome do JornalRevista
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");
@@ -285,7 +280,7 @@ public class Menus {
         } while (op != 0);
     }
 
-    public static void menuJornalRevistaEditar () {
+    public static void menuJornalRevistaEditar (String issn) {
         int op;
         String[] menu = {
                 "\n==== MENU Jornal/Revista Edição ====",
@@ -303,30 +298,31 @@ public class Menus {
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: Titulo");
-
+                    String novoTitulo = Funcionalidades.lerString("Introduza o Titulo: ");
+                   JornalRevista.editarCampo(issn,JornalRevista.procurar(issn).getTitulo(),novoTitulo,1);
 
                     break;
                 case 2:
                     System.out.println("Escolheu: Editora");
-                    // Ler a nova Editora
-                    // Chamar a função editar
+                    String novoEditora = Funcionalidades.lerString("Introduza a Editora: ");
+                    JornalRevista.editarCampo(issn,JornalRevista.procurar(issn).getEditora(),novoEditora,2);
                     break;
                 case 3:
                     System.out.println("Escolheu: Categoria");
-                    // Ler a nova Categoria
-                    // Chamar a função editar
+                    String novoCategoria = Funcionalidades.lerString("Introduza a Categoria: ");
+                    JornalRevista.editarCampo(issn,JornalRevista.procurar(issn).getCategoria(),novoCategoria,3);
                     op ++;
                     break;
                 case 4:
                     System.out.println("Escolheu: ISSN");
-                    // Ler o novo ISSN
-                    // Chamar a função editar
+                    String novoISSN = Funcionalidades.lerString("Introduza o ISSN: ");
+                    JornalRevista.editarCampo(issn,JornalRevista.procurar(issn).getIssn(),novoISSN,1);
                     op ++;
                     break;
                 case 5:
                     System.out.println("Escolheu: Data de Publicação");
-                    // Ler a nova Data de Publicação
-                    // Chamar a função editar
+                    String novoDataPublicacao= Funcionalidades.lerString("Introduza a Data de publicação: ");
+                    JornalRevista.editarCampo(issn,JornalRevista.procurar(issn).getDataPublicacao(),novoDataPublicacao,1);
                     op ++;
                     break;
                 case 0:
@@ -518,8 +514,7 @@ public class Menus {
                     break;
                 case 4:
                     System.out.println("Escolheu: Data de Início");
-                    // Ler a nova Data de Início
-                    // Chamar a função editar
+
                     op ++;
                     break;
                 case 5:
@@ -545,6 +540,8 @@ public class Menus {
     }
     public static void menuReserva() {
         int op;
+        Reserva reserva = new Reserva(null,0,null,null,null,null);
+
         String[] menu = {
                 "\n==== MENU Reserva ====",
                 "1. Adicionar Reserva",
@@ -554,23 +551,26 @@ public class Menus {
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerOpcoesMenus(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(4,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
                     System.out.println("Escolheu: Adicionar Reserva");
-                    // Reserva.registar();
+                    reserva.registar();
                     break;
                 case 2:
                     System.out.println("Escolheu: Editar Reserva");
-                    //faz o pedido e a leitura do número ate encontrar a Reserva
-                    menuReservaEditar();
+                    String num = Funcionalidades.lerString("Introduza o numero da reserva (R*):");
+                    menuReservaEditar(num);
                     break;
                 case 3:
                     System.out.println("Escolheu: Visualizar Reserva");
-                    //faz o pedido e a leitura do número ate encontrar a Reserva
-                    //chama a função visualizar com o número da Reserva
+                    String num2 = Funcionalidades.lerString("Introduza o numero da reserva (R*):");
+                    reserva.mostrarReserva(num2);
                     break;
+                case 4:
+                    System.out.println("Escolheu: Eliminar Reserva");
+                    reserva.eliminar();
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");
@@ -581,16 +581,16 @@ public class Menus {
         } while (op != 0);
     }
 
-    public static void menuReservaEditar () {
+    public static void menuReservaEditar (String num) {
         int op;
+        Reserva reserva = new Reserva(null,0,num,null,null,null);
         String[] menu = {
                 "\n==== MENU Reserva Edição ====",
-                "1. Alterar o N.º Reserva",
-                "2. Alterar o Utente da Reserva",
-                "3. Alterar o Livro da Reserva",
-                "4. Alterar a Data de Registo da Reserva",
-                "5. Alterar a Data de Início da Reserva",
-                "6. Alterar a Data de Fim da Reserva",
+                "1. Alterar o Utente da Reserva",
+                "2. Alterar o Livro da Reserva",
+                "3. Alterar a Data de Registo da Reserva",
+                "4. Alterar a Data de Início da Reserva",
+                "5. Alterar a Data de Fim da Reserva",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -599,37 +599,32 @@ public class Menus {
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
-                    System.out.println("Escolheu: N.º Reserva");
-                    // Ler o novo N.º Reserva
-                    // Chamar a função editar
+                    System.out.println("Escolheu: Utente da Reserva");
+                    String novoUtente= Funcionalidades.lerString("Introduza um Utente: ");
+                    reserva.editarCampo(num,String.valueOf(reserva.procurarReservas(num).getNif()),novoUtente,2);
                     break;
                 case 2:
-                    System.out.println("Escolheu: Utente da Reserva");
-                    // Ler o novo Utente da Reserva"
-                    // Chamar a função editar
+                    System.out.println("Escolheu: Livro da Reserva");
+                    String novoLivro= Funcionalidades.lerString("Introduza um novo livro: ");
+                    reserva.editarCampo(num,reserva.procurarReservas(num).getObra(),novoLivro,2);
+                    op ++;
                     break;
                 case 3:
-                    System.out.println("Escolheu: Livro da Reserva");
-                    // Ler o novo Livro da Reserva
-                    // Chamar a função editar
+                    System.out.println("Escolheu: Data de Registo da Reserva");
+                    String novoRegisto= Funcionalidades.lerString("Introduza a nova data de registo: ");
+                    reserva.editarCampo(num,reserva.procurarReservas(num).getRegisto(),novoRegisto,4);
                     op ++;
                     break;
                 case 4:
-                    System.out.println("Escolheu: Data de Registo da Reserva");
-                    // Ler o novo Registo da Reserva
-                    // Chamar a função editar
+                    System.out.println("Escolheu: Data de Início da Reserva");
+                    String novoInicio= Funcionalidades.lerString("Introduza a nova data de registo: ");
+                    reserva.editarCampo(num,reserva.procurarReservas(num).getRegisto(),novoInicio,3);
                     op ++;
                     break;
                 case 5:
-                    System.out.println("Escolheu: Data de Início da Reserva");
-                    // Ler a nova Data de Início da Reserva
-                    // Chamar a função editar
-                    op ++;
-                    break;
-                case 6:
                     System.out.println("Escolheu: Data de Fim da Reserva");
-                    // Ler a nova Data de Fim da Reserva
-                    // Chamar a função editar
+                    String novoFim= Funcionalidades.lerString("Introduza a nova data de fim: ");
+                    reserva.editarCampo(num,reserva.procurarReservas(num).getFim(),novoFim,5);
                     op ++;
                     break;
                 case 0:
