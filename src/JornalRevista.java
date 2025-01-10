@@ -53,7 +53,7 @@ public class JornalRevista extends Obra {
         for (String JornalRevista : JornalRevistas) {
             String[] partes = JornalRevista.split("\\|");
             if (partes.length >= 5) {
-                String issnComparar = partes[3].trim();
+                String issnComparar = partes[4].trim();
                 if (newJornalRevista.issn.equals(issnComparar)) {
                     sucesso = 1;
                     break;
@@ -191,14 +191,27 @@ public class JornalRevista extends Obra {
             return;
         }
 
-        String palavraAnterior = switch (posCampo) {
-            case 0 -> jornalRevista.getTitulo();
-            case 1 -> jornalRevista.getEditora();
-            case 2 -> jornalRevista.getCategoria();
-            case 3 -> jornalRevista.getIssn();
-            case 4 -> jornalRevista.getDataPublicacao();
-            default -> null;
-        };
+        switch (posCampo) {
+            case 1,2,3,5 -> {
+                if (palavraNova.length() <= 3 || palavraNova.length() >= 100) {
+                    Funcionalidades.escreverString("Erro: Introduza um texto entre 3 e 100 caracteres");
+                    return;
+                }
+
+            }
+
+            case 4 -> {
+                if (!palavraNova.matches("^\\d{4}-\\d{3}[\\dX]$")) {
+                    Funcionalidades.escreverString("Erro: O ISSN deve estar no formato 1234-567X.");
+                    return;
+                } else if (!validarIssn(palavraNova)) {
+                    Funcionalidades.escreverString("Erro: O ISSN introduzido é inválido.");
+                    return;
+                }
+            }
+
+        }
+
 
         if (palavraAntiga != null) {
             Ficheiros.atualizar(NOME_FICHEIRO, issn, palavraAntiga, palavraNova, "");

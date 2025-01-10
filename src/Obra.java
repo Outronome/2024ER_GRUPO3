@@ -71,7 +71,7 @@ public class Obra {
         } while (editora.length() <= 3 || editora.length() >= 100);
     }
 
-    protected boolean validarIssn(String issn) {
+    protected static boolean validarIssn(String issn) {
         String issnSemHifen = issn.replace("-", "");
         String primeirosSete = issnSemHifen.substring(0, 7);
         char ultimoDigito = issnSemHifen.charAt(7);

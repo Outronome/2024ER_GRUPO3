@@ -34,7 +34,7 @@ public abstract class Ficheiros<T> {
                 lista.add(scanner.nextLine());
             }
         } catch (FileNotFoundException e) {
-            System.err.println("Erro: Ficheiro não encontrado - " + e.getMessage());
+            System.err.println("");
         }
         return lista;
     }
@@ -80,7 +80,12 @@ public abstract class Ficheiros<T> {
     //escreve o conteudo enviado
     public static <T> void escrever(String nomeFicheiro, T objeto, String formato) {
         String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
-        nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
+        // Garante que o nome da pasta não seja duplicado
+        if (!bibliotecaAtual.endsWith("\\")) {
+            bibliotecaAtual += "\\"; // Adiciona a barra invertida, se necessário
+        }
+
+        nomeFicheiro = bibliotecaAtual + nomeFicheiro;
         try {
             File file = new File(nomeFicheiro);
             // Criar o arquivo, se não existir
@@ -97,7 +102,7 @@ public abstract class Ficheiros<T> {
                     ficheiro.format(formato, campos);
 
                 } catch (FileNotFoundException e) {
-                    System.err.println("Ficheiro não encontrado: " + e.getMessage());
+                    System.err.println("" + e.getMessage());
                 }
             }
         } catch (IOException e) {

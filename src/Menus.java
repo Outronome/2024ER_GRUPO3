@@ -57,7 +57,7 @@ public class Menus {
                 System.out.println(indice+". "+"Abrir na "+pasta);
                 indice++;
             }
-            op = Funcionalidades.lerOpcoesMenus(5,pergunta);
+            op = Funcionalidades.lerOpcoesMenus(pastas.size()+3,pergunta);
             //falta definir a biblioteca
             switch(op) {
                 case 1:
@@ -72,8 +72,8 @@ public class Menus {
                     biblioteca.eliminarBiblioteca(Funcionalidades.lerString("Eliminar Biblioteca:"));
                     break;
                 default:
-                    System.out.println("Abrir com a biblioteca: "+pastas.get(indice-5));
-                    biblioteca.setBibliotecaAtual(pastas.get(indice-5));
+                    System.out.println("Abrir com a biblioteca: "+pastas.get(indice-6));
+                    biblioteca.setBibliotecaAtual(pastas.get(indice-6));
 
                     //continua o ciclo
                     break;
@@ -316,13 +316,13 @@ public class Menus {
                 case 4:
                     System.out.println("Escolheu: ISSN");
                     String novoISSN = Funcionalidades.lerString("Introduza o ISSN: ");
-                    JornalRevista.editarCampo(issn,JornalRevista.procurar(issn).getIssn(),novoISSN,1);
+                    JornalRevista.editarCampo(issn,JornalRevista.procurar(issn).getIssn(),novoISSN,4);
                     op ++;
                     break;
                 case 5:
                     System.out.println("Escolheu: Data de Publicação");
                     String novoDataPublicacao= Funcionalidades.lerString("Introduza a Data de publicação: ");
-                    JornalRevista.editarCampo(issn,JornalRevista.procurar(issn).getDataPublicacao(),novoDataPublicacao,1);
+                    JornalRevista.editarCampo(issn,JornalRevista.procurar(issn).getDataPublicacao(),novoDataPublicacao,5);
                     op ++;
                     break;
                 case 0:
