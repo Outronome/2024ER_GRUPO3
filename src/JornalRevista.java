@@ -37,9 +37,15 @@ public class JornalRevista extends Obra {
     }
 
     public static void eliminar(){
-        //falta verificar se exite alguma dependencia
+
+
         String isnneliminado = Funcionalidades.lerString("Introduza o Isnn do jornal ou reista que deseja apagar:");
+        if (Funcionalidades.verificarDependencias(isnneliminado)){
         Ficheiros.apagar(NOME_FICHEIRO,isnneliminado);
+        }
+        else {
+            System.out.println("O Jronal/Revista tem Reservas/Emprestimos pendentes.");
+        }
     }
 
     public Object[] getData() {
@@ -192,11 +198,24 @@ public class JornalRevista extends Obra {
         }
 
         switch (posCampo) {
-            case 1,2,3,5 -> {
+            case 1,2,3 -> {
                 if (palavraNova.length() <= 3 || palavraNova.length() >= 100) {
                     Funcionalidades.escreverString("Erro: Introduza um texto entre 3 e 100 caracteres");
                     return;
                 }
+
+            }
+
+            case 5 -> {
+                do {
+
+                    if (!validarData(palavraNova)){
+                        Funcionalidades.escreverString("Erro: Introduza uma data válida.");
+                        continue;
+                    }
+                    break;
+                } while (true);
+
 
             }
 

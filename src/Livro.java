@@ -129,15 +129,35 @@ public class Livro extends Obra {
             return;
         }
 
-        String palavraAnterior = switch (posCampo) {
-            case 0 -> livro.getTitulo();
-            case 1 -> livro.getEditora();
-            case 2 -> livro.getCategoria();
-            case 3 -> String.valueOf(livro.getAnoEdicao());
-            case 4 -> livro.getIsbn();
-            case 5 -> livro.getAutores();
-            default -> null;
-        };
+        switch (posCampo) {
+            case 1,2,3,6 -> {
+                if (palavraNova.length() <= 3 || palavraNova.length() >= 100) {
+                    Funcionalidades.escreverString("Erro: Introduza um texto entre 3 e 100 caracteres");
+                    return;
+                }
+
+            }
+
+            case 4 -> {do {
+
+                if (Integer.parseInt(palavraNova) < 0 || Integer.parseInt(palavraNova)> 2024) {
+                    Funcionalidades.escreverString("Erro: Introduza um Ano de Edição válido (entre 1450 e 2024)");
+                }
+            } while (Integer.parseInt(palavraNova)< 0 || Integer.parseInt(palavraNova) > 2024);
+            }
+
+
+            case 5 -> {
+                Obra obra = new Obra(null,null,null);
+                do {
+                    if (!obra.isbnValido(palavraNova)) {
+                        Funcionalidades.escreverString("Erro: ISBN inválido. Certifique-se de que seja um ISBN-10 ou ISBN-13 válido (com hífens).");
+                    }
+                } while (!obra.isbnValido(palavraNova));
+                }
+            }
+
+
 
         if (palavraAntiga != null) {
             Ficheiros.atualizar(NOME_FICHEIRO, isbn, palavraAntiga, palavraNova, "");

@@ -118,6 +118,7 @@ public class Menus {
                     break;
                 case 5:
                     System.out.println("Escolheu: Menu Reserva");
+                    menuReserva();
                     break;
                 case 0:
                     System.out.println("Sair");
