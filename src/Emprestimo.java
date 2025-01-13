@@ -9,17 +9,17 @@ public class Emprestimo {
     int num;
     String isbn;
     int nif;
-    LocalDate inicio;
-    LocalDate devolucaoPrevista;
-    LocalDate devolucaoDefinitiva;
-    private static final String FORMATO = "%d|%s|%d|%d%n";//falta fazer
+    String inicio;
+    static String devolucaoPrevista;
+    String devolucaoDefinitiva;
+    private static final String FORMATO = "%d|%s|%d|%s|%s|%s%n";//falta fazer
     private static final String NOME_FICHEIRO = "emprestimos.txt";
 
     public Emprestimo(int num, String isbn, int nif,
-                      LocalDate inicio, LocalDate devolucaoPrevista, LocalDate devolucaoDefinitiva) {
+                      String inicio, String devolucaoPrevista, String devolucaoDefinitiva) {
         this.num = num;
-        this.nif = nif;
         this.isbn = isbn;
+        this.nif = nif;
         this.inicio = inicio;
         this.devolucaoPrevista = devolucaoPrevista;
         this.devolucaoDefinitiva = devolucaoDefinitiva;
@@ -71,27 +71,27 @@ public class Emprestimo {
         this.nif = nif;
     }
 
-    public LocalDate getInicio() {
+    public String getInicio() {
         return inicio;
     }
 
-    public void setInicio(LocalDate inicio) {
+    public void setInicio(String inicio) {
         this.inicio = inicio;
     }
 
-    public LocalDate getDevolucaoPrevista() {
+    public String getDevolucaoPrevista() {
         return devolucaoPrevista;
     }
 
-    public void setDevolucaoPrevista(LocalDate devolucaoPrevista) {
+    public void setDevolucaoPrevista(String devolucaoPrevista) {
         this.devolucaoPrevista = devolucaoPrevista;
     }
 
-    public LocalDate getDevolucaoDefinitiva() {
+    public String getDevolucaoDefinitiva() {
         return devolucaoDefinitiva;
     }
 
-    public void setDevolucaoDefinitiva(LocalDate devolucaoDefinitiva) {
+    public void setDevolucaoDefinitiva(String devolucaoDefinitiva) {
         this.devolucaoDefinitiva = devolucaoDefinitiva;
     }
 
@@ -115,7 +115,7 @@ public class Emprestimo {
                 }
             }
         } while (utente == null && cont == 1);
-        this.nif = utente.getNif();
+        this.nif = nif;
     }
     private void introObra() {
         Obra obra = new Obra("","","","");
@@ -177,16 +177,21 @@ public class Emprestimo {
                     if (partes.length >= 5) {
                         String isbnEmprestimo = partes[2].trim(); // Obter ISBN da obra no empréstimo
                         LocalDate inicio = LocalDate.parse(partes[3].trim(), formatter);
-                        LocalDate devolucaoPrevista = LocalDate.parse(partes[4].trim(), formatter);
-
                         System.out.println("Comparando empréstimo: " + isbnEmprestimo + " com novo empréstimo (ISBN): " + novoEmprestimo.isbn);
-                        System.out.println("Comparando datas: " + inicio + " - " + devolucaoPrevista + " com " + novoEmprestimo.inicio + " - " + novoEmprestimo.devolucaoPrevista);
-
+                        System.out.println("Comparando datas: " + inicio + " - " + LocalDate.parse(devolucaoPrevista.split("T")[0]) + " com " + novoEmprestimo.inicio + " - " + novoEmprestimo.devolucaoPrevista);
+                        System.out.println(!LocalDate.parse(novoEmprestimo.inicio.split("T")[0]).isAfter(LocalDate.parse(devolucaoPrevista.split("T")[0])));
+                        System.out.println(!LocalDate.parse(novoEmprestimo.devolucaoPrevista.split("T")[0]).isBefore(inicio));
                         // Comparar ISBN e verificar sobreposição de datas
-                        if (isbnEmprestimo.equals(novoEmprestimo.isbn) &&
-                                !novoEmprestimo.inicio.isAfter(devolucaoPrevista) &&
-                                !novoEmprestimo.devolucaoPrevista.isBefore(inicio)) {
-                            System.out.println("Sobreposição detectada em empréstimo.");
+                        if (!LocalDate.parse(novoEmprestimo.inicio.split("T")[0]).isAfter(LocalDate.parse(devolucaoPrevista.split("T")[0]))){
+                            System.out.println("O novo emprestimo não é depois do anterior");
+                        }
+                        if (!LocalDate.parse(novoEmprestimo.devolucaoPrevista.split("T")[0]).isBefore(inicio)){
+                            System.out.println("O novo emprestimo não é antes do anterior");
+                        }
+                        if (isbnEmprestimo.trim().equals(novoEmprestimo.isbn.trim()) &&
+                                !LocalDate.parse(novoEmprestimo.inicio.split("T")[0]).isAfter(LocalDate.parse(devolucaoPrevista.split("T")[0])) &&
+                                !LocalDate.parse(novoEmprestimo.devolucaoPrevista.split("T")[0]).isBefore(inicio)) {
+                            System.out.println(isbnEmprestimo.trim()+"-"+novoEmprestimo.isbn.trim());
                             return true; // Existe sobreposição com um empréstimo
                         }
                     }
@@ -212,8 +217,8 @@ public class Emprestimo {
 
                         // Comparar ISBN e verificar sobreposição de datas
                         if (isbnReserva.equals(novoEmprestimo.isbn) &&
-                                !novoEmprestimo.inicio.isAfter(dataFim) &&
-                                !novoEmprestimo.devolucaoPrevista.isBefore(dataInicio)) {
+                                !LocalDate.parse(novoEmprestimo.inicio.split("T")[0]).isAfter(dataFim) &&
+                                !LocalDate.parse(novoEmprestimo.devolucaoPrevista.split("T")[0]).isBefore(dataInicio)) {
                             System.out.println("Sobreposição detectada em reserva.");
                             return true; // Existe sobreposição com uma reserva
                         }
@@ -266,7 +271,7 @@ public class Emprestimo {
     }*/
 
     public static Emprestimo registar() {
-        Emprestimo tempEmprestimo = new Emprestimo(0, "", 0, null, null, null);
+        Emprestimo tempEmprestimo = new Emprestimo(0, "", 0, "", "", "");
         Emprestimo newEmprestimo = null;
         Emprestimo emprestimo = null;
         boolean podeCriar = false;
@@ -280,11 +285,11 @@ public class Emprestimo {
                 tempEmprestimo.introNum();
                 tempEmprestimo.introUtente();
                 tempEmprestimo.introObra();
-                tempEmprestimo.inicio = LocalDate.from(Data.dataNow());
+                tempEmprestimo.inicio = String.valueOf(Data.dataNow());
                 do{
                     Funcionalidades.escreverString("Escreva Data Prevista de Entrega");
-                    tempEmprestimo.devolucaoPrevista = Data.introData();
-                }while (tempEmprestimo.devolucaoPrevista.isBefore(tempEmprestimo.inicio) );
+                    tempEmprestimo.devolucaoPrevista = String.valueOf(Data.introData());
+                }while (LocalDate.parse(tempEmprestimo.devolucaoPrevista.split("T")[0]).isBefore(LocalDate.parse(tempEmprestimo.inicio.split("T")[0])) );
                 /*do{
                     tempEmprestimo.devolucaoDefinitiva = Data.introData();
                 }while (tempEmprestimo.devolucaoDefinitiva.isBefore(tempEmprestimo.inicio));*/
@@ -296,9 +301,12 @@ public class Emprestimo {
                 emprestimos = ler();
                 List<String> reservas = Ficheiros.ler("reservas.txt");
                 podeCriar = verificarSeExiste(emprestimos, reservas, newEmprestimo);
-                if (!podeCriar) {
+                if (podeCriar) {
                     Funcionalidades.escreverString("Não foi possivel inserir o emprestimo pois ele já existe");
                 }else{
+                    System.out.printf("Campos: num=%d, isbn=%s, nif=%d, inicio=%s, devolucaoPrevista=%s, devolucaoDefinitiva=%s%n",
+                            newEmprestimo.getNum(), newEmprestimo.getObra(), newEmprestimo.getUtente(),
+                            newEmprestimo.getInicio(), newEmprestimo.getDevolucaoPrevista(), newEmprestimo.getDevolucaoDefinitiva());
                     Ficheiros.escrever(NOME_FICHEIRO,newEmprestimo,FORMATO);
                 }
                 first = false;
@@ -320,7 +328,7 @@ public class Emprestimo {
     }
 
     public Object[] getData() {
-        return new Object[]{getNif(), getInicio(), getDevolucaoPrevista(), getDevolucaoDefinitiva()};
+        return new Object[]{getNum(),getObra(),getNif(), getInicio(), getDevolucaoPrevista(), getDevolucaoDefinitiva()};
     }
     /*public List<Emprestimo> mostrar (){
         //código de enviar o range de emprestimos que estão no ficheiro caso não receba range enviar tudo
