@@ -141,7 +141,7 @@ public class Livro extends Obra {
             case 4 -> {do {
 
                 if (Integer.parseInt(palavraNova) < 0 || Integer.parseInt(palavraNova)> 2024) {
-                    Funcionalidades.escreverString("Erro: Introduza um Ano de Edição válido (entre 1450 e 2024)");
+                    Funcionalidades.escreverString("Erro: Introduza um Ano de Edição válido (entre 0 e 2024)");
                 }
             } while (Integer.parseInt(palavraNova)< 0 || Integer.parseInt(palavraNova) > 2024);
             }

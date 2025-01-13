@@ -74,6 +74,12 @@ public class Obra {
     protected static boolean validarIssn(String issn) {
         String issnSemHifen = issn.replace("-", "");
         String primeirosSete = issnSemHifen.substring(0, 7);
+
+        if (JornalRevista.procurar(issn)!=null)
+        {
+            System.out.println("O issn já existe");
+            return false;
+        }
         char ultimoDigito = issnSemHifen.charAt(7);
         // Calcular a soma ponderada dos primeiros 7 dígitos
         int soma = 0;
@@ -124,7 +130,14 @@ public class Obra {
 
         // Regex para validar formatos
         String regexISBN10 = "^[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9X]$";
+
         String regexISBN13 = "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9]$";
+
+        if(Livro.procurar(isbn)!=null){
+            System.out.println("O código do livro já existe");
+            return false;
+
+        }
 
         if (isbn.matches(regexISBN10)) {
             return validarIsbn10(isbn.replace("-", ""));
