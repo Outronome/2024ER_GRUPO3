@@ -7,10 +7,25 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Classe abstrata que fornece utilitários para manipulação de ficheiros genéricos.
+ * Esta classe inclui métodos para ler ficheiros e para obter dados de objetos via reflexão.
+ *
+ * @param <T> O tipo de objeto manipulado por esta classe.
+ */
+
 public abstract class Ficheiros<T> {
 
+    /**
+     * Obtém os dados de um objeto invocando o método "getData" via reflexão.
+     *
+     * @param object O objeto do qual os dados serão extraídos.
+     * @param <T>    O tipo do objeto.
+     * @return Array de objetos contendo os dados retornados pelo método "getData" ou um array vazio se ocorrer um erro.
+     */
     private static <T> Object[] getObjectData(T object) {
         try {
+
             // Usamos reflexão para buscar o método getData na classe do objeto
             Method method = object.getClass().getMethod("getData");
 
@@ -23,18 +38,28 @@ public abstract class Ficheiros<T> {
         }
     }
 
-    // Função para ler do ficheiro e retornar uma lista com cada linha
+    /**
+     * Lê o conteúdo de um ficheiro e retorna uma lista contendo cada linha como um elemento.
+     * <p>
+     * O caminho do ficheiro é ajustado de acordo com a biblioteca atual.
+     *
+     * @param nomeFicheiro O nome do ficheiro a ser lido.
+     * @return Uma lista de strings contendo as linhas do ficheiro.
+     * Retorna uma lista vazia se o ficheiro não for encontrado.
+     */
     public static List<String> ler(String nomeFicheiro) {
-        //le varias linhas e retorna de um dado ficheiro em
+        // Obtem o caminho da biblioteca atual e ajusta o caminho do ficheiro
         String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
-        nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
+        nomeFicheiro = bibliotecaAtual + "\\" + nomeFicheiro;
         List<String> lista = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(nomeFicheiro), "UTF-8")) {
+            // Lê o ficheiro linha por linha e adiciona cada linha à lista
             while (scanner.hasNextLine()) {
                 lista.add(scanner.nextLine());
             }
         } catch (FileNotFoundException e) {
-            System.err.println("");
+            // Trata o erro caso o ficheiro não seja encontrado
+            System.err.println("Erro: Ficheiro não encontrado - " + e.getMessage());
         }
         return lista;
     }
@@ -77,15 +102,27 @@ public abstract class Ficheiros<T> {
             System.err.println("Erro ao criar o arquivo: " + e.getMessage());
         }
     }*/
-    //escreve o conteudo enviado
+
+    /**
+     * Escreve os dados de um objeto em um ficheiro utilizando um formato especificado.
+     *
+     * @param nomeFicheiro O nome do ficheiro onde os dados serão escritos.
+     * @param objeto       O objeto cujos dados serão escritos no ficheiro.
+     * @param formato      O formato utilizado para escrever os dados (compatível com Formatter).
+     * @param <T>          O tipo do objeto.
+     */
+
     public static <T> void escrever(String nomeFicheiro, T objeto, String formato) {
         String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
+
+
         // Garante que o nome da pasta não seja duplicado
         if (!bibliotecaAtual.endsWith("\\")) {
             bibliotecaAtual += "\\"; // Adiciona a barra invertida, se necessário
         }
 
         nomeFicheiro = bibliotecaAtual + nomeFicheiro;
+
         try {
             File file = new File(nomeFicheiro);
             // Criar o arquivo, se não existir
@@ -110,11 +147,22 @@ public abstract class Ficheiros<T> {
         }
     }
 
-    // Função para atualizar o conteúdo do ficheiro, substituindo a lista
+    /**
+     * Atualiza o conteúdo de um ficheiro, substituindo linhas ou palavras específicas.
+     *
+     * @param nomeFicheiro     O nome do ficheiro a ser atualizado.
+     * @param elementoPesquisa O elemento utilizado para localizar a linha que deve ser atualizada.
+     * @param palavraAntiga    A palavra antiga a ser substituída (pode ser null).
+     * @param palavraNova      A palavra nova que substituirá a antiga (pode ser null).
+     * @param novaLinha        Uma nova linha para substituir a linha inteira (opcional, pode ser null).
+     *
+     *
+     */
+
     public static void atualizar(String nomeFicheiro, String elementoPesquisa,
-                                         String palavraAntiga, String palavraNova, String novaLinha){
+                                 String palavraAntiga, String palavraNova, String novaLinha) {
         String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
-        nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
+        nomeFicheiro = bibliotecaAtual + "\\" + nomeFicheiro;
         File arquivoOriginal = new File(nomeFicheiro);
         File arquivoTemp = new File("temp.txt");
 
@@ -125,7 +173,7 @@ public abstract class Ficheiros<T> {
             while ((linha = reader.readLine()) != null) {
                 // Verifica se a linha contém a chave de busca (ISBN)
                 if (linha.contains(elementoPesquisa)) {
-                    System.out.println("Registo Anterior: "+linha);
+                    System.out.println("Registo Anterior: " + linha);
                     // Se uma nova linha for fornecida, substitui a linha inteira
                     if (novaLinha != null && !novaLinha.isEmpty()) {
                         linha = novaLinha;
@@ -154,9 +202,15 @@ public abstract class Ficheiros<T> {
         }
     }
 
+    /**
+     * Remove linhas de um ficheiro que contenham um determinado dado.
+     *
+     * @param nomeFicheiro O nome do ficheiro a ser modificado.
+     * @param dado         O dado utilizado para localizar e apagar as linhas correspondentes.
+     */
     public static void apagar(String nomeFicheiro, String dado) {
         String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
-        nomeFicheiro = bibliotecaAtual+"\\"+nomeFicheiro;
+        nomeFicheiro = bibliotecaAtual + "\\" + nomeFicheiro;
         File arquivoOriginal = new File(nomeFicheiro);
         File arquivoTemp = new File("temp.txt");
 
@@ -170,8 +224,8 @@ public abstract class Ficheiros<T> {
                     // Se não encontrar, reescreve a linha no arquivo temporário
                     writer.write(linha);
                     writer.newLine();
-                }else{
-                    System.out.println("Registo Eliminado"+linha);
+                } else {
+                    System.out.println("Registo Eliminado" + linha);
                 }
             }
         } catch (IOException e) {
