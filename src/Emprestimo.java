@@ -166,74 +166,51 @@ public class Emprestimo {
         return !(fim1.isBefore(inicio2) || inicio1.isAfter(fim2));
     }
     public static boolean verificarSeExiste(List<String> emprestimos, List<String> reservas, Emprestimo novoEmprestimo) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Ajustado ao formato esperado
+        try {
+            LocalDate inicioNovo = LocalDate.parse(novoEmprestimo.inicio.split("T")[0]);
+            LocalDate devolucaoNovo = LocalDate.parse(novoEmprestimo.devolucaoPrevista.split("T")[0]);
 
-        // Verificar sobreposição nos empréstimos
-        if (emprestimos != null && !emprestimos.isEmpty()) {
-            for (String emprestimo : emprestimos) {
-                try {
+            // Verificar sobreposição nos empréstimos
+            if (emprestimos != null && !emprestimos.isEmpty()) {
+                for (String emprestimo : emprestimos) {
                     String[] partes = emprestimo.split("\\|");
-
                     if (partes.length >= 5) {
-                        String isbnEmprestimo = partes[2].trim(); // Obter ISBN da obra no empréstimo
-                        LocalDate inicio = LocalDate.parse(partes[3].trim(), formatter);
-                        System.out.println("Comparando empréstimo: " + isbnEmprestimo + " com novo empréstimo (ISBN): " + novoEmprestimo.isbn);
-                        System.out.println("Comparando datas: " + inicio + " - " + LocalDate.parse(devolucaoPrevista.split("T")[0]) + " com " + novoEmprestimo.inicio + " - " + novoEmprestimo.devolucaoPrevista);
-                        System.out.println(!LocalDate.parse(novoEmprestimo.inicio.split("T")[0]).isAfter(LocalDate.parse(devolucaoPrevista.split("T")[0])));
-                        System.out.println(!LocalDate.parse(novoEmprestimo.devolucaoPrevista.split("T")[0]).isBefore(inicio));
-                        // Comparar ISBN e verificar sobreposição de datas
-                        if (!LocalDate.parse(novoEmprestimo.inicio.split("T")[0]).isAfter(LocalDate.parse(devolucaoPrevista.split("T")[0]))){
-                            System.out.println("O novo emprestimo não é depois do anterior");
-                        }
-                        if (!LocalDate.parse(novoEmprestimo.devolucaoPrevista.split("T")[0]).isBefore(inicio)){
-                            System.out.println("O novo emprestimo não é antes do anterior");
-                        }
-                        if (isbnEmprestimo.trim().equals(novoEmprestimo.isbn.trim()) &&
-                                !LocalDate.parse(novoEmprestimo.inicio.split("T")[0]).isAfter(LocalDate.parse(devolucaoPrevista.split("T")[0])) &&
-                                !LocalDate.parse(novoEmprestimo.devolucaoPrevista.split("T")[0]).isBefore(inicio)) {
-                            System.out.println(isbnEmprestimo.trim()+"-"+novoEmprestimo.isbn.trim());
+                        String isbnEmprestimo = partes[1].trim();
+                        LocalDate inicioExistente = LocalDate.parse(partes[3].split("T")[0], formatter);
+                        LocalDate devolucaoExistente = LocalDate.parse(partes[4].split("T")[0], formatter);
+
+                        if (isbnEmprestimo.equals(novoEmprestimo.isbn) &&
+                                !(devolucaoNovo.isBefore(inicioExistente) || inicioNovo.isAfter(devolucaoExistente))) {
                             return true; // Existe sobreposição com um empréstimo
                         }
                     }
-                } catch (DateTimeParseException e) {
-                    System.out.println("Erro ao processar data em empréstimo: " + emprestimo + " - " + e.getMessage());
                 }
             }
-        }
 
-        // Verificar sobreposição nas reservas
-        if (reservas != null && !reservas.isEmpty()) {
-            for (String reserva : reservas) {
-                try {
+            // Verificar sobreposição nas reservas
+            if (reservas != null && !reservas.isEmpty()) {
+                for (String reserva : reservas) {
                     String[] partes = reserva.split("\\|");
-
                     if (partes.length >= 6) {
-                        String isbnReserva = partes[2].trim(); // Obter ISBN da obra na reserva
-                        LocalDate dataInicio = LocalDate.parse(partes[3].trim(), formatter);
-                        LocalDate dataFim = LocalDate.parse(partes[4].trim(), formatter);
+                        String isbnReserva = partes[2].trim();
+                        LocalDate inicioReserva = LocalDate.parse(partes[3].trim(), formatter);
+                        LocalDate fimReserva = LocalDate.parse(partes[4].trim(), formatter);
 
-                        System.out.println("Comparando reserva: " + isbnReserva + " com novo empréstimo (ISBN): " + novoEmprestimo.isbn);
-                        System.out.println("Comparando datas: " + dataInicio + " - " + dataFim + " com " + novoEmprestimo.inicio + " - " + novoEmprestimo.devolucaoPrevista);
-
-                        // Comparar ISBN e verificar sobreposição de datas
                         if (isbnReserva.equals(novoEmprestimo.isbn) &&
-                                !LocalDate.parse(novoEmprestimo.inicio.split("T")[0]).isAfter(dataFim) &&
-                                !LocalDate.parse(novoEmprestimo.devolucaoPrevista.split("T")[0]).isBefore(dataInicio)) {
-                            System.out.println("Sobreposição detectada em reserva.");
+                                !(devolucaoNovo.isBefore(inicioReserva) || inicioNovo.isAfter(fimReserva))) {
                             return true; // Existe sobreposição com uma reserva
                         }
                     }
-                } catch (DateTimeParseException e) {
-                    System.out.println("Erro ao processar data em reserva: " + reserva + " - " + e.getMessage());
                 }
             }
+
+        } catch (DateTimeParseException e) {
+            System.out.println("Erro ao processar data: " + e.getMessage());
         }
 
         return false; // Não existe sobreposição
     }
-
-
-
 
 
 
@@ -301,6 +278,7 @@ public class Emprestimo {
                 emprestimos = ler();
                 List<String> reservas = Ficheiros.ler("reservas.txt");
                 podeCriar = verificarSeExiste(emprestimos, reservas, newEmprestimo);
+                System.out.println(podeCriar);
                 if (podeCriar) {
                     Funcionalidades.escreverString("Não foi possivel inserir o emprestimo pois ele já existe");
                 }else{
