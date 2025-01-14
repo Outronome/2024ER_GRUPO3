@@ -256,7 +256,7 @@ public class Emprestimo {
         boolean first = true;
         do {
             if (!first) {
-                cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+                cont = Funcionalidades.lerInt("Deseja Continuar?(0=não 1=sim)");
             }
             if (cont == 1) {
                 tempEmprestimo.introNum();
