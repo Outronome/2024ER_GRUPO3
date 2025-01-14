@@ -252,11 +252,11 @@ public class Emprestimo {
         Emprestimo newEmprestimo = null;
         Emprestimo emprestimo = null;
         boolean podeCriar = false;
-        int cont = 1;
+        int cont = 0;
         boolean first = true;
         do {
             if (!first) {
-                cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+                cont = Funcionalidades.lerInt("Deseja Continuar?(0=não 1=sim)");
             }
             if (cont == 1) {
                 tempEmprestimo.introNum();
