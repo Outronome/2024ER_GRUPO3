@@ -186,6 +186,7 @@ public class Emprestimo {
                     }
                 }
             }
+            //chamar função reserva para validar se existe alguma reserva com aquele isbn e datas
 
 
 
@@ -245,24 +246,27 @@ public class Emprestimo {
                 cont = Funcionalidades.lerInt("Deseja Continuar?(0=não 1=sim)");
             }
             if (cont == 1) {
-                tempEmprestimo.introNum();
-                tempEmprestimo.introUtente();
-                tempEmprestimo.introObra();
-                LocalDate data = Data.dataNow();
-                inicio = data.toString();
-                tempEmprestimo.inicio = data.format(FORMATTER).toString();
-                System.out.println(tempEmprestimo.inicio);
-                do{
-                    Funcionalidades.escreverString("Escreva Data Prevista de Entrega");
-                    data = Data.introData();
-                    devolucaoPrevista = data.toString();
-                    tempEmprestimo.devolucaoPrevista = data.format(FORMATTER).toString();
-                    System.out.println(tempEmprestimo.devolucaoPrevista);
-                }while (LocalDate.parse(devolucaoPrevista).isBefore(LocalDate.parse(String.valueOf(inicio))) );
-                /*do{
-                    tempEmprestimo.devolucaoDefinitiva = Data.introData();
-                }while (tempEmprestimo.devolucaoDefinitiva.isBefore(tempEmprestimo.inicio));*/
-
+                if (first) {
+                    tempEmprestimo.introNum();
+                    tempEmprestimo.introUtente();
+                    tempEmprestimo.introObra();
+                    LocalDate data = Data.dataNow();
+                    inicio = data.toString();
+                    tempEmprestimo.inicio = data.format(FORMATTER).toString();
+                    System.out.println(tempEmprestimo.inicio);
+                    do{
+                        Funcionalidades.escreverString("Escreva Data Prevista de Entrega");
+                        data = Data.introData();
+                        devolucaoPrevista = data.toString();
+                        tempEmprestimo.devolucaoPrevista = data.format(FORMATTER).toString();
+                        System.out.println(tempEmprestimo.devolucaoPrevista);
+                    }while (LocalDate.parse(devolucaoPrevista).isBefore(LocalDate.parse(String.valueOf(inicio))) );
+                    /*do{
+                        tempEmprestimo.devolucaoDefinitiva = Data.introData();
+                    }while (tempEmprestimo.devolucaoDefinitiva.isBefore(tempEmprestimo.inicio));*/
+                }else{
+                    tempEmprestimo.introObra();
+                }
 
 
                 newEmprestimo = new Emprestimo(tempEmprestimo.num, tempEmprestimo.isbn, tempEmprestimo.nif, tempEmprestimo.inicio, tempEmprestimo.devolucaoPrevista, tempEmprestimo.inicio);
@@ -271,6 +275,7 @@ public class Emprestimo {
                 List<String> reservas = Ficheiros.ler("reservas.txt");
                 podeCriar = verificarSeExiste(emprestimos, reservas, newEmprestimo);
                 System.out.println(podeCriar);
+
                 if (podeCriar) {
                     Funcionalidades.escreverString("Não foi possivel inserir o emprestimo pois ele já existe");
                 }else{
