@@ -90,7 +90,7 @@ public class Livro extends Obra {
     public static void eliminar(){
 
         String isbneliminado = Funcionalidades.lerString("Introduza o Isbn do livro que deseja apagar:");
-        if (Funcionalidades.verificarDependencias(isbneliminado)){
+        if (Reserva.verificarDependencias(isbneliminado)){
         Ficheiros.apagar(NOME_FICHEIRO,isbneliminado);
         }
         else {
@@ -138,9 +138,16 @@ public class Livro extends Obra {
 
             }
 
-            case 4 -> {do {
+            case 4 -> {
+                do {
 
-                if (Integer.parseInt(palavraNova) < 0 || Integer.parseInt(palavraNova)> 2024) {
+                    if (!palavraNova.matches("\\d+"))
+                    {Funcionalidades.escreverString("Introduza um ano válido");
+                    return;
+                    }
+
+
+                    if (Integer.parseInt(palavraNova) < 0 || Integer.parseInt(palavraNova)> 2024) {
                     Funcionalidades.escreverString("Erro: Introduza um Ano de Edição válido (entre 0 e 2024)");
                 }
             } while (Integer.parseInt(palavraNova)< 0 || Integer.parseInt(palavraNova) > 2024);

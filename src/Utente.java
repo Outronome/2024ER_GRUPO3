@@ -119,7 +119,7 @@ public class Utente {
             String val = Funcionalidades.lerString(pergunta);
             if (val.length() != 9) {
                 Funcionalidades.escreverString("O Contacto Telefonico tem que conter 9 numeros");
-            } else if (val.startsWith("91") || val.startsWith("92") || val.startsWith("93")
+            } else if (val.startsWith("2")||val.startsWith("91") || val.startsWith("92") || val.startsWith("93")
                     || val.startsWith("95") || val.startsWith("96")) {
                 try {
                     contacto = Integer.parseInt(val);

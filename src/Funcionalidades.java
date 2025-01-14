@@ -40,20 +40,5 @@ public class Funcionalidades {
             System.out.println(elemento);
         }
     }
-    public static boolean verificarDependencias(String identificador) {
-        List<String> linhas = Ficheiros.ler("reservas.txt");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        for (String linha : linhas) {
-            String[] partes = linha.split("\\|");
-            String dataFinal = partes[5].trim();
-            LocalDate hoje = LocalDate.now(); // Data atual
-            LocalDate fim = LocalDate.parse(dataFinal, formatter); // Converte a dataFinal
-            // Ajuste conforme o formato das linhas no arquivo
-            if (linha.contains(identificador.trim())&&fim.isAfter(hoje)) {
-                return false;
-            }
-        }
 
-        return true;
-    }
 }

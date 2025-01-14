@@ -75,26 +75,21 @@ public class Obra {
         String issnSemHifen = issn.replace("-", "");
         String primeirosSete = issnSemHifen.substring(0, 7);
 
+        if(issn.matches("^\\d{4}-\\d{3}[0-9X]$")) {
+            System.out.println("Formato Errado");
+            return false;
+        }
+
         if (JornalRevista.procurar(issn)!=null)
         {
             System.out.println("O issn já existe");
             return false;
         }
-        char ultimoDigito = issnSemHifen.charAt(7);
-        // Calcular a soma ponderada dos primeiros 7 dígitos
-        int soma = 0;
-        for (int i = 0; i < 7; i++) {
-            int digito = Character.getNumericValue(primeirosSete.charAt(i));
-            soma += digito * (8 - i); // Peso decrescente de 8 a 2
-        }
-        // Calcular o dígito de verificação
-        int resto = soma % 11;
-        int digitoVerificador = (11 - resto) % 11;
-        char digitoEsperado = (digitoVerificador == 10) ? 'X' : Character.forDigit(digitoVerificador, 10);
-        return ultimoDigito == digitoEsperado;
+
+        return true;
     }
 
-    protected boolean validarIsbn10(String isbn) {
+   /* protected boolean validarIsbn10(String isbn) {
         int soma = 0;
 
         for (int i = 0; i < 9; i++) {
@@ -123,7 +118,7 @@ public class Obra {
 
         int checkDigitReal = isbn.charAt(12) - '0';
         return checkDigitEsperado == checkDigitReal;
-    }
+    }*/
 
     protected boolean isbnValido(String isbn) {
         if (isbn == null) return false;
@@ -140,10 +135,10 @@ public class Obra {
         }
 
         if (isbn.matches(regexISBN10)) {
-            return validarIsbn10(isbn.replace("-", ""));
+            return true;
         }
         if (isbn.matches(regexISBN13)) {
-            return validarIsbn13(isbn.replace("-", ""));
+            return true;
         }
         return false;
     }
@@ -174,12 +169,10 @@ public class Obra {
 
         // Verificar comprimento e formato para ISBN
         if (codigoSemHifen.length() == 10 && codigo.matches("^[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9X]$")) {
-            boolean valido = validarIsbn10(codigoSemHifen);
             return true;
         }
 
         if (codigoSemHifen.length() == 13 && codigo.matches("^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9]$")) {
-            boolean valido = validarIsbn13(codigoSemHifen);
             return true;
         }
 
