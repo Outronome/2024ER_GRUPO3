@@ -4,8 +4,7 @@ import java.util.Scanner;
 
 public class Data {
 
-    public static LocalDateTime dataNow() {
-        return LocalDateTime.now();  // Retorna a data e hora atuais
+    public static LocalDate dataNow() {return LocalDate.now();  // Retorna a data e hora atuais
     }
 
     // Função para buscar a data fornecida pelo usuário (mês, dia e ano)

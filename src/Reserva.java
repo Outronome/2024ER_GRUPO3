@@ -1,11 +1,9 @@
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
-import java.io.File;
 
 public class Reserva {
     String num;
@@ -96,6 +94,27 @@ public class Reserva {
         return Ficheiros.ler(NOME_FICHEIRO);
     }
 
+    public static ArrayList<Reserva> procurarListaReservas(String num){
+        List<String> reservas;
+        ArrayList<Reserva> listaReservas = new ArrayList<>();
+        reservas = ler();
+        for (String reserva : reservas) {
+            String[] partes = reserva.split("\\|");
+            String[] partesFiltradas = { partes[0] };
+            for (String parte : partesFiltradas) {
+                if (parte.equals(num)){
+                    Reserva reservaEncontrada = new Reserva(partes[0], Integer.parseInt(partes[1]), partes[2], partes[3], partes[4], partes[5]);
+                    listaReservas.add(reservaEncontrada);
+                }
+            }
+        }
+        if (listaReservas.isEmpty()) {
+            System.out.println("Reserva não encontrada");
+            return null;
+        }
+        return listaReservas;
+        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro livro
+    }
     public static Reserva procurarReservas(String num){
         List<String> reservas;
         reservas = ler();
@@ -193,59 +212,12 @@ public class Reserva {
         } while (cont == 1);
     }
 
-    public static boolean validarData(String data) {
-        // Verifica se a data está no formato correto "dd/MM/yyyy"
-        if (data == null || data.length() != 10 || data.charAt(2) != '/' || data.charAt(5) != '/') {
-            return false;
-        }
 
-        try {
-            // Extrai o dia, mês e ano da string
-            int dia = Integer.parseInt(data.substring(0, 2));
-            int mes = Integer.parseInt(data.substring(3, 5));
-            int ano = Integer.parseInt(data.substring(6, 10));
-
-            // Valida o mês
-            if (mes < 1 || mes > 12) {
-                return false;
-            }
-
-            // Valida os dias de acordo com o mês
-            int diasNoMes = diasNoMes(mes, ano);
-            if (dia < 1 || dia > diasNoMes) {
-                return false;
-            }
-
-            return true; // A data é válida
-        } catch (NumberFormatException e) {
-            return false; // Não conseguiu converter para número
-        }
-    }
-
-    private static int diasNoMes(int mes, int ano) {
-        switch (mes) {
-            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-                return 31; // Meses com 31 dias
-            case 4: case 6: case 9: case 11:
-                return 30; // Meses com 30 dias
-            case 2:
-                // Verifica se é ano bissexto para fevereiro
-                return (anoBissexto(ano)) ? 29 : 28;
-            default:
-                return 0; // Mês inválido (não deveria chegar aqui)
-        }
-    }
-
-    private static boolean anoBissexto(int ano) {
-        // Regras para anos bissextos:
-        // - Divisível por 4 e (não divisível por 100 ou divisível por 400)
-        return (ano % 4 == 0 && (ano % 100 != 0 || ano % 400 == 0));
-    }
 
     private void introInicio() {
         do {
             inicio = Funcionalidades.lerString("Introduza a Data de inicio de reserva (dd/MM/yyyy):");
-            if (!validarData(inicio)){
+            if (!Funcionalidades.validarData(inicio)){
                 Funcionalidades.escreverString("Erro: Introduza uma data válida.");
                 continue;
             }
@@ -256,7 +228,7 @@ public class Reserva {
     private void introFim() {
         do {
             fim = Funcionalidades.lerString("Introduza a Data de fim da reserva (dd/MM/yyyy):");
-            if (!validarData(fim)) {
+            if (!Funcionalidades.validarData(fim)) {
                 Funcionalidades.escreverString("Erro: Introduza uma data válida no formato dd/MM/yyyy.");
                 continue;
             }
@@ -300,13 +272,110 @@ public class Reserva {
         }
     }
     public void eliminar (){
-        String numEliminado = Funcionalidades.lerString("Introduza o numero da reserva que deseja apagar:");
+        String numEliminado = Funcionalidades.lerString("Introduza o numero da reserva que deseja apagar (R*):");
         Ficheiros.apagar(NOME_FICHEIRO, numEliminado);
 
     }
 
+    public void pesquisarReserva(String num) {
+        ArrayList<Reserva> reservas = procurarListaReservas(num);
 
-    /*public List<Reserva> mostrar (){
-        //código de enviar o range de reservas que estão no ficheiro caso não receba range enviar tudo
+        if (reservas.isEmpty()) {
+            System.out.println("Reserva não encontrado.");
+            return;
+        }
+        for (Reserva reserva : reservas) {
+            String[] reservaEscrever =  {   "===== Detalhes do Livro =====",
+                    "Numero de Reserva: " + reserva.getNum(),
+                    "Obra da Reserva: " + reserva.getObra(),
+                    "Data de inicio da Reserva: " + reserva.getInicio(),
+                    "Data de registo da Reserva: " + reserva.getRegisto(),
+                    "Data de Fim da Reserva: " + reserva.getFim(),
+                    "============================="
+                                        };
+            Funcionalidades.escreverStrings(reservaEscrever);
+        }
+    }
+
+    /*public void mostrarReservas(){
+        List<String> revervas = ler();
+        for (String reverva : revervas) {
+            Funcionalidades.lerInt("Reserva " + reverva + ":");
+        }
     }*/
+    public void mostrarReservas() {
+        List<String> reservas = ler();
+        if (reservas.isEmpty()) {
+            Funcionalidades.escreverString("Nenhuma reserva encontrada.");
+            return;
+        }
+
+        int totalReservas = reservas.size();
+        int paginaAtual = 0; // Índice da página atual
+        int tamanhoPagina = 5; // Mostrar até 50 registros por vez
+        int opcao;
+
+        do {
+            int inicio = paginaAtual * tamanhoPagina;
+            int fim = Math.min(inicio + tamanhoPagina, totalReservas);
+
+            // Mostrar reservas da página atual
+            Funcionalidades.escreverString("\n===== Exibindo reservas (" + (inicio + 1) + " a " + fim + " de " + totalReservas + ") =====");
+            for (int i = inicio; i < fim; i++) {
+                String reserva = reservas.get(i);
+                String[] partes = reserva.split("\\|");
+                Funcionalidades.escreverString("Reserva " + (i + 1) + ":");
+                Funcionalidades.escreverString("Numero de Reserva: " + partes[0]);
+                Funcionalidades.escreverString("NIF: " + partes[1]);
+                Funcionalidades.escreverString("Obra: " + partes[2]);
+                Funcionalidades.escreverString("Inicio: " + partes[3]);
+                Funcionalidades.escreverString("Registo: " + partes[4]);
+                Funcionalidades.escreverString("Fim: " + partes[5]);
+                Funcionalidades.escreverString("-------------------------");
+            }
+
+            // Determinar opções de navegação
+            if (fim < totalReservas && inicio > 0) {
+                // Opções para avançar e retroceder
+                opcao = Funcionalidades.lerInt("1: Próximas 5 reservas | 2: Retroceder 5 reservas | 0: Sair");
+            } else if (fim < totalReservas) {
+                // Somente opção para avançar
+                opcao = Funcionalidades.lerInt("1: Próximas 5 reservas | 0: Sair");
+            } else if (inicio > 0) {
+                // Somente opção para retroceder
+                opcao = Funcionalidades.lerInt("2: Retroceder 5 reservas | 0: Sair");
+            } else {
+                // Nenhuma navegação necessária
+                opcao = Funcionalidades.lerInt("0: Sair");
+            }
+
+            // Atualizar página com base na opção escolhida
+            if (opcao == 1) {
+                paginaAtual++;
+            } else if (opcao == 2) {
+                paginaAtual--;
+            }
+
+        } while (opcao != 0);
+    }
+
+
+
+    public static boolean verificarDependencias(String identificador) {
+        List<String> linhas = ler();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for (String linha : linhas) {
+            String[] partes = linha.split("\\|");
+            String dataFinal = partes[5].trim();
+            LocalDate hoje = LocalDate.now(); // Data atual
+            LocalDate fim = LocalDate.parse(dataFinal, formatter); // Converte a dataFinal
+            // Ajuste conforme o formato das linhas no arquivo
+            if (linha.contains(identificador.trim())&&fim.isAfter(hoje)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }

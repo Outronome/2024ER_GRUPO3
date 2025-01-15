@@ -1,3 +1,5 @@
+import java.util.List;
+
 // Classe base Obra
 public class Obra {
     String codigo;
@@ -69,24 +71,25 @@ public class Obra {
         } while (editora.length() <= 3 || editora.length() >= 100);
     }
 
-    protected boolean validarIssn(String issn) {
+    protected static boolean validarIssn(String issn) {
         String issnSemHifen = issn.replace("-", "");
         String primeirosSete = issnSemHifen.substring(0, 7);
-        char ultimoDigito = issnSemHifen.charAt(7);
-        // Calcular a soma ponderada dos primeiros 7 dígitos
-        int soma = 0;
-        for (int i = 0; i < 7; i++) {
-            int digito = Character.getNumericValue(primeirosSete.charAt(i));
-            soma += digito * (8 - i); // Peso decrescente de 8 a 2
+
+        if(issn.matches("^\\d{4}-\\d{3}[0-9X]$")) {
+            System.out.println("Formato Errado");
+            return false;
         }
-        // Calcular o dígito de verificação
-        int resto = soma % 11;
-        int digitoVerificador = (11 - resto) % 11;
-        char digitoEsperado = (digitoVerificador == 10) ? 'X' : Character.forDigit(digitoVerificador, 10);
-        return ultimoDigito == digitoEsperado;
+
+        if (JornalRevista.procurar(issn)!=null)
+        {
+            System.out.println("O issn já existe");
+            return false;
+        }
+
+        return true;
     }
 
-    protected boolean validarIsbn10(String isbn) {
+   /* protected boolean validarIsbn10(String isbn) {
         int soma = 0;
 
         for (int i = 0; i < 9; i++) {
@@ -115,20 +118,27 @@ public class Obra {
 
         int checkDigitReal = isbn.charAt(12) - '0';
         return checkDigitEsperado == checkDigitReal;
-    }
+    }*/
 
     protected boolean isbnValido(String isbn) {
         if (isbn == null) return false;
 
         // Regex para validar formatos
         String regexISBN10 = "^[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9X]$";
+
         String regexISBN13 = "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9]$";
 
+        if(Livro.procurar(isbn)!=null){
+            System.out.println("O código do livro já existe");
+            return false;
+
+        }
+
         if (isbn.matches(regexISBN10)) {
-            return validarIsbn10(isbn.replace("-", ""));
+            return true;
         }
         if (isbn.matches(regexISBN13)) {
-            return validarIsbn13(isbn.replace("-", ""));
+            return true;
         }
         return false;
     }
@@ -159,12 +169,10 @@ public class Obra {
 
         // Verificar comprimento e formato para ISBN
         if (codigoSemHifen.length() == 10 && codigo.matches("^[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9X]$")) {
-            boolean valido = validarIsbn10(codigoSemHifen);
             return true;
         }
 
         if (codigoSemHifen.length() == 13 && codigo.matches("^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9]$")) {
-            boolean valido = validarIsbn13(codigoSemHifen);
             return true;
         }
 
@@ -186,8 +194,51 @@ public class Obra {
             return null;
         }
     }
+    public Obra verificarExiste() {
+        String codigoSemHifen = codigo.replace("-", "");
+        int comprimento = codigoSemHifen.length();
 
+        if (comprimento == 8) {
+            // Verificar nos jornais/revistas
+            JornalRevista jornal = JornalRevista.procurar(codigo);
+            Obra obra = new Obra(codigo,jornal.titulo,jornal.editora,jornal.categoria);
+            System.out.println(obra);
+            return obra;
+        } else if (comprimento == 10 || comprimento == 13) {
+            // Verificar nos livros
+            Livro livro = Livro.procurar(codigo);
+            Obra obra = new Obra(codigo,livro.titulo,livro.editora,livro.categoria);
+            System.out.println(obra);
+            return obra;
+        } else {
+            System.out.println("Código inválido.");
+            return null;
+        }
+    }
 
+    public static Obra pesquisarPorTitulo(String titulo) {
+        // Pesquisar nos livros
+        List<String> livros = Ficheiros.ler(Livro.NOME_FICHEIRO);
+        for (String linha : livros) {
+            String[] partes = linha.split("\\|");
+            if (partes.length >= 6 && partes[0].toLowerCase().contains(titulo.toLowerCase())) {
+                return new Livro(partes[0], partes[1], partes[2],
+                        Integer.parseInt(partes[3]), partes[4], partes[5]);
+            }
+        }
+
+        // Pesquisar nos jornais/revistas
+        List<String> jornaisRevistas = Ficheiros.ler(JornalRevista.NOME_FICHEIRO);
+        for (String linha : jornaisRevistas) {
+            String[] partes = linha.split("\\|");
+            if (partes.length >= 5 && partes[0].toLowerCase().contains(titulo.toLowerCase())) {
+                return new JornalRevista(partes[0], partes[1], partes[2], partes[3], partes[4]);
+            }
+        }
+
+        // Retornar null se não encontrou nenhum resultado
+        return null;
+    }
     protected void introCategoria() {do {
         categoria = Funcionalidades.lerString("Introduza a Categoria:");
         if (categoria.length() <= 3 || categoria.length() >= 100) {

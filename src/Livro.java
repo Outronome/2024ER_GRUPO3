@@ -1,11 +1,11 @@
 import java.util.List;
 
 public class Livro extends Obra {
+    public static final String NOME_FICHEIRO = "livros.txt";
     private int anoEdicao;
     private String isbn;
     private String autores;
     private static String FORMATO = "%s|%s|%s|%d|%s|%s%n";
-    private static String NOME_FICHEIRO = "livros.txt";
     // Construtor
     public Livro(String titulo, String editora, String categoria, int anoEdicao, String isbn, String autores) {
         super(titulo, editora, categoria);
@@ -90,7 +90,7 @@ public class Livro extends Obra {
     public static void eliminar(){
 
         String isbneliminado = Funcionalidades.lerString("Introduza o Isbn do livro que deseja apagar:");
-        if (Funcionalidades.verificarDependencias(isbneliminado)){
+        if (Reserva.verificarDependencias(isbneliminado)){
         Ficheiros.apagar(NOME_FICHEIRO,isbneliminado);
         }
         else {
@@ -129,15 +129,42 @@ public class Livro extends Obra {
             return;
         }
 
-        String palavraAnterior = switch (posCampo) {
-            case 0 -> livro.getTitulo();
-            case 1 -> livro.getEditora();
-            case 2 -> livro.getCategoria();
-            case 3 -> String.valueOf(livro.getAnoEdicao());
-            case 4 -> livro.getIsbn();
-            case 5 -> livro.getAutores();
-            default -> null;
-        };
+        switch (posCampo) {
+            case 1,2,3,6 -> {
+                if (palavraNova.length() <= 3 || palavraNova.length() >= 100) {
+                    Funcionalidades.escreverString("Erro: Introduza um texto entre 3 e 100 caracteres");
+                    return;
+                }
+
+            }
+
+            case 4 -> {
+                do {
+
+                    if (!palavraNova.matches("\\d+"))
+                    {Funcionalidades.escreverString("Introduza um ano válido");
+                    return;
+                    }
+
+
+                    if (Integer.parseInt(palavraNova) < 0 || Integer.parseInt(palavraNova)> 2024) {
+                    Funcionalidades.escreverString("Erro: Introduza um Ano de Edição válido (entre 0 e 2024)");
+                }
+            } while (Integer.parseInt(palavraNova)< 0 || Integer.parseInt(palavraNova) > 2024);
+            }
+
+
+            case 5 -> {
+                Obra obra = new Obra(null,null,null);
+                do {
+                    if (!obra.isbnValido(palavraNova)) {
+                        Funcionalidades.escreverString("Erro: ISBN inválido. Certifique-se de que seja um ISBN-10 ou ISBN-13 válido (com hífens).");
+                    }
+                } while (!obra.isbnValido(palavraNova));
+                }
+            }
+
+
 
         if (palavraAntiga != null) {
             Ficheiros.atualizar(NOME_FICHEIRO, isbn, palavraAntiga, palavraNova, "");
@@ -240,5 +267,24 @@ public class Livro extends Obra {
             autores += autor;
         }
 
+    }
+
+    public static void mostrarLivroPorISBN(String isbn) {
+        Livro livro = procurar(isbn);
+
+        if (livro == null) {
+            System.out.println("Livro não encontrado.");
+            return;
+        }
+
+        // Exibir os campos do livro de forma organizada
+        System.out.println("===== Detalhes do Livro =====");
+        System.out.println("Título: " + livro.getTitulo());
+        System.out.println("Editora: " + livro.getEditora());
+        System.out.println("Categoria: " + livro.getCategoria());
+        System.out.println("Ano de Edição: " + livro.getAnoEdicao());
+        System.out.println("ISBN: " + livro.getIsbn());
+        System.out.println("Autores: " + livro.getAutores());
+        System.out.println("=============================");
     }
 }

@@ -2,9 +2,9 @@ import java.util.List;
 
 // Classe JornalRevista, que herda de Obra
 public class JornalRevista extends Obra {
+    public static final String NOME_FICHEIRO = "JornalRevista.txt";
     private String issn;
     private String dataPublicacao;
-    private static String NOME_FICHEIRO = "JornalRevista.txt";
     private static String FORMATO = "%s|%s|%s|%s|%s%n";
     // Construtor
     public JornalRevista(String titulo, String editora, String categoria, String issn, String dataPublicacao) {
@@ -37,9 +37,15 @@ public class JornalRevista extends Obra {
     }
 
     public static void eliminar(){
-        //falta verificar se exite alguma dependencia
+
+
         String isnneliminado = Funcionalidades.lerString("Introduza o Isnn do jornal ou reista que deseja apagar:");
+        if (Reserva.verificarDependencias(isnneliminado)){
         Ficheiros.apagar(NOME_FICHEIRO,isnneliminado);
+        }
+        else {
+            System.out.println("O Jronal/Revista tem Reservas/Emprestimos pendentes.");
+        }
     }
 
     public Object[] getData() {
@@ -53,7 +59,7 @@ public class JornalRevista extends Obra {
         for (String JornalRevista : JornalRevistas) {
             String[] partes = JornalRevista.split("\\|");
             if (partes.length >= 5) {
-                String issnComparar = partes[3].trim();
+                String issnComparar = partes[4].trim();
                 if (newJornalRevista.issn.equals(issnComparar)) {
                     sucesso = 1;
                     break;
@@ -191,14 +197,40 @@ public class JornalRevista extends Obra {
             return;
         }
 
-        String palavraAnterior = switch (posCampo) {
-            case 0 -> jornalRevista.getTitulo();
-            case 1 -> jornalRevista.getEditora();
-            case 2 -> jornalRevista.getCategoria();
-            case 3 -> jornalRevista.getIssn();
-            case 4 -> jornalRevista.getDataPublicacao();
-            default -> null;
-        };
+        switch (posCampo) {
+            case 1,2,3 -> {
+                if (palavraNova.length() <= 3 || palavraNova.length() >= 100) {
+                    Funcionalidades.escreverString("Erro: Introduza um texto entre 3 e 100 caracteres");
+                    return;
+                }
+
+            }
+
+            case 5 -> {
+                do {
+
+                    if (!validarData(palavraNova)){
+                        Funcionalidades.escreverString("Erro: Introduza uma data válida.");
+                        continue;
+                    }
+                    break;
+                } while (true);
+
+
+            }
+
+            case 4 -> {
+                if (!palavraNova.matches("^\\d{4}-\\d{3}[\\dX]$")) {
+                    Funcionalidades.escreverString("Erro: O ISSN deve estar no formato 1234-567X.");
+                    return;
+                } else if (!validarIssn(palavraNova)) {
+                    Funcionalidades.escreverString("Erro: O ISSN introduzido é inválido.");
+                    return;
+                }
+            }
+
+        }
+
 
         if (palavraAntiga != null) {
             Ficheiros.atualizar(NOME_FICHEIRO, issn, palavraAntiga, palavraNova, "");
@@ -206,6 +238,24 @@ public class JornalRevista extends Obra {
         } else {
             System.out.println("Posição do campo inválida.");
         }
+    }
+
+    public static void mostrarJonalRevistaPorISBN(String issn) {
+        JornalRevista jornalRevista = procurar(issn);
+
+        if (jornalRevista == null) {
+            System.out.println("Jornal/Revista não encontrado.");
+            return;
+        }
+
+        // Exibir os campos do livro de forma organizada
+        System.out.println("===== Detalhes do Jornal/Revista =====");
+        System.out.println("Título: " + jornalRevista.getTitulo());
+        System.out.println("Editora: " + jornalRevista.getEditora());
+        System.out.println("Categoria: " + jornalRevista.getCategoria());
+        System.out.println("ISSN: " + jornalRevista.getIssn());
+        System.out.println("Autores: " + jornalRevista.getDataPublicacao());
+        System.out.println("=============================");
     }
 
 
