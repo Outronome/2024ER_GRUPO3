@@ -2,6 +2,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Objects;
+import java.util.Objects;
 
 import static java.time.LocalDate.parse;
 
@@ -14,7 +16,7 @@ public class Emprestimo {
     String devolucaoDefinitiva;
     private static final String FORMATO = "%d|%s|%d|%s|%s|%s%n";//falta fazer
     private static final String NOME_FICHEIRO = "emprestimos.txt";
-    static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public Emprestimo(int num, String isbn, int nif,
                       String inicio, String devolucaoPrevista, String devolucaoDefinitiva) {
@@ -165,10 +167,6 @@ public class Emprestimo {
     }
 
     public static boolean verificarSeExiste(List<String> emprestimos, List<String> reservas, Emprestimo novoEmprestimo) {
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // Ajustado ao formato esperado
-        try {
-            LocalDate inicioNovo = LocalDate.parse(novoEmprestimo.inicio);
-            LocalDate devolucaoNovo = LocalDate.parse(novoEmprestimo.devolucaoPrevista);
 
             // Verificar sobreposição nos empréstimos
             if (emprestimos != null && !emprestimos.isEmpty()) {
@@ -176,61 +174,32 @@ public class Emprestimo {
                     String[] partes = emprestimo.split("\\|");
                     if (partes.length >= 5) {
                         String isbnEmprestimo = partes[1].trim();
-                        LocalDate inicioExistente = LocalDate.parse(partes[4], FORMATTER);
-                        LocalDate devolucaoExistente = LocalDate.parse(partes[5], FORMATTER);
 
                         if (isbnEmprestimo.equals(novoEmprestimo.isbn) &&
-                                (devolucaoNovo.isBefore(inicioExistente) || inicioNovo.isAfter(devolucaoExistente))) {
-                            return true; // Existe sobreposição com um empréstimo
+                                Objects.equals(partes[3], partes[5])) {
+                                return true;
                         }
                     }
                 }
             }
             //chamar função reserva para validar se existe alguma reserva com aquele isbn e datas
 
+        if (reservas != null && !reservas.isEmpty()) {
+            for (String reserva : reservas) {
+                String[] partes2 = reserva.split("\\|");
+                if (partes2.length >= 5) {
+                    String isbnReserva = partes2[2].trim();
 
-
-        } catch (DateTimeParseException e) {
-            System.out.println("Erro ao processar data: " + e.getMessage());
+                    if (isbnReserva.equals(novoEmprestimo.isbn) && (LocalDate.parse(partes2[5],FORMATTER).isAfter(Data.dataNow()))){
+                        return true;
+                    }
+                }
+            }
         }
 
         return false; // Não existe sobreposição
     }
 
-
-
-
-
-
-
-    /*private static Emprestimo verificarSeExiste(List<String> emprestimos,List<String> reservas, String dado){
-        //o dado tem que ser o nif o nome ou o contacto
-        for (String emprestimo : emprestimos){
-            String[] partes = emprestimo.split("\\|");
-            String[] partesFiltradas = { partes[0], partes[1], partes[3] };
-            for (String parte : partesFiltradas) {
-                if (parte.equals(dado)){
-                    return new Emprestimo(Integer.parseInt(partes[0]),partes[1],Integer.parseInt(partes[2]),Integer.parseInt(partes[3]));
-                }
-            }
-        }
-        System.out.println("Utilizador não encontrado");
-        return null;
-    }*/
-    /*private int verficarEmprestimo(Emprestimo newEmprestimo){
-        int sucesso = 0;
-        //verifica se existe no ficheiro
-        List<String> emprestimos = Ficheiros.ler(NOME_FICHEIRO);
-        for ( String emprestimo : emprestimos ) {
-            String[] partes = emprestimo.split("\\|");  // Usa expressão regular para dividir por "|"
-
-            if (!newEmprestimo.nomeObra.equals(partes[1].trim()) && !String.valueOf(newEmprestimo.nif).equals(partes[2].trim()) && !String.valueOf(newEmprestimo.inicio).equals(partes[3].trim()) && !String.valueOf(newEmprestimo.devolucaoPrevista).equals(partes[4].trim()) && !String.valueOf(newEmprestimo.devolucaoDefinitiva).equals(partes[5].trim())) {
-                sucesso = 1;
-                break;
-            }
-        }
-        return sucesso;
-    }*/
 
     public static Emprestimo registar() {
         Emprestimo tempEmprestimo = new Emprestimo(0, "", 0, "", "", "");
@@ -246,27 +215,37 @@ public class Emprestimo {
                 cont = Funcionalidades.lerInt("Deseja Continuar?(0=não 1=sim)");
             }
             if (cont == 1) {
-                if (first) {
-                    tempEmprestimo.introNum();
-                    tempEmprestimo.introUtente();
-                    tempEmprestimo.introObra();
-                    LocalDate data = Data.dataNow();
-                    inicio = data.toString();
-                    tempEmprestimo.inicio = data.format(FORMATTER).toString();
-                    System.out.println(tempEmprestimo.inicio);
-                    do{
-                        Funcionalidades.escreverString("Escreva Data Prevista de Entrega");
-                        data = Data.introData();
-                        devolucaoPrevista = data.toString();
-                        tempEmprestimo.devolucaoPrevista = data.format(FORMATTER).toString();
-                        System.out.println(tempEmprestimo.devolucaoPrevista);
-                    }while (LocalDate.parse(devolucaoPrevista).isBefore(LocalDate.parse(String.valueOf(inicio))) );
-                    /*do{
-                        tempEmprestimo.devolucaoDefinitiva = Data.introData();
-                    }while (tempEmprestimo.devolucaoDefinitiva.isBefore(tempEmprestimo.inicio));*/
-                }else{
-                    tempEmprestimo.introObra();
-                }
+                tempEmprestimo.introNum();
+                tempEmprestimo.introUtente();
+                tempEmprestimo.introObra();
+                tempEmprestimo.inicio = String.valueOf(Data.dataNow());
+                System.out.println(tempEmprestimo.inicio);
+
+                do {
+                    String fim = Funcionalidades.lerString("Introduza a Data prevista de entrega (dd/MM/yyyy):");
+
+
+                        // Converter a data de inicio de "yyyy-MM-dd" para "dd/MM/yyyy"
+                        DateTimeFormatter originalFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        LocalDate parsedDate = LocalDate.parse(tempEmprestimo.inicio, originalFormatter);
+                        tempEmprestimo.inicio = parsedDate.format(FORMATTER); // "dd/MM/yyyy"
+
+                        // Validar e analisar a data de devolução
+                        LocalDate dataInicio = LocalDate.parse(tempEmprestimo.inicio, FORMATTER);
+                        LocalDate dataFim = LocalDate.parse(fim, FORMATTER);
+
+                        // Verificar se a data final é anterior à inicial
+                        if (dataFim.isBefore(dataInicio)) {
+                            Funcionalidades.escreverString("Erro: A data prevista não pode ser anterior à data de início.");
+                        } else {
+                            tempEmprestimo.devolucaoPrevista = fim;
+                            break; // Sai do loop se tudo estiver correto
+                        }
+
+
+
+                } while (true);
+
 
 
                 newEmprestimo = new Emprestimo(tempEmprestimo.num, tempEmprestimo.isbn, tempEmprestimo.nif, tempEmprestimo.inicio, tempEmprestimo.devolucaoPrevista, tempEmprestimo.inicio);
@@ -278,11 +257,11 @@ public class Emprestimo {
 
                 if (podeCriar) {
                     Funcionalidades.escreverString("Não foi possivel inserir o emprestimo pois ele já existe");
-                }else{
+                } else {
                     System.out.printf("Campos: num=%d, isbn=%s, nif=%d, inicio=%s, devolucaoPrevista=%s, devolucaoDefinitiva=%s%n",
                             newEmprestimo.getNum(), newEmprestimo.getObra(), newEmprestimo.getUtente(),
                             newEmprestimo.getInicio(), newEmprestimo.getDevolucaoPrevista(), newEmprestimo.getDevolucaoDefinitiva());
-                    Ficheiros.escrever(NOME_FICHEIRO,newEmprestimo,FORMATO);
+                    Ficheiros.escrever(NOME_FICHEIRO, newEmprestimo, FORMATO);
                 }
                 first = false;
             }
@@ -308,4 +287,25 @@ public class Emprestimo {
     /*public List<Emprestimo> mostrar (){
         //código de enviar o range de emprestimos que estão no ficheiro caso não receba range enviar tudo
     }*/
+
+    public void converterReserva(String codigo){
+        Reserva existe = Reserva.procurarReservas(codigo);
+        int num = generateId();
+        if (existe == null) {
+            System.out.println("Reserva não existe");
+            return;
+        }
+        List<String> reservas = Ficheiros.ler("reservas.txt");
+        for (String reserva : reservas)
+        {
+            if(reserva.contains(codigo)){
+                Reserva converter = Reserva.procurarReservas(codigo);
+                String[] partes = reserva.split("\\|");
+                Emprestimo novoEmp = new Emprestimo(num,partes[2], converter.getNif(), converter.getInicio(), converter.getFim(), converter.getInicio());
+                Ficheiros.escrever(NOME_FICHEIRO,novoEmp,FORMATO);
+            }
+        }
+
+
+    }
 }

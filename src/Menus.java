@@ -443,11 +443,13 @@ public class Menus {
 
     public static void menuEmprestimo() {
         int op;
+        Emprestimo emprestimo = new Emprestimo(0,null,0,null,null,null);
         String[] menu = {
                 "\n==== MENU Empréstimo ====",
                 "1. Adicionar Empréstimo",
                 "2. Editar Empréstimo",
                 "3. Visualizar Empréstimo",
+                "4. Converter Reserva para Empréstimo",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -469,6 +471,9 @@ public class Menus {
                     //faz o pedido e a leitura do número ate encontrar o Empréstimo
                     //chama a função visualizar com o número do Empréstimo
                     break;
+                case 4:
+                    System.out.println("Escolheu: Converter Reserva para Empréstimo");
+                    emprestimo.converterReserva(Funcionalidades.lerString("Introduza o código da reserva:"));
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");

@@ -4,7 +4,7 @@ Caminhos Perdidos|Casa do Saber|Mistério|2015|978-501-7648-1003-6|Carlos Souza
 Pokemon o Inicio|Nova Era|Fantasia|2005|978-715-5012-8677-4|Ana Costa
 Viagem ao Centro da Terra|Biblioteca Universitária|História|1990|978-120-4729-5294-2|Paulo Fernandes
 Mongo|Asas|Fantasia|2000|978-1-4028-9462-6|Manuel
-Nelson|Rafa|Willy|2000|978-1-4028-9462-6|Rodri
+Nelson|Rafa|Willy|2000|978-3-16-148410-1|Rodri
 Nelson|Rafa|mongo|2000|978-1-4028-9462-6|nelo
 Nelson|Rafa|Willy|2000|978-1-4028-9462-6|Rodri
 Nelson|Monteiro|Nelson|2000|978-1-4028-9462-6|momo
