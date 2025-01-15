@@ -1,11 +1,9 @@
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
-import java.io.File;
 
 public class Reserva {
     String num;
@@ -96,6 +94,27 @@ public class Reserva {
         return Ficheiros.ler(NOME_FICHEIRO);
     }
 
+    public static ArrayList<Reserva> procurarListaReservas(String num){
+        List<String> reservas;
+        ArrayList<Reserva> listaReservas = new ArrayList<>();
+        reservas = ler();
+        for (String reserva : reservas) {
+            String[] partes = reserva.split("\\|");
+            String[] partesFiltradas = { partes[0] };
+            for (String parte : partesFiltradas) {
+                if (parte.equals(num)){
+                    Reserva reservaEncontrada = new Reserva(partes[0], Integer.parseInt(partes[1]), partes[2], partes[3], partes[4], partes[5]);
+                    listaReservas.add(reservaEncontrada);
+                }
+            }
+        }
+        if (listaReservas.isEmpty()) {
+            System.out.println("Reserva não encontrada");
+            return null;
+        }
+        return listaReservas;
+        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro livro
+    }
     public static Reserva procurarReservas(String num){
         List<String> reservas;
         reservas = ler();
@@ -258,27 +277,92 @@ public class Reserva {
 
     }
 
-    public  void mostrarReserva(String num) {
-        Reserva reserva = procurarReservas(num);
+    public void pesquisarReserva(String num) {
+        ArrayList<Reserva> reservas = procurarListaReservas(num);
 
-        if (reserva == null) {
-            System.out.println("Livro não encontrado.");
+        if (reservas.isEmpty()) {
+            System.out.println("Reserva não encontrado.");
+            return;
+        }
+        for (Reserva reserva : reservas) {
+            String[] reservaEscrever =  {   "===== Detalhes do Livro =====",
+                    "Numero de Reserva: " + reserva.getNum(),
+                    "Obra da Reserva: " + reserva.getObra(),
+                    "Data de inicio da Reserva: " + reserva.getInicio(),
+                    "Data de registo da Reserva: " + reserva.getRegisto(),
+                    "Data de Fim da Reserva: " + reserva.getFim(),
+                    "============================="
+                                        };
+            Funcionalidades.escreverStrings(reservaEscrever);
+        }
+    }
+
+    /*public void mostrarReservas(){
+        List<String> revervas = ler();
+        for (String reverva : revervas) {
+            Funcionalidades.lerInt("Reserva " + reverva + ":");
+        }
+    }*/
+    public void mostrarReservas() {
+        List<String> reservas = ler();
+        if (reservas.isEmpty()) {
+            Funcionalidades.escreverString("Nenhuma reserva encontrada.");
             return;
         }
 
-        // Exibir os campos do livro de forma organizada
-        System.out.println("===== Detalhes do Livro =====");
-        System.out.println("Numero de Reserva: " + reserva.getNum());
-        System.out.println("Obra da Reserva: " + reserva.getObra());
-        System.out.println("Data de inicio da Reserva: " + reserva.getInicio());
-        System.out.println("Data de registo da Reserva: " + reserva.getRegisto());
-        System.out.println("Data de Fim da Reserva: " + reserva.getFim());
-        System.out.println("=============================");
+        int totalReservas = reservas.size();
+        int paginaAtual = 0; // Índice da página atual
+        int tamanhoPagina = 5; // Mostrar até 50 registros por vez
+        int opcao;
+
+        do {
+            int inicio = paginaAtual * tamanhoPagina;
+            int fim = Math.min(inicio + tamanhoPagina, totalReservas);
+
+            // Mostrar reservas da página atual
+            Funcionalidades.escreverString("\n===== Exibindo reservas (" + (inicio + 1) + " a " + fim + " de " + totalReservas + ") =====");
+            for (int i = inicio; i < fim; i++) {
+                String reserva = reservas.get(i);
+                String[] partes = reserva.split("\\|");
+                Funcionalidades.escreverString("Reserva " + (i + 1) + ":");
+                Funcionalidades.escreverString("Numero de Reserva: " + partes[0]);
+                Funcionalidades.escreverString("NIF: " + partes[1]);
+                Funcionalidades.escreverString("Obra: " + partes[2]);
+                Funcionalidades.escreverString("Inicio: " + partes[3]);
+                Funcionalidades.escreverString("Registo: " + partes[4]);
+                Funcionalidades.escreverString("Fim: " + partes[5]);
+                Funcionalidades.escreverString("-------------------------");
+            }
+
+            // Determinar opções de navegação
+            if (fim < totalReservas && inicio > 0) {
+                // Opções para avançar e retroceder
+                opcao = Funcionalidades.lerInt("1: Próximas 5 reservas | 2: Retroceder 5 reservas | 0: Sair");
+            } else if (fim < totalReservas) {
+                // Somente opção para avançar
+                opcao = Funcionalidades.lerInt("1: Próximas 5 reservas | 0: Sair");
+            } else if (inicio > 0) {
+                // Somente opção para retroceder
+                opcao = Funcionalidades.lerInt("2: Retroceder 5 reservas | 0: Sair");
+            } else {
+                // Nenhuma navegação necessária
+                opcao = Funcionalidades.lerInt("0: Sair");
+            }
+
+            // Atualizar página com base na opção escolhida
+            if (opcao == 1) {
+                paginaAtual++;
+            } else if (opcao == 2) {
+                paginaAtual--;
+            }
+
+        } while (opcao != 0);
     }
 
 
+
     public static boolean verificarDependencias(String identificador) {
-        List<String> linhas = Ficheiros.ler("reservas.txt");
+        List<String> linhas = ler();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         for (String linha : linhas) {
             String[] partes = linha.split("\\|");

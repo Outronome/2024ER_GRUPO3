@@ -552,12 +552,13 @@ public class Menus {
                 "\n==== MENU Reserva ====",
                 "1. Adicionar Reserva",
                 "2. Editar Reserva",
-                "3. Visualizar Reserva",
+                "3. Pesquisar Reserva",
+                "4. Mostrar Reservas",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerOpcoesMenus(4,menu);
+            op = Funcionalidades.lerOpcoesMenus(5,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
@@ -570,11 +571,15 @@ public class Menus {
                     menuReservaEditar(num);
                     break;
                 case 3:
-                    System.out.println("Escolheu: Visualizar Reserva");
+                    System.out.println("Escolheu: Pesquisar Reserva");
                     String num2 = Funcionalidades.lerString("Introduza o numero da reserva (R*):");
-                    reserva.mostrarReserva(num2);
+                    reserva.pesquisarReserva(num2);
                     break;
                 case 4:
+                    System.out.println("Escolheu: Mostrar Reservas");
+                    reserva.mostrarReservas();
+                    break;
+                case 5:
                     System.out.println("Escolheu: Eliminar Reserva");
                     reserva.eliminar();
                 case 0:
