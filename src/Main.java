@@ -1,8 +1,9 @@
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
-
-        Menus.menuPrincipal();
+    public static void main(String[] args) throws IOException {
+        Menus menu = new Menus();
+        menu.menuPrincipal();
 
     }
 }
