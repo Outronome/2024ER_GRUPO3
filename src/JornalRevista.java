@@ -69,14 +69,14 @@ public class JornalRevista extends Obra{
 
     private int verificarJornalRevista(JornalRevista newJornalRevista){
 
-        int sucesso = 0;
-        List<String> JornalRevistas = Ficheiros.ler(Biblioteca.bibliotecaAtual+"\\"+NOME_FICHEIRO);
+        int sucesso = 1;
+        List<String> JornalRevistas = Ficheiros.ler(NOME_FICHEIRO);
         for (String JornalRevista : JornalRevistas) {
             String[] partes = JornalRevista.split("\\|");
             if (partes.length >= 5) {
                 String issnComparar = partes[4].trim();
                 if (newJornalRevista.issn.equals(issnComparar)) {
-                    sucesso = 1;
+                    sucesso = 0;
                     break;
                 }
             }
@@ -115,7 +115,7 @@ public class JornalRevista extends Obra{
             }
 
 
-            if (validarIssn(issn)) {
+            if (!validarIssn(issn)) {
                 Funcionalidades.escreverString("Erro: O ISSN introduzido é inválido.");
                 continue;
             }

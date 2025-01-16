@@ -93,36 +93,7 @@ public class Obra {
         this.categoria = categoria;
     }
 
-   /* protected boolean validarIsbn10(String isbn) {
-        int soma = 0;
 
-        for (int i = 0; i < 9; i++) {
-            soma += (isbn.charAt(i) - '0') * (10 - i);
-        }
-
-        char ultimo = isbn.charAt(9);
-        if (ultimo == 'X') {
-            soma += 10; //
-        } else if (Character.isDigit(ultimo)) {
-            soma += (ultimo - '0');
-        } else {
-            return false;
-        }
-
-        return soma % 11 == 0;
-    }
-    protected boolean validarIsbn13(String isbn){
-        int soma = 0;
-        for (int i = 0; i < 12; i++) {
-            int digito = isbn.charAt(i) - '0';
-            soma += (i % 2 == 0) ? digito : digito * 3;
-        }
-
-        int checkDigitEsperado = (10 - (soma % 10)) % 10;
-
-        int checkDigitReal = isbn.charAt(12) - '0';
-        return checkDigitEsperado == checkDigitReal;
-    }*/
 
     protected boolean isbnValido(String isbn) {
         if (isbn == null) return false;
