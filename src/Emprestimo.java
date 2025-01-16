@@ -112,7 +112,7 @@ public class Emprestimo {
         int nif = 0;
         do {
             if (!first) {
-                cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+                cont = Funcionalidades.lerInt("Deseja Continuar?(0=não 1=sim)");
             }
             if (cont == 1) {
                 if (first) {
@@ -124,8 +124,11 @@ public class Emprestimo {
                     utente = Utente.procurar(String.valueOf(nif));
                 }
             }
-        } while (utente == null || cont == 1);
-        this.nif = nif;
+        } while (utente==null || cont == 1);
+        if(utente==null){
+            this.nif = nif;
+        }
+
     }
     public static List<String> introObras() {
         Scanner scanner = new Scanner(System.in);
