@@ -268,7 +268,7 @@ public class Menus {
                     break;
                 case 4:
                     System.out.println("Escolheu: Ler JornalRevista");
-                    String issn2 = Funcionalidades.lerString("Introduza o ISSN do livro que deseja visualizar:");
+                    String issn2 = Funcionalidades.lerString("Introduza o ISSN do Jornal/Revista que deseja visualizar:");
                     Livro.mostrarLivroPorISBN(issn2);
                     break;
                 case 0:
@@ -366,14 +366,16 @@ public class Menus {
                     do {
                         if (!first) {
                             cont = Funcionalidades.lerInt("Deseja continuar?(0=não 1=sim)");
+
                         }
                         if (cont == 1) {
                             String dadoPesquisa = Funcionalidades.lerString("Introduza o Nif, Nome ou Contacto a Procurar");
                             utente = Utente.procurar(dadoPesquisa);
                             first = false;
                         }
+
                     } while (utente == null && cont == 1);
-                    menuUtenteAlterar();
+
                     //apaga o utente de memoria
                     break;
                     //MenuUtentePesquisa(0);
@@ -388,6 +390,7 @@ public class Menus {
                             utente = Utente.procurar(dadoPesquisa);
                             first = false;
                         }
+
                     } while (utente == null && cont == 1);
                     utente.eliminar();
                     //faz o pedido e a leitura do Nif/nome/contacto ate encontrar o utente
@@ -412,7 +415,7 @@ public class Menus {
         } while (op != 0);
     }
 
-    public  void menuUtenteAlterar () {
+    public void menuUtenteAlterar () {
         int op;
         String[] menu = {
                 "\n==== MENU Utente Edição ====",

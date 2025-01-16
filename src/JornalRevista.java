@@ -39,7 +39,7 @@ public class JornalRevista extends Obra {
     public static void eliminar(){
 
 
-        String isnneliminado = Funcionalidades.lerString("Introduza o Isnn do jornal ou reista que deseja apagar:");
+        String isnneliminado = Funcionalidades.lerString("Introduza o Isnn do jornal ou revista que deseja apagar:");
         if (Reserva.verificarDependencias(isnneliminado)){
         Ficheiros.apagar(NOME_FICHEIRO,isnneliminado);
         }
@@ -98,7 +98,8 @@ public class JornalRevista extends Obra {
                 continue;
             }
 
-            if (!validarIssn(issn)) {
+
+            if (validarIssn(issn)) {
                 Funcionalidades.escreverString("Erro: O ISSN introduzido é inválido.");
                 continue;
             }
@@ -180,7 +181,6 @@ public class JornalRevista extends Obra {
                 }
             }
         }
-        System.out.println("Utilizador não encontrado");
         return null;
         //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro livro
     }

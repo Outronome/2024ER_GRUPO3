@@ -75,7 +75,7 @@ public class Obra {
         String issnSemHifen = issn.replace("-", "");
         String primeirosSete = issnSemHifen.substring(0, 7);
 
-        if(issn.matches("^\\d{4}-\\d{3}[0-9X]$")) {
+        if(!issn.matches("^\\d{4}-\\d{3}[0-9X]$")) {
             System.out.println("Formato Errado");
             return false;
         }
@@ -128,11 +128,11 @@ public class Obra {
 
         String regexISBN13 = "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9]$";
 
-        if(Livro.procurar(isbn)!=null){
+       /* if(Livro.procurar(isbn)!=null){
             System.out.println("O código do livro já existe");
             return false;
 
-        }
+        }*/
 
         if (isbn.matches(regexISBN10)) {
             return true;
