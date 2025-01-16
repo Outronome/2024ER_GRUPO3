@@ -30,7 +30,14 @@ public class Funcionalidades {
     public static int lerInt(String pergunta){
         Scanner ler = new Scanner(System.in);
         escreverString(pergunta);
-        return ler.nextInt();
+        if (ler.hasNextInt()){
+        int val = ler.nextInt();
+        return val;
+        }else
+        {System.out.println("Introduza um inteiro");
+            return 0;
+        }
+
     }
     public static void escreverString(String texto){
         System.out.println(texto);

@@ -50,10 +50,10 @@ public class Livro extends Obra {
         return new Object[]{getTitulo(), getEditora(), getCategoria(), getAnoEdicao(),getIsbn(), getAutores()};
     }
 
-    private int verficarLivro(Livro newLivro){
+    private int verificarLivro(Livro newLivro){
 
         int sucesso = 0;
-        List<String> livros = Ficheiros.ler(Biblioteca.bibliotecaAtual+"\\"+NOME_FICHEIRO);
+        List<String> livros = Ficheiros.ler(NOME_FICHEIRO);
         for (String livro : livros) {
             String[] partes = livro.split("\\|");
             if (partes.length >= 5) {
@@ -78,7 +78,7 @@ public class Livro extends Obra {
 
         Livro newLivro = new Livro(tempLivro.titulo, tempLivro.editora, tempLivro.categoria, tempLivro.anoEdicao,tempLivro.isbn, tempLivro.autores);
         Ficheiros.escrever(NOME_FICHEIRO,newLivro,FORMATO);
-        int sucesso = newLivro.verficarLivro(newLivro);
+        int sucesso = newLivro.verificarLivro(newLivro);
         if (sucesso == 1){
             Funcionalidades.escreverString("Livro registado com sucesso.");
         } else if (sucesso == 0) {

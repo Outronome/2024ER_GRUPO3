@@ -1,10 +1,10 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Objects;
-import java.util.Objects;
+import java.util.Scanner;
 
 import static java.time.LocalDate.parse;
 
@@ -124,32 +124,34 @@ public class Emprestimo {
         } while (utente == null && cont == 1);
         this.nif = nif;
     }
-    private void introObra() {
-        Obra obra = new Obra("","","","");
-        int cont = 1;
-        boolean first = true;
-        String codigo;
-        do {
-            if (!first) {
-                cont = Funcionalidades.lerInt("Deseja sair?(1=não 0=sim)");
-            }
-            if (cont == 1) {
+    public static List<String> introObras() {
+        Scanner scanner = new Scanner(System.in);
+        List<String> Obras = new ArrayList<>();
+        boolean valido=false;
 
-                if (first) {
-                    obra.introCodigo("Introduza o ISBN/ISNN (com hífens) que quer pedir Emprestimo:");
-                    obra = obra.verificarExiste();
-                    System.out.println(obra.codigo);
-                    first = false;
-                } else {
-                    obra = new Obra("","","","");
-                    obra.introCodigo("Introduza o ISBN/ISNN (com hífens) correto que quer pedir Emprestimo:");
-                    System.out.println(obra.codigo);
-                    obra = obra.verificarExiste();
-                }
-            }
-        } while (obra == null && cont == 1);
-        isbn = obra.codigo;
+        System.out.println("Introduza os códigos das obras (digite 'FIM' para terminar):");
 
+        while (true) {
+            System.out.print("Código da obra: ");
+            String codigo = scanner.nextLine().trim();
+
+            // Terminar o loop se o utilizador digitar 'FIM'
+            if (codigo.equalsIgnoreCase("FIM")) {
+                break;
+            }
+            if (codigo.matches("^\\d{4}-\\d{3}[\\dX]$")) {
+                valido = Reserva.procurar(codigo, "JornalRevista.txt");
+            } else {
+                valido= Reserva.procurar(codigo, "livros.txt");
+            }
+
+            if (valido) {
+                Obras.add(codigo);
+            }else System.out.println("Obra não encontrada tente novamente.");
+
+        }
+
+        return Obras;
     }
 
     private int generateId() {
@@ -208,12 +210,10 @@ public class Emprestimo {
     public static Emprestimo registar() {
         Emprestimo tempEmprestimo = new Emprestimo(0, "", 0, "", "", "");
         Emprestimo newEmprestimo = null;
-        Emprestimo emprestimo = null;
         boolean podeCriar = false;
         int cont = 1;
         boolean first = true;
-        String devolucaoPrevista;
-        String inicio;
+
         do {
             if (!first) {
                 cont = Funcionalidades.lerInt("Deseja Continuar?(0=não 1=sim)");
@@ -221,9 +221,9 @@ public class Emprestimo {
             if (cont == 1) {
                 tempEmprestimo.introNum();
                 tempEmprestimo.introUtente();
-                tempEmprestimo.introObra();
+                List<String> obras = introObras();
                 tempEmprestimo.inicio = String.valueOf(Data.dataNow());
-                System.out.println(tempEmprestimo.inicio);
+
 
                 do {
                     String fim = Funcionalidades.lerString("Introduza a Data prevista de entrega (dd/MM/yyyy):");
@@ -252,21 +252,22 @@ public class Emprestimo {
 
 
 
-                newEmprestimo = new Emprestimo(tempEmprestimo.num, tempEmprestimo.isbn, tempEmprestimo.nif, tempEmprestimo.inicio, tempEmprestimo.devolucaoPrevista, tempEmprestimo.inicio);
+
                 List<String> emprestimos;
                 emprestimos = ler();
                 List<String> reservas = Ficheiros.ler("reservas.txt");
-                podeCriar = verificarSeExiste(emprestimos, reservas, newEmprestimo);
-                System.out.println(podeCriar);
 
-                if (podeCriar) {
-                    Funcionalidades.escreverString("Não foi possivel inserir o emprestimo pois ele já existe");
-                } else {
-                    System.out.printf("Campos: num=%d, isbn=%s, nif=%d, inicio=%s, devolucaoPrevista=%s, devolucaoDefinitiva=%s%n",
-                            newEmprestimo.getNum(), newEmprestimo.getObra(), newEmprestimo.getUtente(),
-                            newEmprestimo.getInicio(), newEmprestimo.getDevolucaoPrevista(), newEmprestimo.getDevolucaoDefinitiva());
-                    Ficheiros.escrever(NOME_FICHEIRO, newEmprestimo, FORMATO);
-                }
+
+                    for (String obra : obras)
+                    {
+                        newEmprestimo = new Emprestimo(tempEmprestimo.num, obra, tempEmprestimo.nif, tempEmprestimo.inicio, tempEmprestimo.devolucaoPrevista, tempEmprestimo.inicio);
+                        podeCriar = verificarSeExiste(emprestimos, reservas, newEmprestimo);
+                        if (podeCriar)
+                            Ficheiros.escrever(NOME_FICHEIRO, newEmprestimo, FORMATO);
+                        else {Funcionalidades.escreverString("Não foi possivel inserir o emprestimo da obra " +obra+" pois ele já existe");}
+                    }
+
+
                 first = false;
             }
         } while (!podeCriar || cont == 1);

@@ -43,7 +43,7 @@ public class Menus {
         return new ArrayList<>(pastasEncontradas);
     }
 
-    private void menuBiblioteca(){
+    private void menuBiblioteca() throws IOException {
 
         int op;
         String[] opcoes = new String[]{"1. Adicionar Biblioteca: ","2. Editar Biblioteca","3. Apagar Biblioteca"};
@@ -84,7 +84,7 @@ public class Menus {
 
     }
 
-    public void menuPrincipal() {
+    public void menuPrincipal() throws IOException {
         menuBiblioteca();
         int op;
         String[] menu = {
@@ -365,7 +365,7 @@ public class Menus {
                     System.out.println("Escolheu: Editar Utente");
                     do {
                         if (!first) {
-                            cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+                            cont = Funcionalidades.lerInt("Deseja continuar?(0=não 1=sim)");
                         }
                         if (cont == 1) {
                             String dadoPesquisa = Funcionalidades.lerString("Introduza o Nif, Nome ou Contacto a Procurar");
@@ -381,7 +381,7 @@ public class Menus {
                     System.out.println("Escolheu: Remover Utente");
                     do {
                         if (!first) {
-                            cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+                            cont = Funcionalidades.lerInt("Deseja continuar?(0=não 1=sim)");
                         }
                         if (cont == 1) {
                             String dadoPesquisa = Funcionalidades.lerString("Introduza o Nif, Nome ou Contacto a Procurar");

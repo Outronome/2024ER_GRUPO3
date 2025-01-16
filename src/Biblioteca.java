@@ -50,7 +50,7 @@ public class Biblioteca {
         }
     }
 */
-   public void criarBiblioteca(String nomeBiblioteca) {
+   public void criarBiblioteca(String nomeBiblioteca) throws IOException {
        File novaBiblioteca = new File(nomeBiblioteca);
 
        if (novaBiblioteca.exists()) {
@@ -58,6 +58,16 @@ public class Biblioteca {
        } else {
            if (novaBiblioteca.mkdir()) {
                System.out.println("Biblioteca criada com sucesso.");
+               File arquivo = new File(nomeBiblioteca+"\\" + "livros.txt");
+               arquivo.createNewFile();
+               arquivo = new File(nomeBiblioteca+ "\\"+ "reservas.txt");
+               arquivo.createNewFile();
+               arquivo = new File(nomeBiblioteca+ "\\"+ "utentes.txt");
+               arquivo.createNewFile();
+               arquivo = new File(nomeBiblioteca+ "\\"+ "emprestimos.txt");
+               arquivo.createNewFile();
+               arquivo = new File(nomeBiblioteca+ "\\"+ "JornalRevista.txt");
+               arquivo.createNewFile();
 
            } else {
                System.out.println("Erro ao criar biblioteca.");
