@@ -26,7 +26,7 @@ Pokemon o Inicio|Nova Era|Fantasia|2005|978-715-5012-8677-4|Ana Costa
 Viagem ao Centro da Terra|Biblioteca Universitária|História|1990|978-120-4729-5294-2|Paulo Fernandes
 Mongo|Asas|Fantasia|2000|978-1-4028-9462-6|Manuel
 Nelson|Rafa|Willy|2000|978-3-16-148410-1|Rodri
-Nelson|Rafa|mongo|2000|978-1-4028-9462-6|nelo
+Nelson|Rafa|mongo|2000|978-1-4028-9999-9|nelo
 Nelson|Rafa|Willy|2000|978-1-4028-9462-6|Rodri
 Nelson|Monteiro|Nelson|2000|978-1-4028-9462-6|momo
 Aventura no Espaço|Editora Mundo|Ficção Científica|1999|978-308-1283-2173-9|João Silva
@@ -81,4 +81,4 @@ Nelson|Rafa|Willy|2000|978-3-16-148410-1|Rodri
 Nelson|Rafa|mongo|2000|978-1-4028-9462-6|nelo
 Nelson|Rafa|Willy|2000|978-1-4028-9462-6|Rodri
 Nelson|Monteiro|Nelson|2000|978-1-4028-9462-6|momo
-Te amo|Te amo|Te amo|2000|978-989-8907-87-5|Jessica Easto
+Te amo|Te amo|Te amo|2000|978-3-16-148410-4|Jessica Easto

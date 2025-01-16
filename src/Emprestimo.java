@@ -31,10 +31,6 @@ public class Emprestimo {
         this.devolucaoDefinitiva = devolucaoDefinitiva;
     }
 
-    public static List<Emprestimo> lerTodosEmprestimos() {
-        Ficheiros<Emprestimo> reader = new Ficheiros<>(Emprestimo.class);
-        return reader.lerMemoria(NOME_FICHEIRO);
-    }
 
     //ler toda a informação de um emprestimo e colocar em memória
     public int getNum() {
@@ -190,7 +186,7 @@ public class Emprestimo {
 
                         if (isbnEmprestimo.equals(novoEmprestimo.isbn) &&
                                 Objects.equals(partes[3], partes[5])) {
-                                return true;
+                                return false;
                         }
                     }
                 }
@@ -204,13 +200,13 @@ public class Emprestimo {
                     String isbnReserva = partes2[2].trim();
 
                     if (isbnReserva.equals(novoEmprestimo.isbn) && (LocalDate.parse(partes2[5],FORMATTER).isAfter(Data.dataNow()))){
-                        return true;
+                        return false;
                     }
                 }
             }
         }
 
-        return false; // Não existe sobreposição
+        return true; // Não existe sobreposição
     }
 
 
