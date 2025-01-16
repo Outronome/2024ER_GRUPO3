@@ -28,17 +28,6 @@ public class Utente{
     public Utente() {}
 
 
-
-    @Override
-    public String toString() {
-        return "Utente{" +
-                "nif=" + nif +
-                ", nome='" + nome + '\'' +
-                ", genero=" + genero +
-                ", contacto=" + contacto +
-                '}';
-    }
-
     public static List<Utente> lerTodosUtentes() {
         Ficheiros<Utente> reader = new Ficheiros<>(Utente.class);
         return reader.lerMemoria(NOME_FICHEIRO);
@@ -261,7 +250,7 @@ public class Utente{
 
 
 
-        boolean sucesso = newUtente.verficarUtente(newUtente);
+        boolean sucesso = !newUtente.verficarUtente(newUtente);
         if (sucesso) {
             Ficheiros.escrever(NOME_FICHEIRO, newUtente, FORMATO);
             Funcionalidades.escreverString("Utente registado com sucesso.");

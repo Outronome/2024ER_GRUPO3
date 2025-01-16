@@ -31,15 +31,6 @@ public class Emprestimo {
         this.devolucaoDefinitiva = devolucaoDefinitiva;
     }
 
-
-
-
-    // Método para gerar uma string de representação do empréstimo
-    @Override
-    public String toString() {
-        return String.format("Emprestimo {Num=%d, ISBN='%s', NIF=%d, Início='%s', Devolução Prevista='%s', Devolução Definitiva='%s'}",
-                num, isbn, nif, inicio, devolucaoPrevista, devolucaoDefinitiva);
-    }
     public static List<Emprestimo> lerTodosEmprestimos() {
         Ficheiros<Emprestimo> reader = new Ficheiros<>(Emprestimo.class);
         return reader.lerMemoria(NOME_FICHEIRO);

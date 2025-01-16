@@ -346,7 +346,6 @@ public class Menus {
                 "2. Editar Utente",
                 "3. Remover Utente",
                 "4. Ler Utente",
-                "5. Pesquisar Utente",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -401,10 +400,6 @@ public class Menus {
                     //faz o pedido e a leitura do nome ate encontrar o Utente
                     //chama a função leitura com o nome do Utente
                     break;
-                case 5:
-                    System.out.println("Escolheu: Pesquisar Utente");
-                    //faz o pedido e a leitura do nome ate encontrar o Ute
-                    //chama a função pesquisar com o nome do JornalRevista
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");
