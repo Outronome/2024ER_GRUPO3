@@ -74,7 +74,12 @@ public class Menus {
                 default:
                     System.out.println("Abrir com a biblioteca: "+pastas.get(op-4));
                     biblioteca.setBibliotecaAtual(pastas.get(op-4));
-
+                    //Carregar todos os dados para as respetivas listas
+                    Utente.getUtentes();
+                    Livro.getLivros();
+                    JornalRevista.getJornaisRevistas();
+                    Emprestimo.getEmprestimos();
+                    Reserva.getReservas();
                     return;
 
             }
