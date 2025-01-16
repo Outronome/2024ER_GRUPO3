@@ -75,7 +75,7 @@ public class Menus {
                     System.out.println("Abrir com a biblioteca: "+pastas.get(op-4));
                     biblioteca.setBibliotecaAtual(pastas.get(op-4));
                     //Carregar todos os dados para as respetivas listas
-                    Funcionalidades.definirTudo();
+
                     return;
 
             }
@@ -121,7 +121,7 @@ public class Menus {
                     menuReserva();
                     break;
                 case 0:
-                    Funcionalidades.guardarTudo();
+
                     System.out.println("Sair");
                     break;
                 default:

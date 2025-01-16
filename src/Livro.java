@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Livro extends Obra implements Ficheiros.linhaConvertida{
+public class Livro extends Obra{
     public static final String NOME_FICHEIRO = "livros.txt";
     private int anoEdicao;
     private String isbn;
@@ -9,15 +9,6 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
     private static String FORMATO = "%s|%s|%s|%d|%s|%s%n";
     static List<Livro> livros = new ArrayList<>();
 
-    public static List<Livro> setLivros() {
-        livros = Livro.lerTodosLivros();
-        return livros;
-    }
-    public static void guardarLivrosFicheiro(){
-        for(Livro livro : livros) {
-            Ficheiros.escrever(NOME_FICHEIRO,livro,FORMATO);
-        }
-    }
 
     // Construtor
     public Livro(String titulo, String editora, String categoria, int anoEdicao, String isbn, String autores) {
@@ -28,25 +19,6 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
     }
 
     // Construtor sem argumentos (necessário para o fromLine)
-    public Livro() {
-        super("", "", "");
-    }
-
-    // Implementação do método fromLine da interface
-    @Override
-    public void fromLine(String line) {
-        String[] parts = line.split("\\|");
-        if (parts.length == 6) { // Certificando-se que a linha tem todos os campos
-            this.setTitulo(parts[0]);
-            this.setEditora(parts[1]);
-            this.setCategoria(parts[2]);
-            this.setAnoEdicao(Integer.parseInt(parts[3]));
-            this.setIsbn(parts[4]);
-            this.setAutores(parts[5]);
-        } else {
-            throw new IllegalArgumentException("Formato da linha inválido: " + line);
-        }
-    }
 
     @Override
     public String toString() {
@@ -106,19 +78,6 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
         }
         return false;
 
-        /*int sucesso = 0;
-        List<String> livros = Ficheiros.ler(Biblioteca.bibliotecaAtual+"\\"+NOME_FICHEIRO);
-        for (String livro : livros) {
-            String[] partes = livro.split("\\|");
-            if (partes.length >= 5) {
-                String isbnComparar = partes[4].trim();
-                if (newLivro.isbn.equals(isbnComparar)) {
-                    sucesso = 1;
-                    break;
-                }
-            }
-        }
-        return sucesso;*/
     }
 
     private void adicionarLivro(Livro livro){
@@ -136,12 +95,11 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
 
         Livro newLivro = new Livro(tempLivro.titulo, tempLivro.editora, tempLivro.categoria, tempLivro.anoEdicao,tempLivro.isbn, tempLivro.autores);
 
-        //guardar logo no ficheiro se estiver ligado o guardar automatico
-        //Ficheiros.escrever(NOME_FICHEIRO,newLivro,FORMATO);
-        //colocar na lista em memoria
+
         newLivro.adicionarLivro(newLivro);
         boolean sucesso = newLivro.verficarLivro(newLivro);
         if (sucesso){
+            Ficheiros.escrever(NOME_FICHEIRO,newLivro,FORMATO);
             Funcionalidades.escreverString("Livro guardado com sucesso.");
         } else{
             Funcionalidades.escreverString("Erro:Livro não foi guardado.");
@@ -282,10 +240,10 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
     private void introAnoEdicao() {
         do {
             anoEdicao = Funcionalidades.lerInt("Introduza o Ano de Edição:");
-            if (anoEdicao < 0 || anoEdicao > 2024) {
-                Funcionalidades.escreverString("Erro: Introduza um Ano de Edição válido (entre 1450 e 2024)");
+            if (anoEdicao < 0 || anoEdicao > 2025) {
+                Funcionalidades.escreverString("Erro: Introduza um Ano de Edição válido (entre 0 e 2025)");
             }
-        } while (anoEdicao < 0 || anoEdicao > 2024);
+        } while (anoEdicao < 0 || anoEdicao > 2025);
     }
 
 

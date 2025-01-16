@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Classe JornalRevista, que herda de Obra
-public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
+public class JornalRevista extends Obra{
     public static final String NOME_FICHEIRO = "JornalRevista.txt";
     private String issn;
     private String dataPublicacao;
@@ -14,37 +14,7 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
         this.issn = issn;
         this.dataPublicacao = dataPublicacao;
     }
-    public JornalRevista() {
-        super("", "", ""); // Passando valores padrão para os campos obrigatórios da superclasse
-    }
 
-    public static List<JornalRevista> setJornaisRevistas() {
-        jornaisRevistas = JornalRevista.lerTodosJornaisRevistas();
-        return jornaisRevistas;
-    }
-    public static void guardarJornaisRevistasFicheiro(){
-        for(JornalRevista jornalRevista : jornaisRevistas) {
-            Ficheiros.escrever(NOME_FICHEIRO,jornalRevista,FORMATO);
-        }
-    }
-    private void adicionarLivro(JornalRevista jornalRevista){
-        jornaisRevistas.add(jornalRevista);
-    }
-
-    // Implementação do método fromLine da interface
-    @Override
-    public void fromLine(String line) {
-        String[] parts = line.split("\\|");
-        if (parts.length == 5) {
-            this.setTitulo(parts[0]);
-            this.setEditora(parts[1]);
-            this.setCategoria(parts[2]);
-            this.setIssn(parts[3]);
-            this.setDataPublicacao(parts[4]);
-        } else {
-            throw new IllegalArgumentException("Formato da linha inválido: " + line);
-        }
-    }
 
     // Método toString para retornar uma representação do objeto
     @Override
@@ -123,9 +93,10 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
         tempJornalRevista.introDataPublicacao();
 
         JornalRevista newJornalRevista = new JornalRevista(tempJornalRevista.titulo, tempJornalRevista.editora, tempJornalRevista.categoria,tempJornalRevista.issn, tempJornalRevista.dataPublicacao);
-        Ficheiros.escrever(NOME_FICHEIRO,newJornalRevista,FORMATO);
+
         int sucesso = newJornalRevista.verificarJornalRevista(newJornalRevista);
         if (sucesso == 1){
+            Ficheiros.escrever(NOME_FICHEIRO,newJornalRevista,FORMATO);
             Funcionalidades.escreverString("Registado com sucesso.");
         } else if (sucesso == 0) {
             Funcionalidades.escreverString("Não foi registado.");
