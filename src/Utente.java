@@ -271,16 +271,19 @@ public class Utente implements Ficheiros.linhaConvertida {
         boolean first = true;
         String dado;
         do {
-            dado = Funcionalidades.lerString("Digite o NIF ou o nome ou contacto do utente a pesquisar:");
+
             if (!first) {
-                cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+                cont = Funcionalidades.lerInt("Deseja Continuar?(0=não 1=sim)");
             }
             if (cont == 1) {
+                dado = Funcionalidades.lerString("Digite o NIF ou o nome ou contacto do utente a pesquisar:");
+                first = false;
                 for (Utente utenteProcurar : utentes) {
                     if (utenteProcurar.nif == Integer.parseInt(dado) || utenteProcurar.nome == dado || utenteProcurar.contacto == Integer.parseInt(dado)) {
                         //chamar o mostar com a paginação com o utente encontrado
                         vazio = false;
                         utente = utenteProcurar;
+                        Funcionalidades.escreverString(utenteProcurar.toString());
                         break;
                     }
                 }
@@ -288,14 +291,6 @@ public class Utente implements Ficheiros.linhaConvertida {
 
         }while(vazio || cont == 1);
 
-        if (vazio) {
-            // escreve utente não encontrado
-            Funcionalidades.escreverString("Utente não encontrado");
-        }else{
-            //chama paginação com o utente
-            Funcionalidades.escreverString(utente.toString());
-        }
-        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro utente
     }
 
 
