@@ -380,7 +380,7 @@ public class Menus {
                     //MenuUtentePesquisa(0);
                 case 3:
                     System.out.println("Escolheu: Remover Utente");
-                    do {
+                    /*do {
                         if (!first) {
                             cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
                         }
@@ -389,7 +389,7 @@ public class Menus {
                             utente = Utente.procurar(dadoPesquisa);
                             first = false;
                         }
-                    } while (utente == null && cont == 1);
+                    } while (utente == null && cont == 1);*/
                     utente.eliminar();
                     //faz o pedido e a leitura do Nif/nome/contacto ate encontrar o utente
                     //chama a função apagar com o nif do utente

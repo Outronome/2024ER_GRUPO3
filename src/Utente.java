@@ -14,6 +14,7 @@ public class Utente implements Ficheiros.linhaConvertida {
     private static final String FORMATO = "%d|%s|%d|%d%n";
     private static final String NOME_FICHEIRO = "utentes.txt";
     static List<Utente> utentes = new ArrayList<>();
+    static Utente utenteAtual = new Utente();
 
     public static List<Utente> setUtentes() {
         utentes = Utente.lerTodosUtentes();
@@ -266,7 +267,6 @@ public class Utente implements Ficheiros.linhaConvertida {
     public static void pesquisar() {
         //o dado tem que ser o nif o nome ou o contacto
         boolean vazio = true;
-        Utente utente= new Utente();
         int cont = 1;
         boolean first = true;
         String dado;
@@ -282,7 +282,7 @@ public class Utente implements Ficheiros.linhaConvertida {
                     if (utenteProcurar.nif == Integer.parseInt(dado) || utenteProcurar.nome == dado || utenteProcurar.contacto == Integer.parseInt(dado)) {
                         //chamar o mostar com a paginação com o utente encontrado
                         vazio = false;
-                        utente = utenteProcurar;
+                        utenteAtual = utenteProcurar;
                         Funcionalidades.escreverString(utenteProcurar.toString());
                         break;
                     }
@@ -388,7 +388,20 @@ public class Utente implements Ficheiros.linhaConvertida {
      */
     public void eliminar() {
         //falta verificar se exite alguma dependencia
-        Ficheiros.apagar(NOME_FICHEIRO, Integer.toString(nif));
+        pesquisar();
+        boolean r =Reserva.verificarDependencias(String.valueOf(utenteAtual.nif));
+        boolean e =Emprestimo.verificarDependencias(String.valueOf(utenteAtual.nif));
+        System.out.println(String.valueOf(r)+"T"+String.valueOf(e));
+        if (e && r){
+            for (int i = 0; i < utentes.size(); i++) {
+                if (utentes.get(i).getNif() == utenteAtual.nif) {
+                    utentes.remove(i);
+                    break;  // Remove o primeiro Utente encontrado com esse NIF e sai do loop
+                }
+            }
+        }else {
+            Funcionalidades.escreverString("Erro ao eliminar existem dependencias");
+        }
     }
 
     /**

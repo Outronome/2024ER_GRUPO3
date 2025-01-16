@@ -300,7 +300,7 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
                 System.out.println(podeCriar);
 
 
-                for (String obra : obras) {
+                /*for (String obra : obras) {
                     newEmprestimo = new Emprestimo(tempEmprestimo.num, obra, tempEmprestimo.nif, tempEmprestimo.inicio, tempEmprestimo.devolucaoPrevista, tempEmprestimo.inicio);
                     podeCriar = verificarSeExiste(emprestimos, reservas, newEmprestimo);
                     if (!podeCriar) {
@@ -312,7 +312,7 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
                         Funcionalidades.escreverString("Não foi possivel inserir o emprestimo da obra " + obra + " pois ele já existe");
                     }
                     first = false;
-                }
+                }*/
             }
         }while (!podeCriar || cont == 1) ;
     }
@@ -371,6 +371,32 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
         return listaEmprestimos;
         //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro livro
     }
+    public static boolean verificarDependencias(String identificador) {
+        List<String> linhas = ler();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        // Obtém a data atual
+        LocalDate hoje = LocalDate.now();
+
+        for (String linha : linhas) {
+            String[] partes = linha.split("\\|");
+            String dataDefinitiva = partes[5].trim(); // Devolução definitiva (ajuste conforme o índice correto)
+
+            // Converte a data final para LocalDate
+            LocalDate devolucaoDefinitiva = LocalDate.parse(dataDefinitiva, formatter);
+
+            // Verifica se a linha contém o identificador e se a devolução definitiva é válida
+            if (linha.contains(identificador.trim())) {
+                // Verifica se a devolução definitiva é após a data atual e antes do dia de hoje
+                if (devolucaoDefinitiva.isAfter(hoje) && devolucaoDefinitiva.isBefore(hoje.plusDays(1))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public void pesquisarEmprestimo(String num) {
         ArrayList<Emprestimo> emprestimos = procurarListaEmprestimos(num);
 
