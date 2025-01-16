@@ -124,7 +124,7 @@ public class Emprestimo {
                     utente = Utente.procurar(String.valueOf(nif));
                 }
             }
-        } while (utente == null || cont == 1);
+        } while (utente == null && cont == 1);
         this.nif = nif;
     }
     public static List<String> introObras() {
