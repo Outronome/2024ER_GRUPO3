@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Funcionalidades <T> {
@@ -68,6 +69,7 @@ public class Funcionalidades <T> {
 
         } while (opcao != 0);
     }
+
     public static int lerInteiros(int range, String[] pergunta){
         Scanner ler = new Scanner(System.in);
         int val = -1  ;

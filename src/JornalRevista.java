@@ -97,8 +97,18 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
         return new Object[]{getTitulo(), getEditora(), getCategoria(), getIssn(),getDataPublicacao()};
     }
 
-    private int verficarJornalRevista(JornalRevista newJornalRevista){
+    private boolean verficarJornalRevista(JornalRevista jornalRevista){
+        if (jornaisRevistas == null || jornaisRevistas.isEmpty()) {
+            return false;
+        }
 
+        for (JornalRevista jornalRevistaProcurar : jornaisRevistas) {
+            if (jornalRevistaProcurar.getIssn().equals(jornalRevista.issn)) {
+                return true;
+            }
+        }
+        return false;
+        /*
         int sucesso = 0;
         List<String> JornalRevistas = Ficheiros.ler(Biblioteca.bibliotecaAtual+"\\"+NOME_FICHEIRO);
         for (String JornalRevista : JornalRevistas) {
@@ -111,7 +121,7 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
                 }
             }
         }
-        return sucesso;
+        return sucesso;*/
     }
 
     public static JornalRevista registar(){
@@ -123,12 +133,16 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
         tempJornalRevista.introDataPublicacao();
 
         JornalRevista newJornalRevista = new JornalRevista(tempJornalRevista.titulo, tempJornalRevista.editora, tempJornalRevista.categoria,tempJornalRevista.issn, tempJornalRevista.dataPublicacao);
-        Ficheiros.escrever(NOME_FICHEIRO,newJornalRevista,FORMATO);
-        int sucesso = newJornalRevista.verficarJornalRevista(newJornalRevista);
-        if (sucesso == 1){
-            Funcionalidades.escreverString("Registado com sucesso.");
-        } else if (sucesso == 0) {
-            Funcionalidades.escreverString("Não foi registado.");
+        //guardar logo no ficheiro se estiver ligado o guardar automatico
+        //Ficheiros.escrever(NOME_FICHEIRO,newJornalRevista,FORMATO);
+        //int sucesso = newJornalRevista.verficarJornalRevista(newJornalRevista);
+        //colocar na lista em memoria
+        newJornalRevista.adicionarLivro(newJornalRevista);
+        boolean sucesso = newJornalRevista.verficarJornalRevista(newJornalRevista);
+        if (sucesso){
+            Funcionalidades.escreverString("Jornal/Revista guardado com sucesso.");
+        } else {
+            Funcionalidades.escreverString("Erro: Jornal/Revista não foi guardado.");
         }
         return newJornalRevista;
     }
@@ -285,7 +299,7 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
         }
     }
 
-    public static void mostrarJonalRevistaPorISBN(String issn) {
+    public static void mostrarJonalRevistaPorISSN(String issn) {
         JornalRevista jornalRevista = procurar(issn);
 
         if (jornalRevista == null) {

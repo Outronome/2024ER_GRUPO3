@@ -95,7 +95,7 @@ public class Utente implements Ficheiros.linhaConvertida {
         }
 
         for (Utente utenteProcurar : utentes) {
-            if (utenteProcurar.getNif() == utenteProcurar.nif) {
+            if (utenteProcurar.nif == newUtente.nif) {
                 return true;
             }
         }
@@ -233,23 +233,7 @@ public class Utente implements Ficheiros.linhaConvertida {
      *
      * @return Uma lista de strings representando os dados dos utentes.
      */
-
-    public static Utente procurar(String dado) {
-        List<String> utentes;
-        utentes = ler();
-        return verificarSeExiste(utentes, dado);
-        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro utente
-    }
-
-    /**
-     * Verifica se um utente existe em uma lista de strings.
-     *
-     * @param utentes A lista de strings contendo os dados dos utentes.
-     * @param dado    O dado usado para localizar o utente.
-     * @return O utente encontrado, ou null se nenhum for encontrado.
-     */
-
-    public static Utente verificarSeExiste(List<String> utentes, String dado) {
+    /*public static Utente verificarSeExiste(List<String> utentes, String dado) {
         //o dado tem que ser o nif o nome ou o contacto
         for (String utente : utentes) {
             String[] partes = utente.split("\\|");
@@ -263,7 +247,67 @@ public class Utente implements Ficheiros.linhaConvertida {
         }
         System.out.println("Utilizador não encontrado");
         return null;
+    }*/
+
+    public static Utente procurar(String dado) {
+        //o dado tem que ser o nif o nome ou o contacto
+        boolean vazio = true;
+        Utente utente= new Utente();
+        for (Utente utenteProcurar : utentes) {
+            if (utenteProcurar.nif == Integer.parseInt(dado) || utenteProcurar.nome == dado || utenteProcurar.contacto == Integer.parseInt(dado)) {
+                //chamar o mostar com a paginação com o utente encontrado
+                vazio = false;
+                return utenteProcurar;
+            }
+        }
+        return null;
+        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro utente
     }
+    public static void pesquisar() {
+        //o dado tem que ser o nif o nome ou o contacto
+        boolean vazio = true;
+        Utente utente= new Utente();
+        int cont = 1;
+        boolean first = true;
+        String dado;
+        do {
+            dado = Funcionalidades.lerString("Digite o NIF ou o nome ou contacto do utente a pesquisar:");
+            if (!first) {
+                cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
+            }
+            if (cont == 1) {
+                for (Utente utenteProcurar : utentes) {
+                    if (utenteProcurar.nif == Integer.parseInt(dado) || utenteProcurar.nome == dado || utenteProcurar.contacto == Integer.parseInt(dado)) {
+                        //chamar o mostar com a paginação com o utente encontrado
+                        vazio = false;
+                        utente = utenteProcurar;
+                        break;
+                    }
+                }
+            }
+
+        }while(vazio || cont == 1);
+
+        if (vazio) {
+            // escreve utente não encontrado
+            Funcionalidades.escreverString("Utente não encontrado");
+        }else{
+            //chama paginação com o utente
+            Funcionalidades.escreverString(utente.toString());
+        }
+        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro utente
+    }
+
+
+    /**
+     * Verifica se um utente existe em uma lista de strings.
+     *
+     * @param utentes A lista de strings contendo os dados dos utentes.
+     * @param dado    O dado usado para localizar o utente.
+     * @return O utente encontrado, ou null se nenhum for encontrado.
+     */
+
+
 
     /**
      * Regista um novo utente, solicitando os dados ao usuário.
@@ -277,9 +321,9 @@ public class Utente implements Ficheiros.linhaConvertida {
     public static Utente registar() {
         Utente tempUtente = new Utente(0, "", 0, 0);
         Utente newUtente = null;
-        Utente utente = null;
         int cont = 1;
         boolean first = true;
+        boolean encontrado = false;
         do {
             if (!first) {
                 cont = Funcionalidades.lerInt("Deseja sair?(0=não 1=sim)");
@@ -290,15 +334,14 @@ public class Utente implements Ficheiros.linhaConvertida {
                 tempUtente.introGenero();
                 tempUtente.introContacto("Introduza o Contacto Telefónico do Utente");
                 newUtente = new Utente(tempUtente.nif, tempUtente.nome, tempUtente.genero, tempUtente.contacto);
-                List<String> utentes;
-                utentes = ler();
-                utente = verificarSeExiste(utentes, String.valueOf(newUtente.nif));
-                if (utente != null) {
+                encontrado = newUtente.verficarUtente(newUtente);
+
+                if (encontrado) {
                     Funcionalidades.escreverString("Não foi possivel inserir o utente pois ele já existe");
                 }
                 first = false;
             }
-        } while (utente != null && cont == 1);
+        } while (encontrado || cont == 1);
         //colocar na lista em memoria
         newUtente.adicionarUtente(newUtente);
         //guardar logo no ficheiro se estiver ligado o guardar automatico

@@ -401,6 +401,8 @@ public class Menus {
                     break;
                 case 5:
                     System.out.println("Escolheu: Pesquisar Utente");
+
+                    Utente.pesquisar();
                     //faz o pedido e a leitura do nome ate encontrar o Ute
                     //chama a função pesquisar com o nome do JornalRevista
                 case 0:

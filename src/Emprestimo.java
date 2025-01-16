@@ -244,8 +244,11 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
         return false; // Não existe sobreposição
     }
 
+    private void adicionarEmprestimo(Emprestimo emprestimo){
+        emprestimos.add(emprestimo);
+    }
 
-    public static Emprestimo registar() {
+    public static void registar() {
         Emprestimo tempEmprestimo = new Emprestimo(0, "", 0, "", "", "");
         Emprestimo newEmprestimo = null;
         Emprestimo emprestimo = null;
@@ -263,30 +266,27 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
                 tempEmprestimo.introUtente();
                 tempEmprestimo.introObra();
                 tempEmprestimo.inicio = String.valueOf(Data.dataNow());
-                System.out.println(tempEmprestimo.inicio);
 
                 do {
                     String fim = Funcionalidades.lerString("Introduza a Data prevista de entrega (dd/MM/yyyy):");
 
 
-                        // Converter a data de inicio de "yyyy-MM-dd" para "dd/MM/yyyy"
-                        DateTimeFormatter originalFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                        LocalDate parsedDate = LocalDate.parse(tempEmprestimo.inicio, originalFormatter);
-                        tempEmprestimo.inicio = parsedDate.format(FORMATTER); // "dd/MM/yyyy"
+                    // Converter a data de inicio de "yyyy-MM-dd" para "dd/MM/yyyy"
+                    DateTimeFormatter originalFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate parsedDate = LocalDate.parse(tempEmprestimo.inicio, originalFormatter);
+                    tempEmprestimo.inicio = parsedDate.format(FORMATTER); // "dd/MM/yyyy"
 
-                        // Validar e analisar a data de devolução
-                        LocalDate dataInicio = LocalDate.parse(tempEmprestimo.inicio, FORMATTER);
-                        LocalDate dataFim = LocalDate.parse(fim, FORMATTER);
+                    // Validar e analisar a data de devolução
+                    LocalDate dataInicio = LocalDate.parse(tempEmprestimo.inicio, FORMATTER);
+                    LocalDate dataFim = LocalDate.parse(fim, FORMATTER);
 
-                        // Verificar se a data final é anterior à inicial
-                        if (dataFim.isBefore(dataInicio)) {
-                            Funcionalidades.escreverString("Erro: A data prevista não pode ser anterior à data de início.");
-                        } else {
-                            tempEmprestimo.devolucaoPrevista = fim;
-                            break; // Sai do loop se tudo estiver correto
-                        }
-
-
+                    // Verificar se a data final é anterior à inicial
+                    if (dataFim.isBefore(dataInicio)) {
+                        Funcionalidades.escreverString("Erro: A data prevista não pode ser anterior à data de início.");
+                    } else {
+                        tempEmprestimo.devolucaoPrevista = fim;
+                        break; // Sai do loop se tudo estiver correto
+                    }
 
                 } while (true);
 
@@ -299,26 +299,24 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
                 podeCriar = verificarSeExiste(emprestimos, reservas, newEmprestimo);
                 System.out.println(podeCriar);
 
-                if (podeCriar) {
-                    Funcionalidades.escreverString("Não foi possivel inserir o emprestimo pois ele já existe");
-                } else {
-                    System.out.printf("Campos: num=%d, isbn=%s, nif=%d, inicio=%s, devolucaoPrevista=%s, devolucaoDefinitiva=%s%n",
-                            newEmprestimo.getNum(), newEmprestimo.getObra(), newEmprestimo.getUtente(),
-                            newEmprestimo.getInicio(), newEmprestimo.getDevolucaoPrevista(), newEmprestimo.getDevolucaoDefinitiva());
-                    Ficheiros.escrever(NOME_FICHEIRO, newEmprestimo, FORMATO);
+
+                for (String obra : obras) {
+                    newEmprestimo = new Emprestimo(tempEmprestimo.num, obra, tempEmprestimo.nif, tempEmprestimo.inicio, tempEmprestimo.devolucaoPrevista, tempEmprestimo.inicio);
+                    podeCriar = verificarSeExiste(emprestimos, reservas, newEmprestimo);
+                    if (!podeCriar) {
+                        //colocar na lista em memoria
+                        newEmprestimo.adicionarEmprestimo(newEmprestimo);
+                        //guardar logo no ficheiro se estiver ligado o guardar automatico
+                        //Ficheiros.escrever(NOME_FICHEIRO, newEmprestimo, FORMATO);
+                    } else {
+                        Funcionalidades.escreverString("Não foi possivel inserir o emprestimo da obra " + obra + " pois ele já existe");
+                    }
+                    first = false;
                 }
-                first = false;
             }
-        } while (!podeCriar || cont == 1);
-        Ficheiros.escrever(NOME_FICHEIRO, newEmprestimo, FORMATO);
-        /*int sucesso = newEmprestimo.verficarEmprestimo(newEmprestimo);
-        if (sucesso == 1) {*/
-        Funcionalidades.escreverString("Emprestimo registado com sucesso.");
-        /*} else if (sucesso == 0) {
-            Funcionalidades.escreverString("Erro:Emprestimo não foi registado.");
-        }*/
-        return newEmprestimo;
+        }while (!podeCriar || cont == 1) ;
     }
+
 
     public String editar() {
         //código de editar o emprestimo no ficheiro
@@ -347,6 +345,8 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
                 String[] partes = reserva.split("\\|");
                 Emprestimo novoEmp = new Emprestimo(num,partes[2], converter.getNif(), converter.getInicio(), converter.getFim(), converter.getInicio());
                 Ficheiros.escrever(NOME_FICHEIRO,novoEmp,FORMATO);
+
+                //falta converter para memoria
             }
         }
     }
