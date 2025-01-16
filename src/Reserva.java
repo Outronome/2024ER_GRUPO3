@@ -27,9 +27,14 @@ public class Reserva implements Ficheiros.linhaConvertida{
     }
     public Reserva() {}
 
-    public static List<Reserva> getReservas() {
+    public static List<Reserva> setReservas() {
         reservas = Reserva.lerTodosReservas();
         return reservas;
+    }
+    public static void guardarReservasFicheiro(){
+        for(Reserva reserva : reservas) {
+            Ficheiros.escrever(NOME_FICHEIRO,reserva,FORMATO);
+        }
     }
 
     @Override

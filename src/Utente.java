@@ -15,9 +15,14 @@ public class Utente implements Ficheiros.linhaConvertida {
     private static final String NOME_FICHEIRO = "utentes.txt";
     static List<Utente> utentes = new ArrayList<>();
 
-    public static List<Utente> getUtentes() {
+    public static List<Utente> setUtentes() {
         utentes = Utente.lerTodosUtentes();
         return utentes;
+    }
+    public static void guardarUtentesFicheiro(){
+        for(Utente utente : utentes) {
+            Ficheiros.escrever(NOME_FICHEIRO,utente,FORMATO);
+        }
     }
 
     // Construtor completo para instância
@@ -84,8 +89,18 @@ public class Utente implements Ficheiros.linhaConvertida {
      * @return 0 se o utente já existir, 1 caso contrário.
      */
 
-    private int verficarUtente(Utente newUtente) {
-        int sucesso = 0;
+    private boolean verficarUtente(Utente newUtente) {
+        if (utentes == null || utentes.isEmpty()) {
+            return false;
+        }
+
+        for (Utente utenteProcurar : utentes) {
+            if (utenteProcurar.getNif() == utenteProcurar.nif) {
+                return true;
+            }
+        }
+        return false;
+        /*int sucesso = 0;
         //verifica se existe no ficheiro
         List<String> utentes = Ficheiros.ler(NOME_FICHEIRO);
         for (String utente : utentes) {
@@ -96,7 +111,7 @@ public class Utente implements Ficheiros.linhaConvertida {
                 break;
             }
         }
-        return sucesso;
+        return sucesso;*/
     }
 
     /**
@@ -255,6 +270,9 @@ public class Utente implements Ficheiros.linhaConvertida {
      *
      * @return O utente registrado.
      */
+    private void adicionarUtente(Utente utente){
+        utentes.add(utente);
+    }
 
     public static Utente registar() {
         Utente tempUtente = new Utente(0, "", 0, 0);
@@ -281,11 +299,14 @@ public class Utente implements Ficheiros.linhaConvertida {
                 first = false;
             }
         } while (utente != null && cont == 1);
-        Ficheiros.escrever(NOME_FICHEIRO, newUtente, FORMATO);
-        int sucesso = newUtente.verficarUtente(newUtente);
-        if (sucesso == 1) {
+        //colocar na lista em memoria
+        newUtente.adicionarUtente(newUtente);
+        //guardar logo no ficheiro se estiver ligado o guardar automatico
+        //Ficheiros.escrever(NOME_FICHEIRO, newUtente, FORMATO);
+        boolean sucesso = newUtente.verficarUtente(newUtente);
+        if (sucesso) {
             Funcionalidades.escreverString("Utente registado com sucesso.");
-        } else if (sucesso == 0) {
+        } else  {
             Funcionalidades.escreverString("Erro:Utente não foi registado.");
         }
         return newUtente;

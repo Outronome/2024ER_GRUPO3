@@ -32,9 +32,14 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
     // Construtor sem argumentos
     public Emprestimo() {}
 
-    public static List<Emprestimo> getEmprestimos() {
+    public static List<Emprestimo> setEmprestimos() {
         emprestimos = Emprestimo.lerTodosEmprestimos();
         return emprestimos;
+    }
+    public static void guardarEmprestimosFicheiro(){
+        for(Emprestimo emprestimo : emprestimos) {
+            Ficheiros.escrever(NOME_FICHEIRO,emprestimo,FORMATO);
+        }
     }
 
     // Método para ler uma linha do ficheiro e preencher os dados do empréstimo

@@ -9,9 +9,14 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
     private static String FORMATO = "%s|%s|%s|%d|%s|%s%n";
     static List<Livro> livros = new ArrayList<>();
 
-    public static List<Livro> getLivros() {
+    public static List<Livro> setLivros() {
         livros = Livro.lerTodosLivros();
         return livros;
+    }
+    public static void guardarLivrosFicheiro(){
+        for(Livro livro : livros) {
+            Ficheiros.escrever(NOME_FICHEIRO,livro,FORMATO);
+        }
     }
 
     // Construtor
@@ -89,9 +94,19 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
         return new Object[]{getTitulo(), getEditora(), getCategoria(), getAnoEdicao(),getIsbn(), getAutores()};
     }
 
-    private int verficarLivro(Livro newLivro){
+    private boolean verficarLivro(Livro livro){
+        if (livros == null || livros.isEmpty()) {
+            return false;
+        }
 
-        int sucesso = 0;
+        for (Livro livroProcurar : livros) {
+            if (livroProcurar.getIsbn().equals(livro.isbn)) {
+                return true;
+            }
+        }
+        return false;
+
+        /*int sucesso = 0;
         List<String> livros = Ficheiros.ler(Biblioteca.bibliotecaAtual+"\\"+NOME_FICHEIRO);
         for (String livro : livros) {
             String[] partes = livro.split("\\|");
@@ -103,8 +118,12 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
                 }
             }
         }
-        return sucesso;
-            }
+        return sucesso;*/
+    }
+
+    private void adicionarLivro(Livro livro){
+        livros.add(livro);
+    }
 
     public static Livro registar(){
         Livro tempLivro = new Livro("","","",0,"","");
@@ -116,18 +135,21 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
         tempLivro.introAutores();
 
         Livro newLivro = new Livro(tempLivro.titulo, tempLivro.editora, tempLivro.categoria, tempLivro.anoEdicao,tempLivro.isbn, tempLivro.autores);
-        Ficheiros.escrever(NOME_FICHEIRO,newLivro,FORMATO);
-        int sucesso = newLivro.verficarLivro(newLivro);
-        if (sucesso == 1){
-            Funcionalidades.escreverString("Livro registado com sucesso.");
-        } else if (sucesso == 0) {
-            Funcionalidades.escreverString("Livro não foi registado.");
+
+        //guardar logo no ficheiro se estiver ligado o guardar automatico
+        //Ficheiros.escrever(NOME_FICHEIRO,newLivro,FORMATO);
+        //colocar na lista em memoria
+        newLivro.adicionarLivro(newLivro);
+        boolean sucesso = newLivro.verficarLivro(newLivro);
+        if (sucesso){
+            Funcionalidades.escreverString("Livro guardado com sucesso.");
+        } else{
+            Funcionalidades.escreverString("Erro:Livro não foi guardado.");
         }
         return newLivro;
     }
 
     public static void eliminar(){
-
         String isbneliminado = Funcionalidades.lerString("Introduza o Isbn do livro que deseja apagar:");
         if (Reserva.verificarDependencias(isbneliminado)){
         Ficheiros.apagar(NOME_FICHEIRO,isbneliminado);
@@ -135,7 +157,7 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
         else {
             System.out.println("O livro tem Reservas/Emprestimos pendentes.");
         }
-        }
+    }
 
 
 

@@ -4,6 +4,23 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Funcionalidades <T> {
+    public static void definirTudo() {
+        //define todos as listas
+        Utente.setUtentes();
+        Livro.setLivros();
+        JornalRevista.setJornaisRevistas();
+        Emprestimo.setEmprestimos();
+        Reserva.setReservas();
+    }
+
+    public static void guardarTudo(){
+        //guarda todos as listas
+        Utente.guardarUtentesFicheiro();
+        Livro.guardarLivrosFicheiro();
+        JornalRevista.guardarJornaisRevistasFicheiro();
+        Emprestimo.guardarEmprestimosFicheiro();
+        Reserva.guardarReservasFicheiro();
+    }
     public void exibirPaginado(List<T> lista, int tamanhoPagina) {
         if (lista.isEmpty()) {
             Funcionalidades.escreverString("Nenhum registro encontrado.");

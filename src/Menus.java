@@ -75,18 +75,13 @@ public class Menus {
                     System.out.println("Abrir com a biblioteca: "+pastas.get(op-4));
                     biblioteca.setBibliotecaAtual(pastas.get(op-4));
                     //Carregar todos os dados para as respetivas listas
-                    Utente.getUtentes();
-                    Livro.getLivros();
-                    JornalRevista.getJornaisRevistas();
-                    Emprestimo.getEmprestimos();
-                    Reserva.getReservas();
+                    Funcionalidades.definirTudo();
                     return;
 
             }
         }while(op<4 || op>indice);
 
         //abre com a respetiva biblioteca
-
     }
 
     public void menuPrincipal() {
@@ -126,6 +121,7 @@ public class Menus {
                     menuReserva();
                     break;
                 case 0:
+                    Funcionalidades.guardarTudo();
                     System.out.println("Sair");
                     break;
                 default:

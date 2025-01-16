@@ -7,7 +7,7 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
     private String issn;
     private String dataPublicacao;
     private static String FORMATO = "%s|%s|%s|%s|%s%n";
-    private static final List<JornalRevista> jornaisRevistas = new ArrayList<>();
+    static List<JornalRevista> jornaisRevistas = new ArrayList<>();
     // Construtor
     public JornalRevista(String titulo, String editora, String categoria, String issn, String dataPublicacao) {
         super(titulo, editora, categoria);
@@ -18,9 +18,17 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
         super("", "", ""); // Passando valores padrão para os campos obrigatórios da superclasse
     }
 
-    public static List<JornalRevista> getJornaisRevistas() {
-        List<JornalRevista> jornaisRevistas = JornalRevista.lerTodosJornaisRevistas();
+    public static List<JornalRevista> setJornaisRevistas() {
+        jornaisRevistas = JornalRevista.lerTodosJornaisRevistas();
         return jornaisRevistas;
+    }
+    public static void guardarJornaisRevistasFicheiro(){
+        for(JornalRevista jornalRevista : jornaisRevistas) {
+            Ficheiros.escrever(NOME_FICHEIRO,jornalRevista,FORMATO);
+        }
+    }
+    private void adicionarLivro(JornalRevista jornalRevista){
+        jornaisRevistas.add(jornalRevista);
     }
 
     // Implementação do método fromLine da interface
