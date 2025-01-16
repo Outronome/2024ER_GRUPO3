@@ -245,7 +245,6 @@ public class Menus {
                 "2. Editar Jornal ou Revista",
                 "3. Remover Jornal ou Revista",
                 "4. Ler Jornal ou Revista",
-                "5. Pesquisar Jornal ou Revista",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -490,15 +489,19 @@ public class Menus {
                 case 6:
                     System.out.println("Escolheu: Verificar atraso");
                     Emprestimo.listarUtentesComAtraso(Funcionalidades.lerInt("Introduza o numero de dias dos atrasos:"));
+                    break;
                 case 7:
                     System.out.println("Escolheu: Item mais requisitado");
                     Emprestimo.apresentarItemMaisRequisitado();
+                    break;
                 case 8:
                     System.out.println("Escolheu: Tempo médio de empréstimos");
                     Emprestimo.apresentarTempoMedioEmprestimos();
+                    break;
                 case 9:
                     System.out.println("Escolheu: Numero de empréstimos");
                     Emprestimo.apresentarTotalEmprestimos();
+                    break;
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");

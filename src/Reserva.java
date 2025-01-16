@@ -309,7 +309,55 @@ public class Reserva implements Ficheiros.linhaConvertida{
             System.out.println("Reserva não encontrado.");
             return;
         }
+        switch (posCampo) {
+            case 1 -> {
+                if (!palavraNova.matches("\\d{4}-\\d{3}[\\dX]") &&
+                        !palavraNova.matches("^[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9X]$") &&
+                        !palavraNova.matches("^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9]$")) {
+                    System.out.println("Erro: ISBN inválido.");
+                    return;
+                }
 
+                if (!Emprestimo.validarExistencia(palavraNova, "ISBN")) {
+                    System.out.println("Erro: ISBN não encontrado no sistema ou já está reservado.");
+                    return;
+                }
+            }
+            case 2 -> {
+                if (!palavraNova.matches("\\d{9}")) {
+                    System.out.println("Erro: NIF inválido.");
+                    return;
+                }
+
+            }
+            case 3, 4 -> {
+                try {
+                    LocalDate.parse(palavraNova, Emprestimo.FORMATTER);
+                } catch (Exception e) {
+                    System.out.println("Erro: A data deve estar no formato dd/MM/yyyy.");
+                    return;
+                }
+            }
+            case 5 -> {
+                if (!palavraNova.isBlank() && !palavraNova.equals(reserva.getInicio())) {
+                    try {
+                        LocalDate devolucao = LocalDate.parse(palavraNova, Emprestimo.FORMATTER);
+                        LocalDate inicio = LocalDate.parse(reserva.getInicio(), Emprestimo.FORMATTER);
+                        if (!devolucao.isAfter(inicio)) {
+                            System.out.println("Erro: A data de devolução deve ser posterior à data de início.");
+                            return;
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Erro: A data deve estar no formato dd/MM/yyyy.");
+                        return;
+                    }
+                }
+            }
+            default -> {
+                System.out.println("Erro: Campo inválido especificado.");
+                return;
+            }
+        }
         if (palavraAntiga != null) {
             Ficheiros.atualizar(NOME_FICHEIRO, num, palavraAntiga, palavraNova, "");
             System.out.println("Reserva atualizado com sucesso.");

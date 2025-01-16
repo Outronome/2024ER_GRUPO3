@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 import static java.time.LocalDate.parse;
 
-public class Emprestimo implements Ficheiros.linhaConvertida{
+public class Emprestimo {
     int num;
     String isbn;
     int nif;
@@ -30,34 +30,9 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
         this.devolucaoPrevista = devolucaoPrevista;
         this.devolucaoDefinitiva = devolucaoDefinitiva;
     }
-    // Construtor sem argumentos
-    public Emprestimo() {}
 
-    public static List<Emprestimo> setEmprestimos() {
-        emprestimos = Emprestimo.lerTodosEmprestimos();
-        return emprestimos;
-    }
-    public static void guardarEmprestimosFicheiro(){
-        for(Emprestimo emprestimo : emprestimos) {
-            Ficheiros.escrever(NOME_FICHEIRO,emprestimo,FORMATO);
-        }
-    }
 
-    // Método para ler uma linha do ficheiro e preencher os dados do empréstimo
-    @Override
-    public void fromLine(String line) {
-        String[] parts = line.split("\\|");
-        if (parts.length == 6) {
-            this.num = Integer.parseInt(parts[0]);
-            this.isbn = parts[1];
-            this.nif = Integer.parseInt(parts[2]);
-            this.inicio = parts[3];
-            this.devolucaoPrevista = parts[4];
-            this.devolucaoDefinitiva = parts[5];
-        } else {
-            throw new IllegalArgumentException("Formato da linha inválido: " + line);
-        }
-    }
+
 
     // Método para gerar uma string de representação do empréstimo
     @Override
@@ -311,13 +286,9 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
             }
 
         } while (!podeCriar || (cont == 1));
-        Ficheiros.escrever(NOME_FICHEIRO, newEmprestimo, FORMATO);
-        /*int sucesso = newEmprestimo.verficarEmprestimo(newEmprestimo);
-        if (sucesso == 1) {*/
+
+
         Funcionalidades.escreverString("Emprestimo registado com sucesso.");
-        /*} else if (sucesso == 0) {
-            Funcionalidades.escreverString("Erro:Emprestimo não foi registado.");
-        }*/
         return newEmprestimo;
     }
 
@@ -350,6 +321,7 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
                 Ficheiros.escrever(NOME_FICHEIRO,novoEmp,FORMATO);
             }
         }
+        return;
     }
     public static ArrayList<Emprestimo> procurarListaEmprestimos(String num){
         List<String> emprestimos;

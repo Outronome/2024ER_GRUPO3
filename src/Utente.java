@@ -6,7 +6,7 @@ import java.util.List;
  * A classe também fornece métodos para manipulação e persistência de dados de utentes em um ficheiro.
  */
 
-public class Utente implements Ficheiros.linhaConvertida {
+public class Utente{
     private int nif;
     private String nome;
     private int genero;
@@ -15,15 +15,6 @@ public class Utente implements Ficheiros.linhaConvertida {
     private static final String NOME_FICHEIRO = "utentes.txt";
     static List<Utente> utentes = new ArrayList<>();
 
-    public static List<Utente> setUtentes() {
-        utentes = Utente.lerTodosUtentes();
-        return utentes;
-    }
-    public static void guardarUtentesFicheiro(){
-        for(Utente utente : utentes) {
-            Ficheiros.escrever(NOME_FICHEIRO,utente,FORMATO);
-        }
-    }
 
     // Construtor completo para instância
     public Utente(int nif, String nome, int genero, int contacto) {
@@ -36,26 +27,7 @@ public class Utente implements Ficheiros.linhaConvertida {
     // Construtor sem argumentos (necessário para reflexão)
     public Utente() {}
 
-    @Override
-    public void fromLine(String line) {
-        // Supondo que os dados estão separados por "|"
-        String[] parts = line.split("\\|");
 
-        if (parts.length == 4) {
-            try {
-                this.nif = Integer.parseInt(parts[0]);
-                this.nome = parts[1];
-                this.genero = Integer.parseInt(parts[2]);
-                this.contacto = Integer.parseInt(parts[3]);
-            } catch (NumberFormatException e) {
-                // Tratamento para garantir que os dados sejam válidos
-                System.err.println("Erro de formato em linha: " + line);
-                e.printStackTrace();
-            }
-        } else {
-            throw new IllegalArgumentException("Formato da linha inválido: " + line);
-        }
-    }
 
     @Override
     public String toString() {
@@ -100,18 +72,7 @@ public class Utente implements Ficheiros.linhaConvertida {
             }
         }
         return false;
-        /*int sucesso = 0;
-        //verifica se existe no ficheiro
-        List<String> utentes = Ficheiros.ler(NOME_FICHEIRO);
-        for (String utente : utentes) {
-            String[] partes = utente.split("\\|");  // Usa expressão regular para dividir por "|"
-            int nifCompararLista = Integer.parseInt(partes[0].trim());
-            if (newUtente.nif != nifCompararLista) {
-                sucesso = 1;
-                break;
-            }
-        }
-        return sucesso;*/
+
     }
 
     /**
@@ -270,9 +231,7 @@ public class Utente implements Ficheiros.linhaConvertida {
      *
      * @return O utente registrado.
      */
-    private void adicionarUtente(Utente utente){
-        utentes.add(utente);
-    }
+
 
     public static Utente registar() {
         Utente tempUtente = new Utente(0, "", 0, 0);
@@ -299,12 +258,12 @@ public class Utente implements Ficheiros.linhaConvertida {
                 first = false;
             }
         } while (utente != null && cont == 1);
-        //colocar na lista em memoria
-        newUtente.adicionarUtente(newUtente);
-        //guardar logo no ficheiro se estiver ligado o guardar automatico
-        //Ficheiros.escrever(NOME_FICHEIRO, newUtente, FORMATO);
+
+
+
         boolean sucesso = newUtente.verficarUtente(newUtente);
         if (sucesso) {
+            Ficheiros.escrever(NOME_FICHEIRO, newUtente, FORMATO);
             Funcionalidades.escreverString("Utente registado com sucesso.");
         } else  {
             Funcionalidades.escreverString("Erro:Utente não foi registado.");

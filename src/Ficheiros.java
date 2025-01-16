@@ -219,7 +219,7 @@ public class Ficheiros<T> {
             while ((linha = reader.readLine()) != null) {
                 // Verifica se a linha contém a chave de busca (ISBN)
                 if (linha.contains(elementoPesquisa)) {
-                    System.out.println("Registo Anterior: " + linha);
+
                     // Se uma nova linha for fornecida, substitui a linha inteira
                     if (novaLinha != null && !novaLinha.isEmpty()) {
                         linha = novaLinha;
@@ -227,7 +227,7 @@ public class Ficheiros<T> {
                         // Caso contrário, substitui apenas a palavra
                         if (palavraAntiga != null && palavraNova != null && !palavraAntiga.isEmpty()) {
                             linha = linha.replaceAll("\\b" + palavraAntiga + "\\b", palavraNova);
-                            System.out.println("Registo Atualizado: " + linha);
+
                         }
                     }
                 }
