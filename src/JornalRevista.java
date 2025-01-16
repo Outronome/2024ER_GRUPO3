@@ -1,7 +1,7 @@
 import java.util.List;
 
 // Classe JornalRevista, que herda de Obra
-public class JornalRevista extends Obra {
+public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
     public static final String NOME_FICHEIRO = "JornalRevista.txt";
     private String issn;
     private String dataPublicacao;
@@ -12,6 +12,35 @@ public class JornalRevista extends Obra {
         this.issn = issn;
         this.dataPublicacao = dataPublicacao;
     }
+    public JornalRevista() {
+        super("", "", ""); // Passando valores padrão para os campos obrigatórios da superclasse
+    }
+    // Implementação do método fromLine da interface
+    @Override
+    public void fromLine(String line) {
+        String[] parts = line.split("\\|");
+        if (parts.length == 5) {
+            this.setTitulo(parts[0]);
+            this.setEditora(parts[1]);
+            this.setCategoria(parts[2]);
+            this.setIssn(parts[3]);
+            this.setDataPublicacao(parts[4]);
+        } else {
+            throw new IllegalArgumentException("Formato da linha inválido: " + line);
+        }
+    }
+
+    // Método toString para retornar uma representação do objeto
+    @Override
+    public String toString() {
+        return String.format("JornalRevista {Titulo='%s', Editora='%s', Categoria='%s', ISSN='%s', Data Publicação='%s'}",
+                getTitulo(), getEditora(), getCategoria(), getIssn(), getDataPublicacao());
+    }
+    public static List<JornalRevista> lerTodosJornaisRevistas() {
+        Ficheiros<JornalRevista> reader = new Ficheiros<>(JornalRevista.class);
+        return reader.lerMemoria(NOME_FICHEIRO);
+    }
+
 
     // Getters e Setters
     public String getIssn() {

@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class Livro extends Obra {
+public class Livro extends Obra implements Ficheiros.linhaConvertida{
     public static final String NOME_FICHEIRO = "livros.txt";
     private int anoEdicao;
     private String isbn;
@@ -12,6 +12,37 @@ public class Livro extends Obra {
         this.anoEdicao = anoEdicao;
         this.isbn = isbn;
         this.autores = autores;
+    }
+
+    // Construtor sem argumentos (necessário para o fromLine)
+    public Livro() {
+        super("", "", "");
+    }
+
+    // Implementação do método fromLine da interface
+    @Override
+    public void fromLine(String line) {
+        String[] parts = line.split("\\|");
+        if (parts.length == 6) { // Certificando-se que a linha tem todos os campos
+            this.setTitulo(parts[0]);
+            this.setEditora(parts[1]);
+            this.setCategoria(parts[2]);
+            this.setAnoEdicao(Integer.parseInt(parts[3]));
+            this.setIsbn(parts[4]);
+            this.setAutores(parts[5]);
+        } else {
+            throw new IllegalArgumentException("Formato da linha inválido: " + line);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Livro {Titulo='%s', Editora='%s', Categoria='%s', Ano de Edição=%d, ISBN='%s', Autores='%s'}",
+                getTitulo(), getEditora(), getCategoria(), getAnoEdicao(), getIsbn(), getAutores());
+    }
+    public static List<Livro> lerTodosLivros() {
+        Ficheiros<Livro> reader = new Ficheiros<>(Livro.class);
+        return reader.lerMemoria(NOME_FICHEIRO);
     }
 
     // Getters e Setters

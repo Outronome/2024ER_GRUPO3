@@ -3,7 +3,54 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
-public class Funcionalidades {
+public class Funcionalidades <T> {
+    public void exibirPaginado(List<T> lista, int tamanhoPagina) {
+        if (lista.isEmpty()) {
+            Funcionalidades.escreverString("Nenhum registro encontrado.");
+            return;
+        }
+
+        int totalRegistros = lista.size();
+        int paginaAtual = 0; // Índice da página atual
+        int opcao;
+
+        do {
+            int inicio = paginaAtual * tamanhoPagina;
+            int fim = Math.min(inicio + tamanhoPagina, totalRegistros);
+
+            // Mostrar registros da página atual
+            Funcionalidades.escreverString("\n===== Exibindo registros (" + (inicio + 1) + " a " + fim + " de " + totalRegistros + ") =====");
+            for (int i = inicio; i < fim; i++) {
+                T objeto = lista.get(i);
+                Funcionalidades.escreverString("Índice " + (i + 1) + ":");
+                Funcionalidades.escreverString(objeto.toString()); // Chama `toString` do objeto genérico
+                Funcionalidades.escreverString("-------------------------");
+            }
+
+            // Determinar opções de navegação
+            if (fim < totalRegistros && inicio > 0) {
+                // Opções para avançar e retroceder
+                opcao = Funcionalidades.lerInt("1: Próximos registros | 2: Retroceder registros | 0: Sair");
+            } else if (fim < totalRegistros) {
+                // Somente opção para avançar
+                opcao = Funcionalidades.lerInt("1: Próximos registros | 0: Sair");
+            } else if (inicio > 0) {
+                // Somente opção para retroceder
+                opcao = Funcionalidades.lerInt("2: Retroceder registros | 0: Sair");
+            } else {
+                // Nenhuma navegação necessária
+                opcao = Funcionalidades.lerInt("0: Sair");
+            }
+
+            // Atualizar página com base na opção escolhida
+            if (opcao == 1) {
+                paginaAtual++;
+            } else if (opcao == 2) {
+                paginaAtual--;
+            }
+
+        } while (opcao != 0);
+    }
     public static int lerInteiros(int range, String[] pergunta){
         Scanner ler = new Scanner(System.in);
         int val = -1  ;

@@ -6,7 +6,7 @@ import java.util.List;
  * A classe também fornece métodos para manipulação e persistência de dados de utentes em um ficheiro.
  */
 
-public class Utente {
+public class Utente implements Ficheiros.linhaConvertida {
     private int nif;
     private String nome;
     private int genero;
@@ -14,6 +14,52 @@ public class Utente {
     private static final String FORMATO = "%d|%s|%d|%d%n";
     private static final String NOME_FICHEIRO = "utentes.txt";
 
+    // Construtor completo para instância
+    public Utente(int nif, String nome, int genero, int contacto) {
+        this.nif = nif;
+        this.nome = nome;
+        this.genero = genero;
+        this.contacto = contacto;
+    }
+
+    // Construtor sem argumentos (necessário para reflexão)
+    public Utente() {}
+
+    @Override
+    public void fromLine(String line) {
+        // Supondo que os dados estão separados por "|"
+        String[] parts = line.split("\\|");
+
+        if (parts.length == 4) {
+            try {
+                this.nif = Integer.parseInt(parts[0]);
+                this.nome = parts[1];
+                this.genero = Integer.parseInt(parts[2]);
+                this.contacto = Integer.parseInt(parts[3]);
+            } catch (NumberFormatException e) {
+                // Tratamento para garantir que os dados sejam válidos
+                System.err.println("Erro de formato em linha: " + line);
+                e.printStackTrace();
+            }
+        } else {
+            throw new IllegalArgumentException("Formato da linha inválido: " + line);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "nif=" + nif +
+                ", nome='" + nome + '\'' +
+                ", genero=" + genero +
+                ", contacto=" + contacto +
+                '}';
+    }
+
+    public static List<Utente> lerTodosUtentes() {
+        Ficheiros<Utente> reader = new Ficheiros<>(Utente.class);
+        return reader.lerMemoria(NOME_FICHEIRO);
+    }
     /**
      * Construtor da classe Utente.
      *
@@ -23,12 +69,6 @@ public class Utente {
      * @param contacto Contato telefônico do utente.
      */
 
-    public Utente(int nif, String nome, int genero, int contacto) {
-        this.nif = nif;
-        this.nome = nome;
-        this.genero = genero;
-        this.contacto = contacto;
-    }
 
     /**
      * Verifica se um novo utente já existe no ficheiro de utentes.

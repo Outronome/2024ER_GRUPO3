@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 
-public class Reserva {
+public class Reserva implements Ficheiros.linhaConvertida{
     String num;
     int nif;
     List<String> obras;
@@ -15,6 +15,58 @@ public class Reserva {
     String obra;
     private static String FORMATO = "%s|%s|%s|%s|%s|%s%n";
     private static String NOME_FICHEIRO = "reservas.txt";
+
+    public Reserva(String num, int nif, String obra, String inicio, String registo, String fim) {
+        this.num = num;
+        this.nif = nif;
+        this.obra = obra;
+        this.inicio = inicio;
+        this.registo = registo;
+        this.fim = fim;
+    }
+    public Reserva() {}
+
+    @Override
+    public void fromLine(String line) {
+        // Supondo que os dados estão separados por "|"
+        String[] parts = line.split("\\|");
+
+        if (parts.length == 6) {
+            try {
+                this.num = parts[0];
+                this.nif = Integer.parseInt(parts[1]);
+                this.obra = parts[2];
+                this.inicio = parts[3];
+                this.registo = parts[4];
+                this.fim = parts[5];
+            } catch (NumberFormatException e) {
+                // Tratamento para garantir que os dados sejam válidos
+                System.err.println("Erro de formato em linha: " + line);
+                e.printStackTrace();
+            }
+        } else {
+            throw new IllegalArgumentException("Formato da linha inválido: " + line);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Reserva{" +
+                "num='" + num + '\'' +
+                ", nif=" + nif +
+                ", obra='" + obra + '\'' +
+                ", inicio='" + inicio + '\'' +
+                ", registo='" + registo + '\'' +
+                ", fim='" + fim + '\'' +
+                '}';
+    }
+
+    // Método para ler todas as reservas
+    public static List<Reserva> lerTodosReservas() {
+        Ficheiros<Reserva> reader = new Ficheiros<>(Reserva.class);
+        return reader.lerMemoria(NOME_FICHEIRO);
+    }
+
 
     public String getNum() {
         return num;
@@ -64,14 +116,7 @@ public class Reserva {
         this.obra = obra;
     }
 
-    public Reserva(String num, int nif, String obra, String inicio, String registo, String fim) {
-        this.num = num;
-        this.nif = nif;
-        this.obra = obra;
-        this.inicio = inicio;
-        this.registo = registo;
-        this.fim = fim;
-    }
+
     public Reserva registar () {
         num= "R"+Ficheiros.atualizarNum(NOME_FICHEIRO);
         Reserva tempReserva = new Reserva(num,0,null,null,null,null);
