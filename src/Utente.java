@@ -1,5 +1,5 @@
+import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * Classe que representa um Utente (usuário), armazenando informações como NIF, nome, gênero e contato.
@@ -13,6 +13,12 @@ public class Utente implements Ficheiros.linhaConvertida {
     private int contacto;
     private static final String FORMATO = "%d|%s|%d|%d%n";
     private static final String NOME_FICHEIRO = "utentes.txt";
+    static List<Utente> utentes = new ArrayList<>();
+
+    public static List<Utente> getUtentes() {
+        utentes = Utente.lerTodosUtentes();
+        return utentes;
+    }
 
     // Construtor completo para instância
     public Utente(int nif, String nome, int genero, int contacto) {
@@ -60,6 +66,7 @@ public class Utente implements Ficheiros.linhaConvertida {
         Ficheiros<Utente> reader = new Ficheiros<>(Utente.class);
         return reader.lerMemoria(NOME_FICHEIRO);
     }
+
     /**
      * Construtor da classe Utente.
      *

@@ -18,6 +18,7 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
     private static final String FORMATO = "%d|%s|%d|%s|%s|%s%n";//falta fazer
     private static final String NOME_FICHEIRO = "emprestimos.txt";
     static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    static List<Emprestimo> emprestimos = new ArrayList<>();
 
     public Emprestimo(int num, String isbn, int nif,
                       String inicio, String devolucaoPrevista, String devolucaoDefinitiva) {
@@ -30,6 +31,11 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
     }
     // Construtor sem argumentos
     public Emprestimo() {}
+
+    public static List<Emprestimo> getEmprestimos() {
+        emprestimos = Emprestimo.lerTodosEmprestimos();
+        return emprestimos;
+    }
 
     // Método para ler uma linha do ficheiro e preencher os dados do empréstimo
     @Override

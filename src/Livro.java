@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Livro extends Obra implements Ficheiros.linhaConvertida{
@@ -6,6 +7,13 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
     private String isbn;
     private String autores;
     private static String FORMATO = "%s|%s|%s|%d|%s|%s%n";
+    static List<Livro> livros = new ArrayList<>();
+
+    public static List<Livro> getLivros() {
+        livros = Livro.lerTodosLivros();
+        return livros;
+    }
+
     // Construtor
     public Livro(String titulo, String editora, String categoria, int anoEdicao, String isbn, String autores) {
         super(titulo, editora, categoria);

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 // Classe JornalRevista, que herda de Obra
@@ -6,6 +7,7 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
     private String issn;
     private String dataPublicacao;
     private static String FORMATO = "%s|%s|%s|%s|%s%n";
+    private static final List<JornalRevista> jornaisRevistas = new ArrayList<>();
     // Construtor
     public JornalRevista(String titulo, String editora, String categoria, String issn, String dataPublicacao) {
         super(titulo, editora, categoria);
@@ -15,6 +17,12 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
     public JornalRevista() {
         super("", "", ""); // Passando valores padrão para os campos obrigatórios da superclasse
     }
+
+    public static List<JornalRevista> getJornaisRevistas() {
+        List<JornalRevista> jornaisRevistas = JornalRevista.lerTodosJornaisRevistas();
+        return jornaisRevistas;
+    }
+
     // Implementação do método fromLine da interface
     @Override
     public void fromLine(String line) {

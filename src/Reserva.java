@@ -15,6 +15,7 @@ public class Reserva implements Ficheiros.linhaConvertida{
     String obra;
     private static String FORMATO = "%s|%s|%s|%s|%s|%s%n";
     private static String NOME_FICHEIRO = "reservas.txt";
+    static List<Reserva> reservas = new ArrayList<>();
 
     public Reserva(String num, int nif, String obra, String inicio, String registo, String fim) {
         this.num = num;
@@ -25,6 +26,11 @@ public class Reserva implements Ficheiros.linhaConvertida{
         this.fim = fim;
     }
     public Reserva() {}
+
+    public static List<Reserva> getReservas() {
+        reservas = Reserva.lerTodosReservas();
+        return reservas;
+    }
 
     @Override
     public void fromLine(String line) {
