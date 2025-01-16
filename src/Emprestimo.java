@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Objects;
@@ -91,6 +92,9 @@ public class Emprestimo {
     }
 
     public String getDevolucaoDefinitiva() {
+        if(devolucaoPrevista == inicio) {
+            return "Ainda não foi entregue";
+        }
         return devolucaoDefinitiva;
     }
 
@@ -305,7 +309,107 @@ public class Emprestimo {
                 Ficheiros.escrever(NOME_FICHEIRO,novoEmp,FORMATO);
             }
         }
+    }
+    public static ArrayList<Emprestimo> procurarListaEmprestimos(String num){
+        List<String> emprestimos;
+        ArrayList<Emprestimo> listaEmprestimos = new ArrayList<>();
+        emprestimos = ler();
+        for (String emprestimo : emprestimos) {
+            String[] partes = emprestimo.split("\\|");
+            String[] partesFiltradas = { partes[0] };
+            for (String parte : partesFiltradas) {
+                if (parte.equals(num)){
+                    Emprestimo emprestimoEncontrado = new Emprestimo(Integer.parseInt(partes[0]), partes[1], Integer.parseInt(partes[2]), partes[3], partes[4], partes[5]);
+                    listaEmprestimos.add(emprestimoEncontrado);
+                }
+            }
+        }
+        if (listaEmprestimos.isEmpty()) {
+            System.out.println("Reserva não encontrada");
+            return null;
+        }
+        return listaEmprestimos;
+        //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro livro
+    }
+    public void pesquisarEmprestimo(String num) {
+        ArrayList<Emprestimo> emprestimos = procurarListaEmprestimos(num);
 
+        if (emprestimos.isEmpty()) {
+            System.out.println("Reserva não encontrado.");
+            return;
+        }
+        for (Emprestimo emprestimo : emprestimos) {
+            String[] reservaEscrever =  {   "===== Detalhes do Livro =====",
+                    "Numero de Emprestimo: " + emprestimo.getNum(),
+                    "Obra do Emprestimo: " + emprestimo.getObra(),
+                    "Data de inicio do Emprestimo: " + emprestimo.getInicio(),
+                    "Data de registo da Emprestimo: " + emprestimo.getDevolucaoPrevista(),
+                    "Data de Fim da Emprestimo: " + emprestimo.getDevolucaoDefinitiva(),
+                    "============================="
+            };
+            Funcionalidades.escreverStrings(reservaEscrever);
+        }
+    }
 
+    /*public void mostrarReservas(){
+        List<String> revervas = ler();
+        for (String reverva : revervas) {
+            Funcionalidades.lerInt("Reserva " + reverva + ":");
+        }
+    }*/
+    public void mostrarEmprestimos() {
+        List<String> emprestimos = ler();
+        if (emprestimos.isEmpty()) {
+            Funcionalidades.escreverString("Nenhuma reserva encontrada.");
+            return;
+        }
+
+        int totalEmprestimos = emprestimos.size();
+        int paginaAtual = 0; // Índice da página atual
+        int tamanhoPagina = 5; // Mostrar até 50 registros por vez
+        int opcao;
+
+        do {
+            int inicio = paginaAtual * tamanhoPagina;
+            int fim = Math.min(inicio + tamanhoPagina, totalEmprestimos);
+
+            // Mostrar reservas da página atual
+            Funcionalidades.escreverString("\n===== Exibindo reservas (" + (inicio + 1) + " a " + fim + " de " + totalEmprestimos + ") =====");
+            for (int i = inicio; i < fim; i++) {
+                String reserva = emprestimos.get(i);
+                String[] partes = reserva.split("\\|");
+                Funcionalidades.escreverString("Indice " + (i + 1) + ":");
+                Funcionalidades.escreverString("Numero do Emprestimo: " + partes[0]);
+                Funcionalidades.escreverString("ISBN: " + partes[1]);
+                Funcionalidades.escreverString("NIF: " + partes[2]);
+                Funcionalidades.escreverString("Inicio: " + partes[3]);
+                Funcionalidades.escreverString("Devolução Prevista: " + partes[4]);
+                Funcionalidades.escreverString("Devolução Definitiva: " + partes[5]);
+                Funcionalidades.escreverString("-------------------------");
+            }
+
+            // Determinar opções de navegação
+            if (fim < totalEmprestimos && inicio > 0) {
+                // Opções para avançar e retroceder
+                opcao = Funcionalidades.lerInt("1: Próximas 5 reservas | 2: Retroceder 5 reservas | 0: Sair");
+            } else if (fim < totalEmprestimos) {
+                // Somente opção para avançar
+                opcao = Funcionalidades.lerInt("1: Próximas 5 reservas | 0: Sair");
+            } else if (inicio > 0) {
+                // Somente opção para retroceder
+                opcao = Funcionalidades.lerInt("2: Retroceder 5 reservas | 0: Sair");
+            } else {
+                // Nenhuma navegação necessária
+                opcao = Funcionalidades.lerInt("0: Sair");
+            }
+
+            // Atualizar página com base na opção escolhida
+            if (opcao == 1) {
+                paginaAtual++;
+            } else if (opcao == 2) {
+                paginaAtual--;
+            }
+
+        } while (opcao != 0);
     }
 }

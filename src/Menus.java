@@ -450,11 +450,12 @@ public class Menus {
                 "2. Editar Empréstimo",
                 "3. Visualizar Empréstimo",
                 "4. Converter Reserva para Empréstimo",
+                "5. Procurar Empréstimo",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
         do {
-            op = Funcionalidades.lerOpcoesMenus(3,menu);
+            op = Funcionalidades.lerOpcoesMenus(4,menu);
             System.out.printf(String.valueOf(op));
             switch (op) {
                 case 1:
@@ -468,12 +469,16 @@ public class Menus {
                     break;
                 case 3:
                     System.out.println("Escolheu: Visualizar Empréstimo");
-                    //faz o pedido e a leitura do número ate encontrar o Empréstimo
-                    //chama a função visualizar com o número do Empréstimo
+                    emprestimo.mostrarEmprestimos();
                     break;
                 case 4:
                     System.out.println("Escolheu: Converter Reserva para Empréstimo");
                     emprestimo.converterReserva(Funcionalidades.lerString("Introduza o código da reserva:"));
+                case 5:
+                    System.out.println("Escolheu: Procurar Emprestimo");
+                    String num2 = Funcionalidades.lerString("Introduza o numero do Emprestimo:");
+                    emprestimo.pesquisarEmprestimo(num2);
+                    break;
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");
