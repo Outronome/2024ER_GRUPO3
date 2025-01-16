@@ -14,7 +14,7 @@ import java.util.Scanner;
  * @param <T> O tipo de objeto manipulado por esta classe.
  */
 
-public abstract class Ficheiros<T> {
+public class Ficheiros<T> {
 
     /**
      * Obtém os dados de um objeto invocando o método "getData" via reflexão.
@@ -23,6 +23,52 @@ public abstract class Ficheiros<T> {
      * @param <T>    O tipo do objeto.
      * @return Array de objetos contendo os dados retornados pelo método "getData" ou um array vazio se ocorrer um erro.
      */
+
+    private final Class<T> clazz;
+
+    public Ficheiros(Class<T> clazz) {
+        this.clazz = clazz;
+    }
+
+    public List<T> lerMemoria(String nomeFicheiro) {
+        String bibliotecaAtual = Biblioteca.getBibliotecaAtual();
+        nomeFicheiro = bibliotecaAtual + "\\" + nomeFicheiro;
+        List<T> objectList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(nomeFicheiro))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                T obj = linhaObjeto(line);
+                if (obj != null) {
+                    objectList.add(obj);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return objectList;
+    }
+
+    private T linhaObjeto(String line) {
+        try {
+            // Aqui pode ser necessário adaptar o mapeamento do `line` para o objeto `T`
+            T instance = clazz.getDeclaredConstructor().newInstance();
+
+            // Exemplo: Mapear o conteúdo da linha para os campos do objeto
+            // Assumindo que o objeto T tem um método `fromLine`
+            if (instance instanceof linhaConvertida) {
+                ((linhaConvertida) instance).fromLine(line);
+            }
+            return instance;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public interface linhaConvertida {
+        void fromLine(String line);
+    }
+
     private static <T> Object[] getObjectData(T object) {
         try {
 

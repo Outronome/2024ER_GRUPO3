@@ -89,6 +89,10 @@ public class Obra {
         return true;
     }
 
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
    /* protected boolean validarIsbn10(String isbn) {
         int soma = 0;
 

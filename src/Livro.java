@@ -1,17 +1,61 @@
+import java.util.ArrayList;
 import java.util.List;
 
-public class Livro extends Obra {
+public class Livro extends Obra implements Ficheiros.linhaConvertida{
     public static final String NOME_FICHEIRO = "livros.txt";
     private int anoEdicao;
     private String isbn;
     private String autores;
     private static String FORMATO = "%s|%s|%s|%d|%s|%s%n";
+    static List<Livro> livros = new ArrayList<>();
+
+    public static List<Livro> setLivros() {
+        livros = Livro.lerTodosLivros();
+        return livros;
+    }
+    public static void guardarLivrosFicheiro(){
+        for(Livro livro : livros) {
+            Ficheiros.escrever(NOME_FICHEIRO,livro,FORMATO);
+        }
+    }
+
     // Construtor
     public Livro(String titulo, String editora, String categoria, int anoEdicao, String isbn, String autores) {
         super(titulo, editora, categoria);
         this.anoEdicao = anoEdicao;
         this.isbn = isbn;
         this.autores = autores;
+    }
+
+    // Construtor sem argumentos (necessário para o fromLine)
+    public Livro() {
+        super("", "", "");
+    }
+
+    // Implementação do método fromLine da interface
+    @Override
+    public void fromLine(String line) {
+        String[] parts = line.split("\\|");
+        if (parts.length == 6) { // Certificando-se que a linha tem todos os campos
+            this.setTitulo(parts[0]);
+            this.setEditora(parts[1]);
+            this.setCategoria(parts[2]);
+            this.setAnoEdicao(Integer.parseInt(parts[3]));
+            this.setIsbn(parts[4]);
+            this.setAutores(parts[5]);
+        } else {
+            throw new IllegalArgumentException("Formato da linha inválido: " + line);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Livro {Titulo='%s', Editora='%s', Categoria='%s', Ano de Edição=%d, ISBN='%s', Autores='%s'}",
+                getTitulo(), getEditora(), getCategoria(), getAnoEdicao(), getIsbn(), getAutores());
+    }
+    public static List<Livro> lerTodosLivros() {
+        Ficheiros<Livro> reader = new Ficheiros<>(Livro.class);
+        return reader.lerMemoria(NOME_FICHEIRO);
     }
 
     // Getters e Setters
@@ -50,10 +94,20 @@ public class Livro extends Obra {
         return new Object[]{getTitulo(), getEditora(), getCategoria(), getAnoEdicao(),getIsbn(), getAutores()};
     }
 
-    private int verificarLivro(Livro newLivro){
+    private boolean verficarLivro(Livro livro){
+        if (livros == null || livros.isEmpty()) {
+            return false;
+        }
 
-        int sucesso = 0;
-        List<String> livros = Ficheiros.ler(NOME_FICHEIRO);
+        for (Livro livroProcurar : livros) {
+            if (livroProcurar.getIsbn().equals(livro.isbn)) {
+                return true;
+            }
+        }
+        return false;
+
+        /*int sucesso = 0;
+        List<String> livros = Ficheiros.ler(Biblioteca.bibliotecaAtual+"\\"+NOME_FICHEIRO);
         for (String livro : livros) {
             String[] partes = livro.split("\\|");
             if (partes.length >= 5) {
@@ -64,8 +118,12 @@ public class Livro extends Obra {
                 }
             }
         }
-        return sucesso;
-            }
+        return sucesso;*/
+    }
+
+    private void adicionarLivro(Livro livro){
+        livros.add(livro);
+    }
 
     public static Livro registar(){
         Livro tempLivro = new Livro("","","",0,"","");
@@ -77,18 +135,21 @@ public class Livro extends Obra {
         tempLivro.introAutores();
 
         Livro newLivro = new Livro(tempLivro.titulo, tempLivro.editora, tempLivro.categoria, tempLivro.anoEdicao,tempLivro.isbn, tempLivro.autores);
-        Ficheiros.escrever(NOME_FICHEIRO,newLivro,FORMATO);
-        int sucesso = newLivro.verificarLivro(newLivro);
-        if (sucesso == 1){
-            Funcionalidades.escreverString("Livro registado com sucesso.");
-        } else if (sucesso == 0) {
-            Funcionalidades.escreverString("Livro não foi registado.");
+
+        //guardar logo no ficheiro se estiver ligado o guardar automatico
+        //Ficheiros.escrever(NOME_FICHEIRO,newLivro,FORMATO);
+        //colocar na lista em memoria
+        newLivro.adicionarLivro(newLivro);
+        boolean sucesso = newLivro.verficarLivro(newLivro);
+        if (sucesso){
+            Funcionalidades.escreverString("Livro guardado com sucesso.");
+        } else{
+            Funcionalidades.escreverString("Erro:Livro não foi guardado.");
         }
         return newLivro;
     }
 
     public static void eliminar(){
-
         String isbneliminado = Funcionalidades.lerString("Introduza o Isbn do livro que deseja apagar:");
         if (Reserva.verificarDependencias(isbneliminado)){
         Ficheiros.apagar(NOME_FICHEIRO,isbneliminado);
@@ -96,7 +157,7 @@ public class Livro extends Obra {
         else {
             System.out.println("O livro tem Reservas/Emprestimos pendentes.");
         }
-        }
+    }
 
 
 

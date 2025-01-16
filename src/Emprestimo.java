@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import static java.time.LocalDate.parse;
 
-public class Emprestimo {
+public class Emprestimo implements Ficheiros.linhaConvertida{
     int num;
     String isbn;
     int nif;
@@ -18,6 +18,7 @@ public class Emprestimo {
     private static final String FORMATO = "%d|%s|%d|%s|%s|%s%n";//falta fazer
     private static final String NOME_FICHEIRO = "emprestimos.txt";
     static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    static List<Emprestimo> emprestimos = new ArrayList<>();
 
     public Emprestimo(int num, String isbn, int nif,
                       String inicio, String devolucaoPrevista, String devolucaoDefinitiva) {
@@ -27,6 +28,45 @@ public class Emprestimo {
         this.inicio = inicio;
         this.devolucaoPrevista = devolucaoPrevista;
         this.devolucaoDefinitiva = devolucaoDefinitiva;
+    }
+    // Construtor sem argumentos
+    public Emprestimo() {}
+
+    public static List<Emprestimo> setEmprestimos() {
+        emprestimos = Emprestimo.lerTodosEmprestimos();
+        return emprestimos;
+    }
+    public static void guardarEmprestimosFicheiro(){
+        for(Emprestimo emprestimo : emprestimos) {
+            Ficheiros.escrever(NOME_FICHEIRO,emprestimo,FORMATO);
+        }
+    }
+
+    // Método para ler uma linha do ficheiro e preencher os dados do empréstimo
+    @Override
+    public void fromLine(String line) {
+        String[] parts = line.split("\\|");
+        if (parts.length == 6) {
+            this.num = Integer.parseInt(parts[0]);
+            this.isbn = parts[1];
+            this.nif = Integer.parseInt(parts[2]);
+            this.inicio = parts[3];
+            this.devolucaoPrevista = parts[4];
+            this.devolucaoDefinitiva = parts[5];
+        } else {
+            throw new IllegalArgumentException("Formato da linha inválido: " + line);
+        }
+    }
+
+    // Método para gerar uma string de representação do empréstimo
+    @Override
+    public String toString() {
+        return String.format("Emprestimo {Num=%d, ISBN='%s', NIF=%d, Início='%s', Devolução Prevista='%s', Devolução Definitiva='%s'}",
+                num, isbn, nif, inicio, devolucaoPrevista, devolucaoDefinitiva);
+    }
+    public static List<Emprestimo> lerTodosEmprestimos() {
+        Ficheiros<Emprestimo> reader = new Ficheiros<>(Emprestimo.class);
+        return reader.lerMemoria(NOME_FICHEIRO);
     }
 
     //ler toda a informação de um emprestimo e colocar em memória

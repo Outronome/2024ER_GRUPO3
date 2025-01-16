@@ -1,17 +1,62 @@
+import java.util.ArrayList;
 import java.util.List;
 
 // Classe JornalRevista, que herda de Obra
-public class JornalRevista extends Obra {
+public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
     public static final String NOME_FICHEIRO = "JornalRevista.txt";
     private String issn;
     private String dataPublicacao;
     private static String FORMATO = "%s|%s|%s|%s|%s%n";
+    static List<JornalRevista> jornaisRevistas = new ArrayList<>();
     // Construtor
     public JornalRevista(String titulo, String editora, String categoria, String issn, String dataPublicacao) {
         super(titulo, editora, categoria);
         this.issn = issn;
         this.dataPublicacao = dataPublicacao;
     }
+    public JornalRevista() {
+        super("", "", ""); // Passando valores padrão para os campos obrigatórios da superclasse
+    }
+
+    public static List<JornalRevista> setJornaisRevistas() {
+        jornaisRevistas = JornalRevista.lerTodosJornaisRevistas();
+        return jornaisRevistas;
+    }
+    public static void guardarJornaisRevistasFicheiro(){
+        for(JornalRevista jornalRevista : jornaisRevistas) {
+            Ficheiros.escrever(NOME_FICHEIRO,jornalRevista,FORMATO);
+        }
+    }
+    private void adicionarLivro(JornalRevista jornalRevista){
+        jornaisRevistas.add(jornalRevista);
+    }
+
+    // Implementação do método fromLine da interface
+    @Override
+    public void fromLine(String line) {
+        String[] parts = line.split("\\|");
+        if (parts.length == 5) {
+            this.setTitulo(parts[0]);
+            this.setEditora(parts[1]);
+            this.setCategoria(parts[2]);
+            this.setIssn(parts[3]);
+            this.setDataPublicacao(parts[4]);
+        } else {
+            throw new IllegalArgumentException("Formato da linha inválido: " + line);
+        }
+    }
+
+    // Método toString para retornar uma representação do objeto
+    @Override
+    public String toString() {
+        return String.format("JornalRevista {Titulo='%s', Editora='%s', Categoria='%s', ISSN='%s', Data Publicação='%s'}",
+                getTitulo(), getEditora(), getCategoria(), getIssn(), getDataPublicacao());
+    }
+    public static List<JornalRevista> lerTodosJornaisRevistas() {
+        Ficheiros<JornalRevista> reader = new Ficheiros<>(JornalRevista.class);
+        return reader.lerMemoria(NOME_FICHEIRO);
+    }
+
 
     // Getters e Setters
     public String getIssn() {

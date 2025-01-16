@@ -74,14 +74,14 @@ public class Menus {
                 default:
                     System.out.println("Abrir com a biblioteca: "+pastas.get(op-4));
                     biblioteca.setBibliotecaAtual(pastas.get(op-4));
-
+                    //Carregar todos os dados para as respetivas listas
+                    Funcionalidades.definirTudo();
                     return;
 
             }
         }while(op<4 || op>indice);
 
         //abre com a respetiva biblioteca
-
     }
 
     public void menuPrincipal() throws IOException {
@@ -121,6 +121,7 @@ public class Menus {
                     menuReserva();
                     break;
                 case 0:
+                    Funcionalidades.guardarTudo();
                     System.out.println("Sair");
                     break;
                 default:
