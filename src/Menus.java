@@ -269,7 +269,7 @@ public class Menus {
                     break;
                 case 4:
                     System.out.println("Escolheu: Ler JornalRevista");
-                    String issn2 = Funcionalidades.lerString("Introduza o ISSN do Jornal/Revista que deseja visualizar:");
+                    String issn2 = Funcionalidades.lerString("Introduza o ISSN do Jornal ou Revista que deseja visualizar:");
                     Livro.mostrarLivroPorISBN(issn2);
                     break;
                 case 0:
@@ -376,7 +376,7 @@ public class Menus {
                         }
 
                     } while (utente == null && cont == 1);
-
+                    menuUtenteAlterar();
                     //apaga o utente de memoria
                     break;
                     //MenuUtentePesquisa(0);
@@ -455,6 +455,10 @@ public class Menus {
                 "3. Visualizar Empréstimo",
                 "4. Converter Reserva para Empréstimo",
                 "5. Procurar Empréstimo",
+                "6. Verificar atraso",
+                "7. Item mais requisitado",
+                "8. Tempo médio de empréstimos",
+                "9. Numero de empréstimos",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
@@ -468,8 +472,8 @@ public class Menus {
                     break;
                 case 2:
                     System.out.println("Escolheu: Editar Empréstimo");
-                    //faz o pedido e a leitura do número ate encontrar o Empréstimo
-                    menuEmprestimoEditar();
+                    String num = Funcionalidades.lerString("Introduza o numero do empréstimo:");
+                    menuEmprestimoEditar(num);
                     break;
                 case 3:
                     System.out.println("Escolheu: Visualizar Empréstimo");
@@ -483,6 +487,18 @@ public class Menus {
                     String num2 = Funcionalidades.lerString("Introduza o numero do Emprestimo:");
                     emprestimo.pesquisarEmprestimo(num2);
                     break;
+                case 6:
+                    System.out.println("Escolheu: Verificar atraso");
+                    Emprestimo.listarUtentesComAtraso(Funcionalidades.lerInt("Introduza o numero de dias dos atrasos:"));
+                case 7:
+                    System.out.println("Escolheu: Item mais requisitado");
+                    Emprestimo.apresentarItemMaisRequisitado();
+                case 8:
+                    System.out.println("Escolheu: Tempo médio de empréstimos");
+                    Emprestimo.apresentarTempoMedioEmprestimos();
+                case 9:
+                    System.out.println("Escolheu: Numero de empréstimos");
+                    Emprestimo.apresentarTotalEmprestimos();
                 case 0:
                     // op = 0;
                     System.out.println("Voltar");
@@ -493,55 +509,50 @@ public class Menus {
         } while (op != 0);
     }
 
-    public static void menuEmprestimoEditar () {
+    public static void menuEmprestimoEditar (String num) {
         int op;
         String[] menu = {
                 "\n==== MENU Empréstimo Edição ====",
-                "1. Alterar o N.º Empréstimo",
-                "2. Alterar o Utente do Empréstrimo",
-                "3. Alterar o Livro do Empréstrimo",
-                "4. Alterar a Data de Início",
-                "5. Alterar a Data Prevista de Devolução",
-                "6. Alterar a Data Efetiva de Devolução",
+                "1. Alterar o Utente do Empréstrimo",
+                "2. Alterar o Livro do Empréstrimo",
+                "3. Alterar a Data de Início",
+                "4. Alterar a Data Prevista de Devolução",
+                "5. Alterar a Data Efetiva de Devolução",
                 "0. Voltar",
                 "Escolha uma opção: "
         };
         do {
             op = Funcionalidades.lerOpcoesMenus(3,menu);
             System.out.printf(String.valueOf(op));
+
             switch (op) {
                 case 1:
-                    System.out.println("Escolheu: N.º Empréstimo");
-                    // Ler o novo N.º Empréstimo
-                    // Chamar a função editar
-
+                    System.out.println("Escolheu: Utente do Empréstrimo\"");
+                    String novoUtente = Funcionalidades.lerString("Introduza o nif do Utente: ");
+                    Emprestimo.editarCampo(num,String.valueOf(Emprestimo.procurarEmprestimos(num).getNif()),novoUtente,2);
                     break;
                 case 2:
-                    System.out.println("Escolheu: Utente do Empréstrimo\"");
-                    // Ler o novo Utente do Empréstrimo"
-                    // Chamar a função editar
+                    System.out.println("Escolheu: Obra do Empréstrimo");
+                    String novaObra = Funcionalidades.lerString("Introduza o codigo da obra: ");
+                    Emprestimo.editarCampo(num,String.valueOf(Emprestimo.procurarEmprestimos(num).getObra()),novaObra,1);
+                    op ++;
                     break;
                 case 3:
-                    System.out.println("Escolheu: Livro do Empréstrimo");
-                    // Ler o novo Livro do Empréstrimo
-                    // Chamar a função editar
+                    System.out.println("Escolheu: Data de Início");
+                    String novaDataInic = Funcionalidades.lerString("Introduza a nova data de Inicio de empréstimo: ");
+                    Emprestimo.editarCampo(num,String.valueOf(Emprestimo.procurarEmprestimos(num).getInicio()),novaDataInic,3);
                     op ++;
                     break;
                 case 4:
-                    System.out.println("Escolheu: Data de Início");
-
+                    System.out.println("Escolheu: Data Prevista de Devolução");
+                    String novaDataPrev = Funcionalidades.lerString("Introduza a nova data Prevista: ");
+                    Emprestimo.editarCampo(num,Emprestimo.procurarEmprestimos(num).getDevolucaoPrevista(),novaDataPrev,4);
                     op ++;
                     break;
                 case 5:
-                    System.out.println("Escolheu: Data Prevista de Devolução");
-                    // Ler a nova Data Prevista de Devolução
-                    // Chamar a função editar
-                    op ++;
-                    break;
-                case 6:
                     System.out.println("Escolheu: Data Efetiva de Devolução");
-                    // Ler a nova Data Efetiva de Devolução
-                    // Chamar a função editar
+                    String novaDataDev = Funcionalidades.lerString("Introduza a nova data Definitiva: ");
+                    Emprestimo.editarCampo(num,Emprestimo.procurarEmprestimos(num).getDevolucaoDefinitiva(),novaDataDev,5);
                     op ++;
                     break;
                 case 0:

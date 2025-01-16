@@ -132,11 +132,10 @@ public class Obra {
 
         String regexISBN13 = "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9]$";
 
-       /* if(Livro.procurar(isbn)!=null){
+        if(Livro.procurar(isbn)!=null){
             System.out.println("O código do livro já existe");
             return false;
-
-        }*/
+        }
 
         if (isbn.matches(regexISBN10)) {
             return true;

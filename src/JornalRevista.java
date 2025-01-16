@@ -97,7 +97,7 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
         return new Object[]{getTitulo(), getEditora(), getCategoria(), getIssn(),getDataPublicacao()};
     }
 
-    private int verficarJornalRevista(JornalRevista newJornalRevista){
+    private int verificarJornalRevista(JornalRevista newJornalRevista){
 
         int sucesso = 0;
         List<String> JornalRevistas = Ficheiros.ler(Biblioteca.bibliotecaAtual+"\\"+NOME_FICHEIRO);
@@ -124,7 +124,7 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
 
         JornalRevista newJornalRevista = new JornalRevista(tempJornalRevista.titulo, tempJornalRevista.editora, tempJornalRevista.categoria,tempJornalRevista.issn, tempJornalRevista.dataPublicacao);
         Ficheiros.escrever(NOME_FICHEIRO,newJornalRevista,FORMATO);
-        int sucesso = newJornalRevista.verficarJornalRevista(newJornalRevista);
+        int sucesso = newJornalRevista.verificarJornalRevista(newJornalRevista);
         if (sucesso == 1){
             Funcionalidades.escreverString("Registado com sucesso.");
         } else if (sucesso == 0) {
@@ -238,7 +238,7 @@ public class JornalRevista extends Obra implements Ficheiros.linhaConvertida{
 
         JornalRevista jornalRevista = procurar(issn);
         if (jornalRevista == null) {
-            System.out.println("Livro não encontrado.");
+            System.out.println("Revista não encontrada.");
             return;
         }
 

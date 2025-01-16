@@ -132,7 +132,7 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
     }
 
     public String getDevolucaoDefinitiva() {
-        if(devolucaoPrevista == inicio) {
+        if(Objects.equals(devolucaoPrevista, inicio)) {
             return "Ainda não foi entregue";
         }
         return devolucaoDefinitiva;
@@ -289,9 +289,6 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
 
 
                 } while (true);
-
-
-
 
                 List<String> emprestimos;
                 emprestimos = ler();
@@ -453,4 +450,377 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
 
         } while (opcao != 0);
     }
+
+    public static void listarUtentesComAtraso(int diasAtraso) {
+        List<String> emprestimos = Ficheiros.ler(NOME_FICHEIRO);
+        LocalDate hoje = LocalDate.now();
+
+        if (emprestimos == null || emprestimos.isEmpty()) {
+            System.out.println("Nenhum empréstimo encontrado.");
+            return;
+        }
+
+        System.out.println("Utentes com atraso superior a " + diasAtraso + " dias:");
+
+        for (String emprestimo : emprestimos) {
+            String[] partes = emprestimo.split("\\|");
+            if (partes.length >= 5) {
+                String nif = partes[2];
+                String devolucaoPrevistaStr = partes[4];
+                String devolucaoDefinitivaStr = partes[5];
+
+                LocalDate devolucaoPrevista = LocalDate.parse(devolucaoPrevistaStr, FORMATTER);
+                LocalDate devolucaoDefinitiva = devolucaoDefinitivaStr.equals("Ainda não foi entregue")
+                        ? hoje
+                        : LocalDate.parse(devolucaoDefinitivaStr, FORMATTER);
+
+                long atraso = devolucaoDefinitiva.toEpochDay() - devolucaoPrevista.toEpochDay();
+
+                if (atraso > diasAtraso) {
+                    System.out.println("NIF: " + nif + " | Atraso: " + atraso + " dias");
+                }
+            }
+        }
+    }
+
+
+
+    public static void apresentarItemMaisRequisitado() {
+            Scanner scanner = new Scanner(System.in);
+            LocalDate inicio;
+            LocalDate fim;
+
+            try {
+                System.out.print("Digite a data de início (dd/MM/yyyy): ");
+                String dataInicioStr = scanner.nextLine();
+                inicio = LocalDate.parse(dataInicioStr, FORMATTER);
+
+                System.out.print("Digite a data de fim (dd/MM/yyyy): ");
+                String dataFimStr = scanner.nextLine();
+                fim = LocalDate.parse(dataFimStr, FORMATTER);
+            } catch (Exception e) {
+                System.out.println("Erro: Formato de data inválido. Use o formato dd/MM/yyyy.");
+                return;
+            }
+
+            List<String> emprestimos = Ficheiros.ler(NOME_FICHEIRO);
+            List<String> reservas = Ficheiros.ler("reservas.txt");
+
+            if ((emprestimos == null || emprestimos.isEmpty()) && (reservas == null || reservas.isEmpty())) {
+                System.out.println("Nenhum empréstimo ou reserva encontrada.");
+                return;
+            }
+
+            ArrayList<String> itens = new ArrayList<>();
+            ArrayList<Integer> contagens = new ArrayList<>();
+
+            // Contar itens em empréstimos dentro do intervalo
+            if (emprestimos != null) {
+                for (String emprestimo : emprestimos) {
+                    String[] partes = emprestimo.split("\\|");
+                    if (partes.length >= 4) {
+                        LocalDate dataInicio = LocalDate.parse(partes[3], FORMATTER);
+                        if ((dataInicio.isEqual(inicio) || dataInicio.isAfter(inicio)) &&
+                                (dataInicio.isEqual(fim) || dataInicio.isBefore(fim))) {
+                            String isbn = partes[1];
+                            int index = itens.indexOf(isbn);
+                            if (index >= 0) {
+                                contagens.set(index, contagens.get(index) + 1);
+                            } else {
+                                itens.add(isbn);
+                                contagens.add(1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Contar itens em reservas dentro do intervalo
+            if (reservas != null) {
+                for (String reserva : reservas) {
+                    String[] partes = reserva.split("\\|");
+                    if (partes.length >= 4) {
+                        LocalDate dataInicio = LocalDate.parse(partes[3], FORMATTER);
+                        if ((dataInicio.isEqual(inicio) || dataInicio.isAfter(inicio)) &&
+                                (dataInicio.isEqual(fim) || dataInicio.isBefore(fim))) {
+                            String isbn = partes[2];
+                            int index = itens.indexOf(isbn);
+                            if (index >= 0) {
+                                contagens.set(index, contagens.get(index) + 1);
+                            } else {
+                                itens.add(isbn);
+                                contagens.add(1);
+                            }
+                        }
+                    }
+                }
+            }
+            // Determinar o item mais requisitado
+            String itemMaisRequisitado = null;
+            int maxRequisicoes = 0;
+            for (int i = 0; i < itens.size(); i++) {
+                if (contagens.get(i) > maxRequisicoes) {
+                    maxRequisicoes = contagens.get(i);
+                    itemMaisRequisitado = itens.get(i);
+                }
+            }
+            if (itemMaisRequisitado != null) {
+                System.out.println("Item mais requisitado: " + itemMaisRequisitado + " | Total de requisições: " + maxRequisicoes);
+            } else {
+                System.out.println("Nenhum item foi requisitado no intervalo especificado.");
+            }
+        }
+
+    public static void apresentarTempoMedioEmprestimos() {
+        Scanner scanner = new Scanner(System.in);
+        LocalDate inicio;
+        LocalDate fim;
+
+        try {
+            System.out.print("Digite a data de início (dd/MM/yyyy): ");
+            String dataInicioStr = scanner.nextLine();
+            inicio = LocalDate.parse(dataInicioStr, FORMATTER);
+
+            System.out.print("Digite a data de fim (dd/MM/yyyy): ");
+            String dataFimStr = scanner.nextLine();
+            fim = LocalDate.parse(dataFimStr, FORMATTER);
+        } catch (Exception e) {
+            System.out.println("Erro: Formato de data inválido. Use o formato dd/MM/yyyy.");
+            return;
+        }
+
+        List<String> emprestimos = Ficheiros.ler(NOME_FICHEIRO);
+
+        if (emprestimos == null || emprestimos.isEmpty()) {
+            System.out.println("Nenhum empréstimo encontrado.");
+            return;
+        }
+
+        ArrayList<Long> tempos = new ArrayList<>();
+
+        // Calcular tempos de empréstimos dentro do intervalo
+        for (String emprestimo : emprestimos) {
+            String[] partes = emprestimo.split("\\|");
+            if (partes.length >= 5) {
+                LocalDate dataInicio = LocalDate.parse(partes[3], FORMATTER);
+                LocalDate dataDevolucao = LocalDate.parse(partes[5], FORMATTER);
+
+                if ((dataInicio.isEqual(inicio) || dataInicio.isAfter(inicio)) &&
+                        (dataInicio.isEqual(fim) || dataInicio.isBefore(fim))) {
+
+                    if (dataInicio.equals(dataDevolucao)) {
+                        continue; // Ignorar empréstimos ainda não devolvidos
+                    }
+
+                    long dias = dataDevolucao.toEpochDay() - dataInicio.toEpochDay();
+                    tempos.add(dias);
+                }
+            }
+        }
+
+        // Calcular média dos tempos de empréstimos
+        if (tempos.isEmpty()) {
+            System.out.println("Nenhum empréstimo encontrado no intervalo especificado ou ainda não devolvido.");
+            return;
+        }
+
+        long soma = 0;
+        for (long tempo : tempos) {
+            soma += tempo;
+        }
+
+        double media = (double) soma / tempos.size();
+        System.out.printf("Tempo médio dos empréstimos: %.2f dias.%n", media);
+    }
+
+    public static void apresentarTotalEmprestimos() {
+        Scanner scanner = new Scanner(System.in);
+        LocalDate inicio;
+        LocalDate fim;
+
+        try {
+            System.out.print("Digite a data de início (dd/MM/yyyy): ");
+            String dataInicioStr = scanner.nextLine();
+            inicio = LocalDate.parse(dataInicioStr, FORMATTER);
+
+            System.out.print("Digite a data de fim (dd/MM/yyyy): ");
+            String dataFimStr = scanner.nextLine();
+            fim = LocalDate.parse(dataFimStr, FORMATTER);
+        } catch (Exception e) {
+            System.out.println("Erro: Formato de data inválido. Use o formato dd/MM/yyyy.");
+            return;
+        }
+
+        List<String> emprestimos = Ficheiros.ler(NOME_FICHEIRO);
+
+        if (emprestimos == null || emprestimos.isEmpty()) {
+            System.out.println("Nenhum empréstimo encontrado.");
+            return;
+        }
+
+        ArrayList<Integer> numerosUnicos = new ArrayList<>();
+
+        // Contar empréstimos únicos dentro do intervalo
+        for (String emprestimo : emprestimos) {
+            String[] partes = emprestimo.split("\\|");
+            if (partes.length >= 5) {
+                LocalDate dataInicio = LocalDate.parse(partes[3], FORMATTER);
+
+                if ((dataInicio.isEqual(inicio) || dataInicio.isAfter(inicio)) &&
+                        (dataInicio.isEqual(fim) || dataInicio.isBefore(fim))) {
+                    int numEmprestimo = Integer.parseInt(partes[0]);
+
+                    // Verificar se o número já está na lista
+                    if (!numerosUnicos.contains(numEmprestimo)) {
+                        numerosUnicos.add(numEmprestimo);
+                    }
+                }
+            }
+        }
+
+        System.out.println("Total de empréstimos únicos no intervalo especificado: " + numerosUnicos.size());
+    }
+
+    public static Emprestimo procurarEmprestimos(String num) {
+        List<String> emprestimos = Ficheiros.ler(NOME_FICHEIRO);
+        if (emprestimos == null || emprestimos.isEmpty()) {
+            System.out.println("Nenhum empréstimo encontrado.");
+            return null;
+        }
+
+        for (String emprestimo : emprestimos) {
+            String[] partes = emprestimo.split("\\|");
+            if (partes.length >= 6 && partes[0].equals(num)) {
+                return new Emprestimo(
+                        Integer.parseInt(partes[0]),
+                        partes[1],
+                        Integer.parseInt(partes[2]),
+                        partes[3],
+                        partes[4],
+                        partes[5]
+                );
+            }
+        }
+
+        System.out.println("Empréstimo não encontrado.");
+        return null;
+    }
+
+    public static boolean validarExistencia(String valor, String tipo) {
+        List<String> itens;
+        String nomeFicheiro;
+
+        switch (tipo) {
+            case "ISBN" -> nomeFicheiro = "livros.txt";
+            case "ISSN" -> nomeFicheiro = "JornalRevista.txt";
+            case "NIF" -> nomeFicheiro = "utentes.txt";
+            default -> {
+                System.out.println("Tipo inválido.");
+                return false;
+            }
+        }
+        itens = Ficheiros.ler(nomeFicheiro);
+        if (itens == null || itens.isEmpty()) {
+            System.out.println("Nenhum dado encontrado no arquivo " + nomeFicheiro);
+            return false;
+        }
+        for (String item : itens) {
+            if (item.contains(valor)) {
+                return true;
+            }
+        }
+        System.out.println(tipo + " não encontrado: " + valor);
+        return false;
+    }
+
+
+    public static void editarCampo(String num, String palavraAntiga, String palavraNova, int posCampo){
+
+        Emprestimo emprestimo = procurarEmprestimos(num);
+        if (emprestimo == null) {
+            System.out.println("Empréstimo não encontrado.");
+            return;
+        }
+
+        switch (posCampo) {
+            case 1 -> {
+                if (!palavraNova.matches("\\d{4}-\\d{3}[\\dX]")&& !palavraNova.matches("^[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9X]$")&&!palavraNova.matches("^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,6}-[0-9]$")) {}
+
+                if (!validarExistencia(palavraNova, "ISBN")) {
+                    System.out.println("Erro: ISBN não encontrado no sistema ou já está emprestado.");
+                    return;
+                }
+
+                Emprestimo novoEmprestimo = new Emprestimo(
+                        emprestimo.getNum(),
+                        palavraNova,
+                        emprestimo.getNif(),
+                        emprestimo.getInicio(),
+                        emprestimo.getDevolucaoPrevista(),
+                        emprestimo.getDevolucaoDefinitiva()
+                );
+                List<String> emprestimos;
+                emprestimos = ler();
+                List<String> reservas = Ficheiros.ler("reservas.txt");
+
+                if (verificarSeExiste(emprestimos, reservas, novoEmprestimo)) {
+                    System.out.println("Erro: Já existe um empréstimo ou reserva para o ISBN fornecido no mesmo intervalo.");
+                    return;
+                }
+            }
+            case 2 -> {
+                if (!palavraNova.matches("\\d{9}")) {
+                    System.out.println("Erro: NIF inválido.");
+                    return;
+                }
+
+                if (!validarExistencia(palavraNova, "NIF")) {
+                    System.out.println("Erro: NIF não encontrado no sistema.");
+                    return;
+                }
+            }
+            case 3, 4 -> {
+                try {
+                    LocalDate.parse(palavraNova, FORMATTER);
+                } catch (Exception e) {
+                    System.out.println("Erro: A data deve estar no formato dd/MM/yyyy.");
+                    return;
+                }
+            }
+            case 5 -> {
+                if (!palavraNova.isBlank() && !palavraNova.equals(emprestimo.getInicio())) {
+                    try {
+                        LocalDate devolucao = LocalDate.parse(palavraNova, FORMATTER);
+                        LocalDate inicio = LocalDate.parse(emprestimo.getInicio(), FORMATTER);
+                        if (!devolucao.isAfter(inicio)) {
+                            System.out.println("Erro: A data de devolução deve ser posterior à data de início.");
+                            return;
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Erro: A data deve estar no formato dd/MM/yyyy.");
+                        return;
+                    }
+                }
+            }
+            default -> {
+                System.out.println("Erro: Campo inválido especificado.");
+                return;
+            }
+        }
+
+
+        if (palavraAntiga != null) {
+            Ficheiros.atualizar(NOME_FICHEIRO, num, palavraAntiga, palavraNova, "");
+            System.out.println("Empréstimo atualizado com sucesso.");
+        } else {
+            System.out.println("Posição do campo inválida.");
+        }
+    }
 }
+
+
+
+
+
+
+

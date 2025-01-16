@@ -310,16 +310,6 @@ public class Reserva implements Ficheiros.linhaConvertida{
             return;
         }
 
-        String palavraAnterior = switch (posCampo) {
-            case 0 -> reserva.getNum();
-            case 1 -> String.valueOf(reserva.getNif());
-            case 2 -> reserva.getObra();
-            case 3 -> reserva.getInicio();
-            case 4 -> reserva.getRegisto();
-            case 5 -> reserva.getFim();
-            default -> null;
-        };
-
         if (palavraAntiga != null) {
             Ficheiros.atualizar(NOME_FICHEIRO, num, palavraAntiga, palavraNova, "");
             System.out.println("Reserva atualizado com sucesso.");
@@ -327,6 +317,7 @@ public class Reserva implements Ficheiros.linhaConvertida{
             System.out.println("Posição do campo inválida.");
         }
     }
+
     public void eliminar (){
         String numEliminado = Funcionalidades.lerString("Introduza o numero da reserva que deseja apagar (R*):");
         Ficheiros.apagar(NOME_FICHEIRO, numEliminado);
@@ -353,12 +344,8 @@ public class Reserva implements Ficheiros.linhaConvertida{
         }
     }
 
-    /*public void mostrarReservas(){
-        List<String> revervas = ler();
-        for (String reverva : revervas) {
-            Funcionalidades.lerInt("Reserva " + reverva + ":");
-        }
-    }*/
+
+
     public void mostrarReservas() {
         List<String> reservas = ler();
         if (reservas.isEmpty()) {
