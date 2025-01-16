@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -258,6 +259,7 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
             if (!first) {
                 cont = Funcionalidades.lerInt("Deseja Continuar?(0=não 1=sim)");
             }
+
             if (cont == 1) {
                 tempEmprestimo.introNum();
                 tempEmprestimo.introUtente();
@@ -307,7 +309,8 @@ public class Emprestimo implements Ficheiros.linhaConvertida{
 
                 first = false;
             }
-        } while (!podeCriar || cont == 1);
+
+        } while (!podeCriar || (cont == 1));
         Ficheiros.escrever(NOME_FICHEIRO, newEmprestimo, FORMATO);
         /*int sucesso = newEmprestimo.verficarEmprestimo(newEmprestimo);
         if (sucesso == 1) {*/

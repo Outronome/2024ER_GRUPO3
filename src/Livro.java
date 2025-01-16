@@ -177,7 +177,7 @@ public class Livro extends Obra implements Ficheiros.linhaConvertida{
                 }
             }
         }
-        System.out.println("Livro não encontrado");
+
         return null;
         //ao receber null deve pedir outra vez a leitura de um dado para ler e procurar outro livro
     }

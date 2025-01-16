@@ -270,7 +270,7 @@ public class Menus {
                 case 4:
                     System.out.println("Escolheu: Ler JornalRevista");
                     String issn2 = Funcionalidades.lerString("Introduza o ISSN do Jornal ou Revista que deseja visualizar:");
-                    Livro.mostrarLivroPorISBN(issn2);
+                    JornalRevista.mostrarJonalRevistaPorISBN(issn2);
                     break;
                 case 0:
                     // op = 0;
